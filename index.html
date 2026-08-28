@@ -149,7 +149,6 @@
   .rdisplay {
     flex: 1;
     padding: 0.5rem 0.6rem;
-    font-size: 0.88rem;
     line-height: 1.45;
     color: var(--ink);
     border: 1px solid transparent;
@@ -157,66 +156,21 @@
     cursor: text;
   }
   .rdisplay:hover { background: #f6f8fa; border-color: var(--line); }
-  .rdisplay .rempty { color: var(--ink-soft); font-style: italic; }
+  .rdisplay .rempty { color: var(--ink-soft); font-style: italic; font-size: 0.88rem; }
+  .rline-main { font-size: 0.88rem; color: var(--ink); }
+  .rline-note {
+    font-size: 0.76rem;
+    color: var(--ink-soft);
+    margin-top: 0.3rem;
+    padding-top: 0.3rem;
+    border-top: 1px dotted var(--line);
+  }
   .rdisplay .place-link {
     color: var(--accent);
     text-decoration: underline;
     text-decoration-color: rgba(9,105,218,0.4);
     text-underline-offset: 2px;
   }
-  .extras-list { margin: 0 0 0.7rem 32px; }
-  .extra-item {
-    display: flex; align-items: flex-start; gap: 0.4rem;
-    margin-bottom: 0.3rem;
-  }
-  .extra-text {
-    flex: 1;
-    min-width: 0;
-    font-size: 0.8rem;
-    color: var(--ink-soft);
-    padding: 0.35rem 0.5rem;
-    border-radius: 6px;
-    cursor: text;
-    word-break: break-word;
-  }
-  .extra-text:hover { background: #f6f8fa; }
-  .extra-text .place-link { color: var(--accent); text-decoration: underline; text-decoration-color: rgba(9,105,218,0.4); }
-  .extra-item textarea {
-    flex: 1;
-    min-width: 0;
-    border: 1px solid var(--accent);
-    border-radius: 6px;
-    padding: 0.35rem 0.5rem;
-    font-family: inherit;
-    font-size: 0.8rem;
-    color: var(--ink);
-    resize: vertical;
-    min-height: 32px;
-  }
-  .extra-del {
-    background: none; border: none; color: #bb4d38; font-size: 0.9rem; cursor: pointer;
-    padding: 0.3rem 0.2rem; flex-shrink: 0;
-  }
-  .extra-add-btn {
-    background: none;
-    border: none;
-    color: var(--accent);
-    font-size: 0.76rem;
-    font-weight: 600;
-    padding: 0.3rem 0.2rem;
-    cursor: pointer;
-  }
-  .extra-add-input {
-    width: 100%;
-    border: 1px solid var(--accent);
-    border-radius: 6px;
-    padding: 0.35rem 0.5rem;
-    font-family: inherit;
-    font-size: 0.78rem;
-    color: var(--ink);
-    background: #fff;
-  }
-  .extra-add-input:focus { outline: none; }
   .diary-meta { font-size: 0.7rem; color: var(--ink-soft); margin-top: 0.5rem; min-height: 1em; }
 
   /* Expenses */
@@ -255,7 +209,7 @@
     color: var(--ink);
   }
   .exp-item input[type="number"]::placeholder { color: #b7bec4; font-size: 0.72rem; }
-  .exp-item .del-btn {
+  .del-btn {
     background: none; border: none; color: #bb4d38; font-size: 1.05rem; cursor: pointer; padding: 0 0.2rem; flex-shrink: 0;
   }
   .add-row { display: flex; gap: 0.4rem; margin-top: 0.4rem; }
@@ -275,11 +229,16 @@
     background: var(--bg);
     border: 1px solid var(--line);
     border-radius: 8px;
-    padding: 0.6rem 0.75rem;
+    padding: 0.5rem 0.6rem;
     margin-bottom: 0.4rem;
+    display: flex; align-items: center; gap: 0.4rem;
+  }
+  .pack-item-label {
+    flex: 1;
+    min-width: 0;
+    display: flex; align-items: center; gap: 0.6rem;
     cursor: pointer;
     -webkit-tap-highlight-color: transparent;
-    display: flex; align-items: center; gap: 0.6rem;
   }
   .pack-item:active { background: #f6f8fa; }
   .p-checkbox { width: 19px; height: 19px; accent-color: var(--accent); cursor: pointer; flex-shrink: 0; }
@@ -382,13 +341,13 @@
    CONFIGURAZIONE FIREBASE — sostituisci con le chiavi del tuo progetto
    ====================================================================== */
 const firebaseConfig = {
-  apiKey: "INSERISCI_API_KEY",
-  authDomain: "INSERISCI_PROJECT.firebaseapp.com",
-  databaseURL: "https://INSERISCI_PROJECT-default-rtdb.europe-west1.firebasedatabase.app",
-  projectId: "INSERISCI_PROJECT",
-  storageBucket: "INSERISCI_PROJECT.appspot.com",
-  messagingSenderId: "INSERISCI_ID",
-  appId: "INSERISCI_APP_ID"
+  apiKey: "AIzaSyDpHh_ul3FJWST3j654N58J4VZhVz-yD1M",
+  authDomain: "itinerario-7f02d.firebaseapp.com",
+  databaseURL: "https://itinerario-7f02d-default-rtdb.firebaseio.com",
+  projectId: "itinerario-7f02d",
+  storageBucket: "itinerario-7f02d.firebasestorage.app",
+  messagingSenderId: "797697030290",
+  appId: "1:797697030290:web:e732c04442db00c89c0e4b"
 };
 
 const PERSON_A = "Mattia";
@@ -402,7 +361,7 @@ try {
   firebaseReady = true;
 } catch (e) { console.error("Firebase non configurato:", e); }
 
-const SEED = {"days": [{"id": "d1", "title": "Parma → Sabaudia (Sab 29 agosto)", "links": [{"label": "Parma", "url": "https://maps.apple.com/?ll=44.8015,10.3279&q=Parma"}, {"label": "Sabaudia", "url": "https://maps.apple.com/?ll=41.3009,13.0269&q=Sabaudia"}, {"label": "Lago di Bolsena", "url": "https://maps.apple.com/?ll=42.6100,11.9750&q=Lago%20di%20Bolsena"}], "M": "partenza da Parma.", "M_extras": [], "P": "viaggio verso Sabaudia (~5h30/6h totali), con sosta al Lago di Bolsena (uscita A1 Orvieto, circa a metà strada) per un bagno rinfrescante e uno spuntino veloce sul lungolago.", "P_extras": [{"id": "d1-P-x0", "text": "🥪 Pranzo semplice (panino) sul lungolago di Bolsena."}], "S": "arrivo e sistemazione.", "S_extras": [{"id": "d1-S-x0", "text": "🍕 Pizza direttamente al campeggio, per la prima sera senza pensieri."}]}, {"id": "d2", "title": "Sabaudia (Dom 30 agosto)", "links": [{"label": "Sabaudia", "url": "https://maps.apple.com/?ll=41.3009,13.0269&q=Sabaudia"}, {"label": "Lago di Paola", "url": "https://maps.apple.com/?ll=41.2967,13.0500&q=Lago%20di%20Paola"}, {"label": "Sperlonga", "url": "https://maps.apple.com/?ll=41.2540,13.4330&q=Sperlonga"}, {"label": "Terracina", "url": "https://maps.apple.com/?ll=41.2926,13.2496&q=Terracina"}], "M": "mare con calma, spiaggia del Lido di Sabaudia.", "M_extras": [{"id": "d2-M-x0", "text": "🥪 Pranzo semplice (panino) in spiaggia."}], "P": "canoa sul Lago di Paola (unico lago del Circeo dove è permessa la canoa libera), poi una breve passeggiata nella foresta del Parco Nazionale del Circeo (foresta pluviale mediterranea, rara in Italia).", "P_extras": [], "S": "spesa a Sabaudia prima che chiudano i negozi, poi relax al campeggio (o, in alternativa, una delle novità nei dintorni come Sperlonga o Terracina).", "S_extras": [{"id": "d2-S-x0", "text": "🔥 Grigliata di carne al campeggio."}]}, {"id": "d3", "title": "Sabaudia (Lun 31 agosto)", "links": [{"label": "Sabaudia", "url": "https://maps.apple.com/?ll=41.3009,13.0269&q=Sabaudia"}, {"label": "Monte Circeo", "url": "https://maps.apple.com/?ll=41.2380,13.0550&q=Monte%20Circeo"}, {"label": "San Felice Circeo", "url": "https://maps.apple.com/?ll=41.2439,13.0872&q=San%20Felice%20Circeo"}], "M": "spiaggia, mare con calma.", "M_extras": [], "P": "trekking sul Monte Circeo fino alla cima — sentiero impegnativo ma con vista straordinaria su tutto il promontorio, le isole Ponziane e la costa.", "P_extras": [{"id": "d3-P-x0", "text": "🥪 Panino/pranzo al sacco durante il trekking."}], "S": "spesa a San Felice Circeo prima che chiudano i negozi, rientro al campeggio.", "S_extras": [{"id": "d3-S-x0", "text": "🐟 Grigliata di pesce al campeggio."}]}, {"id": "d4", "title": "Sabaudia (Mar 1 settembre)", "links": [{"label": "Sabaudia", "url": "https://maps.apple.com/?ll=41.3009,13.0269&q=Sabaudia"}, {"label": "Terracina", "url": "https://maps.apple.com/?ll=41.2926,13.2496&q=Terracina"}], "M": "giornata a Terracina (~40 min da Sabaudia) — Tempio di Giove Anxur, le rovine romane su uno sperone roccioso con vista mozzafiato sul golfo.", "M_extras": [{"id": "d4-M-x0", "text": "🥪 Pranzo semplice (panino) a Terracina."}], "P": "Spiaggia di Levante, ai piedi del promontorio del tempio — sabbia dorata finissima, acqua bassa, Bandiera Blu.", "P_extras": [], "S": "ultima serata a Sabaudia.", "S_extras": [{"id": "d4-S-x0", "text": "🐟 Il ristorante di pesce sul lungomare che conoscete già."}]}, {"id": "d5", "title": "Sabaudia → Baia → Ischia (Mer 2 settembre)", "links": [{"label": "Sabaudia", "url": "https://maps.apple.com/?ll=41.3009,13.0269&q=Sabaudia"}, {"label": "Baia", "url": "https://maps.apple.com/?ll=40.8236,14.1219&q=Baia%20/%20Pozzuoli"}, {"label": "Pozzuoli", "url": "https://maps.apple.com/?ll=40.8236,14.1219&q=Baia%20/%20Pozzuoli"}, {"label": "Barano", "url": "https://maps.apple.com/?ll=40.7213,13.9114&q=Barano%20d%27Ischia"}, {"label": "Piscina Mirabile", "url": "https://maps.apple.com/?ll=40.7908,14.0842&q=Piscina%20Mirabile"}], "M": "checkout dal campeggio, trasferimento da Sabaudia verso Baia (~2h), in tempo per l'immersione/snorkeling guidata dalle 12:00 alle 14:30 nel Parco Archeologico Sommerso di Baia.", "M_extras": [], "P": "Piscina Mirabile a Bacoli — la più grande cisterna romana d'epoca imperiale, la \"Cattedrale dell'Acqua\" (visita guidata di 45 min); se le Cento Camerelle sono riaperte, sono a 400m e si vedono con lo stesso biglietto cumulativo. Poi tempo libero prima dell'imbarco.", "P_extras": [{"id": "d5-P-x0", "text": "🥪 Pranzo semplice (panino) in zona Pozzuoli."}], "S": "traghetto Pozzuoli → Ischia delle 19:00, arrivo alle 20:05, check-in e sistemazione.", "S_extras": [{"id": "d5-S-x0", "text": "🍕 Pizza da Rosa dei Venti a Barano — gourmet, ingredienti locali, comoda per la prima sera."}]}, {"id": "d6", "title": "Ischia (Gio 3 settembre)", "links": [{"label": "Barano", "url": "https://maps.apple.com/?ll=40.7213,13.9114&q=Barano%20d%27Ischia"}, {"label": "Maronti", "url": "https://maps.apple.com/?ll=40.6980,13.8990&q=Maronti%20/%20Sant%27Angelo"}, {"label": "Sant'Angelo", "url": "https://maps.apple.com/?ll=40.6980,13.8990&q=Maronti%20/%20Sant%27Angelo"}], "M": "spesa con piccola visita a Barano/Testaccio.", "M_extras": [{"id": "d6-M-x0", "text": "🥐 Colazione in un bar del paese."}], "P": "mare alla spiaggia dei Maronti (auto dalla strada panoramica da Testaccio, parcheggi custoditi nei dintorni).", "P_extras": [{"id": "d6-P-x0", "text": "🍷 Aperitivo con vista in uno dei locali di Sant'Angelo."}, {"id": "d6-P-x1", "text": "Dentro la stessa baia, zona Cavascura: le Fumarole, sabbia calda naturale per l'effetto termale — se volete, ci si arriva a piedi lungo la spiaggia."}], "S": "Monte Epomeo al tramonto — si parte da Fontana (Barano, comodo da casa), salita di circa 1h e discesa di 40-50 min, vista a 360° sull'isola; in alternativa, la solita passeggiata nel borgo di Sant'Angelo.", "S_extras": [{"id": "d6-S-x0", "text": "🔥 Cena a casa con grigliata."}]}, {"id": "d7", "title": "Ischia (Ven 4 settembre)", "links": [{"label": "Giardini Poseidon", "url": "https://maps.apple.com/?ll=40.7080,13.8590&q=Giardini%20Poseidon"}, {"label": "Forio", "url": "https://maps.apple.com/?ll=40.7386,13.8583&q=Forio"}], "M": "Giardini Poseidon o Negombo, giornata intera (apertura 9:00).", "M_extras": [{"id": "d7-M-x0", "text": "🥐 Colazione da Divino Cafè (Forio) — ottimi cornetti, babà e cannoli, prima di entrare alle terme."}], "P": "ancora Giardini Poseidon (accesso incluso anche alla spiaggia di Citara, sotto il parco), fino alla chiusura alle 19:00.", "P_extras": [], "S": "relax serale a Forio, passeggiata sul lungomare.", "S_extras": [{"id": "d7-S-x0", "text": "🍷 Aperitivo tardo a Forio."}]}, {"id": "d8", "title": "Ischia → Procida → Ischia (Sab 5 settembre)", "links": [{"label": "Procida", "url": "https://maps.apple.com/?ll=40.7597,14.0206&q=Procida"}], "M": "traghetto da Ischia a Procida, arrivo a Marina Grande. Passeggiata veloce nella zona del porto — Via Roma, le casette colorate, Chiesa della Madonna della Pietà. Bus verso Chiaiolella: passeggiata sul lungomare verso Ciraccio, con vista su Vivara e i faraglioni (Vivara si guarda da qui, non serve visitarla a parte). Bus di rientro verso Terra Murata: Piazza dei Martiri, Santuario di Santa Maria delle Grazie, Belvedere dei Cannoni (vista sulla Corricella), Abbazia di San Michele.", "M_extras": [{"id": "d8-M-x0", "text": "🥐 Caffè con lingua di bue (il dolce tipico di Procida) al Bar Pasticceria Roma (Via Roma 164) — il locale originale dove è stata inventata negli anni '50, considerato il migliore dell'isola."}, {"id": "d8-M-x1", "text": "Palazzo d'Avalos (ex carcere borbonico), a Terra Murata: probabilmente la visita culturale più interessante dell'isola (~1 ora), ma solo se prenotata in anticipo — altrimenti si salta senza problemi e si prosegue verso la Corricella."}], "P": "discesa a piedi da Terra Murata verso Marina Corricella (uno dei tratti più belli dell'isola: case color pastello, scalinate, scorci sul mare), pranzo in uno dei ristoranti sul porticciolo. Poi salita e discesa verso la Spiaggia della Chiaia (la famosa scalinata di 186 gradini), bagno e relax.", "P_extras": [{"id": "d8-P-x0", "text": "🐟 Pranzo alla Corricella — pasta al limone di Procida, pesce fresco/alici/paranza fritta, granita al limone."}], "S": "risalita verso Marina Grande, tempo libero sul porto di Procida prima dell'imbarco, traghetto di rientro a Ischia, poi tramonto sulla Spiaggia dei Pescatori con il Castello Aragonese sullo sfondo (la visita completa è il 9 settembre, con più calma).", "S_extras": []}, {"id": "d9", "title": "Ischia (Dom 6 settembre)", "links": [{"label": "Giardino La Mortella", "url": "https://maps.apple.com/?ll=40.7370,13.8600&q=Giardino%20La%20Mortella"}, {"label": "Forio", "url": "https://maps.apple.com/?ll=40.7386,13.8583&q=Forio"}, {"label": "San Montano", "url": "https://maps.apple.com/?ll=40.7550,13.8870&q=San%20Montano"}], "M": "Giardino La Mortella a Forio (aperto la domenica, 9:00-19:00 — prevedere 2-3 ore), poi trasferimento verso la Baia di San Montano — c'è un parcheggio vicino alla baia, ma in alta stagione conviene arrivare presto per trovare posto.", "M_extras": [{"id": "d9-M-x0", "text": "🥐 Colazione in un bar a Forio, prima di entrare a La Mortella."}, {"id": "d9-M-x1", "text": "Sulla strada verso San Montano: il Fungo di Lacco Ameno, la celebre roccia vulcanica a forma di fungo sul lungomare — bastano 5-10 minuti per una foto."}], "P": "mare con calma a San Montano, snorkeling libero.", "P_extras": [], "S": "relax serale, rientro verso Forio per cena.", "S_extras": [{"id": "d9-S-x0", "text": "🍕 Pizza da Zi Carmela a Forio — storica, vicino al porticciolo."}]}, {"id": "d10", "title": "Ischia → Capri → Ischia (Lun 7 settembre)", "links": [{"label": "Capri", "url": "https://maps.apple.com/?ll=40.5532,14.2429&q=Capri"}, {"label": "Marina Grande", "url": "https://maps.apple.com/?ll=40.5532,14.2429&q=Capri"}, {"label": "Anacapri", "url": "https://maps.apple.com/?ll=40.5532,14.2429&q=Capri"}, {"label": "Chiesa di San Michele", "url": "https://maps.apple.com/?ll=40.5546,14.2260&q=Chiesa%20di%20San%20Michele"}, {"label": "Monte Solaro", "url": "https://maps.apple.com/?ll=40.5490,14.2130&q=Monte%20Solaro"}, {"label": "Piazza Vittoria", "url": "https://maps.apple.com/?ll=40.5545,14.2255&q=Piazza%20Vittoria"}, {"label": "Casa Rossa", "url": "https://maps.apple.com/?ll=40.5580,14.2280&q=Casa%20Rossa"}, {"label": "Certosa di San Giacomo", "url": "https://maps.apple.com/?ll=40.5497,14.2445&q=Certosa%20di%20San%20Giacomo"}, {"label": "Belvedere di Tragara", "url": "https://maps.apple.com/?ll=40.5460,14.2470&q=Belvedere%20di%20Tragara"}, {"label": "Arco Naturale", "url": "https://maps.apple.com/?ll=40.5461,14.2586&q=Arco%20Naturale"}], "M": "traghetto da Ischia Porto, arrivo a Marina Grande. Bus verso Anacapri, giro veloce del centro. Poi bus da Anacapri verso Capri centro.", "M_extras": [{"id": "d10-M-x0", "text": "🥐 Cornetto da Bar Calise a Ischia Porto, prima di imbarcarvi (storico dal 1925, il bar simbolo di Ischia)."}, {"id": "d10-M-x1", "text": "Ad Anacapri, se resta tempo: Villa San Michele (giardini e vista sul golfo) Chiesa di San Michele (pavimento in maiolica dipinta) Monte Solaro in seggiovia Piazza Vittoria e Via Giuseppe Orlandi Casa Rossa"}], "P": "Giardini di Augusto (vista su Via Krupp e sui Faraglioni), poi discesa panoramica per Via Krupp fino alla Scogliera dell'Arsenale/Marina Piccola (verificare che sia aperta) — bagno e pranzo con calma. Al passaggio in centro, torta caprese da Buonocore da portare con voi per Marina Piccola.", "P_extras": [{"id": "d10-P-x0", "text": "🍰 Torta caprese e gelato alla Pasticceria Buonocore (Via Vittorio Emanuele 35, vicino alla Piazzetta), da gustare a Marina Piccola dopo pranzo."}, {"id": "d10-P-x1", "text": "A Capri centro, se resta tempo: Certosa di San Giacomo Via Camerelle Belvedere di Tragara Arco Naturale"}], "S": "risalita verso Marina Grande per le 14:00 — Giro dell'Isola in barca (~2 ore) + sosta alla Grotta Azzurra, poi traghetto di rientro a Ischia.", "S_extras": [{"id": "d10-S-x0", "text": "🍽️ Cena a Ischia al rientro."}, {"id": "d10-S-x1", "text": "Per una cena tipica con coniglio all'ischitana: Il Focolare (Barano d'Ischia, via Cretaio — familiare, immerso nel verde) o La Vigna di Alberto (Barano d'Ischia, via Giuseppe Garibaldi 57 — atmosfera intima, prodotti a km 0), entrambi comodi da casa."}]}, {"id": "d11", "title": "Ischia (Mar 8 settembre)", "links": [{"label": "Forio", "url": "https://maps.apple.com/?ll=40.7386,13.8583&q=Forio"}, {"label": "Spiaggia di San Francesco", "url": "https://maps.apple.com/?ll=40.7350,13.8480&q=Spiaggia%20di%20San%20Francesco"}, {"label": "Sorgeto", "url": "https://maps.apple.com/?ll=40.7030,13.8670&q=Panza%20/%20Sorgeto"}, {"label": "Panza", "url": "https://maps.apple.com/?ll=40.7030,13.8670&q=Panza%20/%20Sorgeto"}], "M": "piccola visita alla Chiesa del Soccorso e al lungomare di Forio, poi mare alla Spiaggia di San Francesco (pochi minuti a piedi dal centro, facile in auto).", "M_extras": [{"id": "d11-M-x0", "text": "🥐 Colazione da Divino Cafè (Forio) — ottimi cornetti, babà e cannoli."}], "P": "ancora mare a San Francesco, oppure Giardini Ravino (Citara) — giardino di piante grasse e cactus, con pavoni liberi e installazioni d'arte, molto diverso da La Mortella; aperto tutti i giorni tranne martedì e giovedì, 10€ a persona.", "P_extras": [], "S": "Baia di Sorgeto — pozze termali naturali sugli scogli, zona libera e gratuita, suggestiva al tramonto (zona Panza, pochi minuti da Citara).", "S_extras": []}, {"id": "d12", "title": "Ischia (Mer 9 settembre)", "links": [{"label": "Spiaggia di Cartaromana", "url": "https://maps.apple.com/?ll=40.7395,13.9560&q=Cartaromana"}, {"label": "Ischia Ponte", "url": "https://maps.apple.com/?ll=40.7360,13.9581&q=Ischia%20Ponte"}, {"label": "Castello Aragonese", "url": "https://maps.apple.com/?ll=40.7333,13.9575&q=Castello%20Aragonese"}], "M": "ultimo mare con calma alla Spiaggia di Cartaromana (Ischia Ponte) — piccola baia di sabbia e ciottoli con sorgenti termali naturali, vista sul Castello Aragonese.", "M_extras": [{"id": "d12-M-x0", "text": "🥐 Colazione da Bar Ciccio a Ischia Ponte (Piazza Antica Reggia) — ottimi brioches."}], "P": "visita completa al Castello Aragonese di Ischia Ponte (1h30-2h con calma) — Terrazzo dell'Immacolata, Chiesa dell'Immacolata, il cimitero delle Monache Clarisse, gallerie scavate nella roccia.", "P_extras": [{"id": "d12-P-x0", "text": "🍨 Gelato artigianale nel borgo di pescatori, dopo la visita (gusti locali: limone di Ischia, fico bianco)."}], "S": "relax serale nel borgo di pescatori di Ischia Ponte.", "S_extras": [{"id": "d12-S-x0", "text": "🍸 Un ultimo drink come saluto a Ischia."}]}, {"id": "d13", "title": "Ischia → Pozzuoli → Ravello (Gio 10 settembre)", "links": [{"label": "Pozzuoli", "url": "https://maps.apple.com/?ll=40.8236,14.1219&q=Baia%20/%20Pozzuoli"}, {"label": "Ravello", "url": "https://maps.apple.com/?ll=40.6492,14.6114&q=Ravello"}, {"label": "Scala", "url": "https://maps.apple.com/?ll=40.6447,14.5964&q=Scala"}, {"label": "Villa Rufolo", "url": "https://maps.apple.com/?ll=40.6493,14.6117&q=Villa%20Rufolo"}, {"label": "Villa Cimbrone", "url": "https://maps.apple.com/?ll=40.6400,14.6066&q=Villa%20Cimbrone"}], "M": "traghetto Ischia → Pozzuoli delle 11:30, arrivo alle 12:30.", "M_extras": [], "P": "guida verso la Costiera Amalfitana (uscita autostradale consigliata a Salerno), arrivo a Scala (dove alloggiate, pochi minuti da Ravello), check-in, poi Villa Rufolo e Villa Cimbrone (Terrazza dell'Infinito) nel tardo pomeriggio — la luce di quell'ora è ideale per il panorama.", "P_extras": [{"id": "d13-P-x0", "text": "🥪 Pranzo semplice (panino) durante il viaggio."}], "S": "spesa per la casa, giro del paese di Scala e passeggiata nel centro storico.", "S_extras": []}, {"id": "d14", "title": "Ravello (Ven 11 settembre)", "links": [{"label": "Ravello", "url": "https://maps.apple.com/?ll=40.6492,14.6114&q=Ravello"}, {"label": "Amalfi", "url": "https://maps.apple.com/?ll=40.6340,14.6027&q=Amalfi"}, {"label": "Atrani", "url": "https://maps.apple.com/?ll=40.6323,14.6108&q=Atrani"}, {"label": "Duomo di Amalfi", "url": "https://maps.apple.com/?ll=40.634,14.6027&q=Duomo%20di%20Amalfi"}], "M": "ad Amalfi: Duomo di Amalfi (Cattedrale di Sant'Andrea) e Chiostro del Paradiso, poi Atrani — il borgo più piccolo della costiera, a 5 minuti a piedi da Amalfi, quasi nessun turista ci arriva.", "M_extras": [{"id": "d14-M-x0", "text": "🥐 Colazione (pasticciotto) alla Pasticceria Andrea Pansa in Piazza Duomo — storica dal 1830. Se lo trovate, anche un sorbetto da A'Sciulia."}], "P": "boat tour della Costiera delle 14:30 da Amalfi (rientro dopo circa 2 ore) — grotte, spiagge raggiungibili solo dal mare, bagno.", "P_extras": [], "S": "rientro a Ravello, passeggiata nel centro storico.", "S_extras": [{"id": "d14-S-x0", "text": "🍷 Drink in piazza nel centro storico."}]}, {"id": "d15", "title": "Ravello (Sab 12 settembre)", "links": [{"label": "Ravello", "url": "https://maps.apple.com/?ll=40.6492,14.6114&q=Ravello"}, {"label": "Sentiero degli Dei", "url": "https://maps.apple.com/?ll=40.6250,14.5000&q=Sentiero%20degli%20Dei"}, {"label": "Nocelle", "url": "https://maps.apple.com/?ll=40.6193,14.4703&q=Nocelle"}, {"label": "Positano", "url": "https://maps.apple.com/?ll=40.6280,14.4848&q=Positano"}, {"label": "Amalfi", "url": "https://maps.apple.com/?ll=40.6340,14.6027&q=Amalfi"}], "M": "Sentiero degli Dei (Bomerano–Nocelle, ~5 km, circa 3 ore), partenza presto la mattina — sosta a Nocelle, il piccolo borgo alla fine del sentiero, prima della discesa verso Positano.", "M_extras": [{"id": "d15-M-x0", "text": "🥪 Pranzo semplice (panino) durante il cammino."}], "P": "arrivo a Positano, esplorazione del paese.", "P_extras": [], "S": "traghetto di ritorno verso Amalfi, poi rientro a Ravello.", "S_extras": []}, {"id": "d16", "title": "Ravello (Dom 13 settembre)", "links": [{"label": "Ravello", "url": "https://maps.apple.com/?ll=40.6492,14.6114&q=Ravello"}, {"label": "Minori", "url": "https://maps.apple.com/?ll=40.6499,14.6338&q=Minori"}, {"label": "Maiori", "url": "https://maps.apple.com/?ll=40.6519,14.6383&q=Maiori"}, {"label": "Vietri sul Mare", "url": "https://maps.apple.com/?ll=40.6669,14.7369&q=Vietri%20sul%20Mare"}, {"label": "Cetara", "url": "https://maps.apple.com/?ll=40.6547,14.7003&q=Cetara"}], "M": "noleggio scooter, giro della costiera verso Minori, con calma.", "M_extras": [{"id": "d16-M-x0", "text": "🍰 Colazione alla Pasticceria Sal De Riso a Minori — una delle pasticcerie più famose d'Italia. Da provare la sfogliatella Santa Rosa, la sua reinterpretazione del dolce originario di Conca dei Marini."}], "P": "proseguimento in scooter verso Maiori, poi Vietri sul Mare (le ceramiche) e Cetara — villaggio di pescatori famoso per la colatura di alici e il tonno, con soste libere lungo la costa.", "P_extras": [], "S": "rientro a Ravello, passeggiata nel centro storico.", "S_extras": [{"id": "d16-S-x0", "text": "🐟 Cena a Ravello — Da Salvatore (gourmet, vista panoramica, ~60-70€ a persona, chiuso il lunedì), Bella Vista Sul Mare (tra Ravello e Scala, comodo da casa, terrazza con vista mozzafiato, pesce, ~40-50€ a persona, ottime recensioni), oppure Cumpà Cosimo (trattoria storica dal 1929, cucina casereccia, ~20-30€ a persona)."}, {"id": "d16-S-x1", "text": "🍷 Drink serale con vista nel centro di Ravello."}]}, {"id": "d17", "title": "Ravello → Maremma (Lun 14 settembre)", "links": [{"label": "Ravello", "url": "https://maps.apple.com/?ll=40.6492,14.6114&q=Ravello"}, {"label": "Vesuvio", "url": "https://maps.apple.com/?ll=40.8219,14.4262&q=Vesuvio"}, {"label": "Follonica", "url": "https://maps.apple.com/?ll=42.9186,10.7561&q=Follonica%20/%20Castiglione%20della%20Pescaia"}, {"label": "Castiglione della Pescaia", "url": "https://maps.apple.com/?ll=42.9186,10.7561&q=Follonica%20/%20Castiglione%20della%20Pescaia"}], "M": "con calma a Ravello, checkout.", "M_extras": [], "P": "sosta al Vesuvio (uscita Ercolano/Torre del Greco dalla A3), salita al Gran Cono, poi dritti verso il campeggio in Maremma (zona Follonica/Castiglione della Pescaia).", "P_extras": [{"id": "d17-P-x0", "text": "🥪 Pranzo semplice (panino) durante il viaggio."}], "S": "arrivo, sistemazione.", "S_extras": [{"id": "d17-S-x0", "text": "🔥 Cena in pineta con grigliata."}]}, {"id": "d18", "title": "Maremma → Parma (Mar 15 settembre)", "links": [{"label": "Parma", "url": "https://maps.apple.com/?ll=44.8015,10.3279&q=Parma"}], "M": "ultimo mare/canoa con calma.", "M_extras": [], "P": "rientro a Parma (~3h).", "P_extras": [], "S": "", "S_extras": []}], "expenses": [{"category": "🚗 Trasporti su gomma", "label": "Carburante (Parma ↔ Sabaudia ↔ Pozzuoli ↔ Ravello ↔ Maremma ↔ Parma, ~1.500 km + spostamenti locali)", "price": "180–220 €", "paid": false, "estMin": 220.0, "estMax": 220.0, "id": "e1"}, {"category": "🚗 Trasporti su gomma", "label": "Pedaggi autostradali (tratte A1/A3 principali)", "price": "90–120 €", "paid": false, "estMin": 120.0, "estMax": 120.0, "id": "e2"}, {"category": "🚗 Trasporti su gomma", "label": "Parcheggio a Scala (per tutto il soggiorno in Costiera)", "price": "40 €", "paid": false, "estMin": 40.0, "estMax": 40.0, "id": "e3"}, {"category": "⛴️ Traghetti", "label": "Pozzuoli ↔ Ischia, andata e ritorno (prenotati)", "price": "180 €", "paid": true, "estMin": 180.0, "estMax": 180.0, "id": "e4"}, {"category": "⛴️ Traghetti", "label": "Procida a/r (2 persone)", "price": "45–60 €", "paid": false, "estMin": 60.0, "estMax": 60.0, "id": "e5"}, {"category": "⛴️ Traghetti", "label": "Capri a/r da Ischia Porto (2 persone, da 21,50€ a tratta)", "price": "85–110 €", "paid": false, "estMin": 110.0, "estMax": 110.0, "id": "e6"}, {"category": "⛴️ Traghetti", "label": "Parcheggio auto a Ischia Porto (1 giorno, giornata Capri)", "price": "~10 €", "paid": false, "estMin": 10.0, "estMax": 10.0, "id": "e7"}, {"category": "🎟️ Attività e ingressi", "label": "Immersione/snorkeling Parco Sommerso di Baia (confermato)", "price": "28 €56 €", "paid": false, "estMin": 56.0, "estMax": 56.0, "id": "e8"}, {"category": "🎟️ Attività e ingressi", "label": "Giardini Poseidon o Negombo (giornata intera)", "price": "45–50 €90–100 €", "paid": false, "estMin": 100.0, "estMax": 100.0, "id": "e9"}, {"category": "🎟️ Attività e ingressi", "label": "Giardini Ravino (opzionale, se visitato)", "price": "10 €20 €", "paid": false, "estMin": 20.0, "estMax": 20.0, "id": "e10"}, {"category": "🎟️ Attività e ingressi", "label": "Castello Aragonese (Ischia)", "price": "10–12 €20–24 €", "paid": false, "estMin": 24.0, "estMax": 24.0, "id": "e11"}, {"category": "🎟️ Attività e ingressi", "label": "Bus/funicolare a Capri (spostamenti della giornata)", "price": "~8 €~16 €", "paid": false, "estMin": 16.0, "estMax": 16.0, "id": "e12"}, {"category": "🎟️ Attività e ingressi", "label": "Tour in barca + Grotta Azzurra", "price": "35–40 €70–80 €", "paid": false, "estMin": 80.0, "estMax": 80.0, "id": "e13"}, {"category": "🎟️ Attività e ingressi", "label": "Villa Rufolo (Ravello)", "price": "8 €16 €", "paid": false, "estMin": 16.0, "estMax": 16.0, "id": "e14"}, {"category": "🎟️ Attività e ingressi", "label": "Villa Cimbrone (Ravello)", "price": "~10 €~20 €", "paid": false, "estMin": 20.0, "estMax": 20.0, "id": "e15"}, {"category": "🎟️ Attività e ingressi", "label": "Noleggio scooter in Costiera (1 giorno)", "price": "—40–60 €", "paid": false, "estMin": 60.0, "estMax": 60.0, "id": "e16"}, {"category": "🎟️ Attività e ingressi", "label": "Duomo di Amalfi / Chiostro del Paradiso", "price": "~4 €~8 €", "paid": false, "estMin": 8.0, "estMax": 8.0, "id": "e17"}, {"category": "🎟️ Attività e ingressi", "label": "Boat tour Costiera da Amalfi (con bagno)", "price": "35 €70 €", "paid": false, "estMin": 70.0, "estMax": 70.0, "id": "e18"}, {"category": "🎟️ Attività e ingressi", "label": "Traghetto Positano→Amalfi (sola andata, dopo il Sentiero degli Dei)", "price": "10–19,50 €20–39 €", "paid": false, "estMin": 39.0, "estMax": 39.0, "id": "e19"}, {"category": "🎟️ Attività e ingressi", "label": "Giardino La Mortella (Forio)", "price": "12 €24 €", "paid": false, "estMin": 24.0, "estMax": 24.0, "id": "e20"}, {"category": "🎟️ Attività e ingressi", "label": "Tempio di Giove Anxur (Terracina)", "price": "7 €14 €", "paid": false, "estMin": 14.0, "estMax": 14.0, "id": "e21"}, {"category": "🎟️ Attività e ingressi", "label": "Piscina Mirabile (Bacoli, con guida)", "price": "7 €14 €", "paid": false, "estMin": 14.0, "estMax": 14.0, "id": "e22"}, {"category": "🎟️ Attività e ingressi", "label": "Gran Cono del Vesuvio (ingresso)", "price": "10 €20 €", "paid": false, "estMin": 20.0, "estMax": 20.0, "id": "e23"}, {"category": "🍽️ Cibo e bevande", "label": "Colazioni fuori (8 mattine)", "price": "2 × 4,5 € × 8~72 €", "paid": false, "estMin": 72.0, "estMax": 72.0, "id": "e24"}, {"category": "🍽️ Cibo e bevande", "label": "Pranzi fuori semplici — panini (9 giorni, 50% dei giorni)", "price": "2 × 6 € × 9~108 €", "paid": false, "estMin": 108.0, "estMax": 108.0, "id": "e25"}, {"category": "🍽️ Cibo e bevande", "label": "Pranzo al ristorante (Corricella, Procida)", "price": "16 €~32 €", "paid": false, "estMin": 32.0, "estMax": 32.0, "id": "e26"}, {"category": "🍽️ Cibo e bevande", "label": "Cene al ristorante (3 occasioni)", "price": "2 × 35 € × 3~210 €", "paid": false, "estMin": 210.0, "estMax": 210.0, "id": "e27"}, {"category": "🍽️ Cibo e bevande", "label": "Pizza (3 serate)", "price": "2 × 18 € × 3~108 €", "paid": false, "estMin": 108.0, "estMax": 108.0, "id": "e28"}, {"category": "🍽️ Cibo e bevande", "label": "Aperitivi/drink serali (5 occasioni)", "price": "2 × 8 € × 5~80 €", "paid": false, "estMin": 80.0, "estMax": 80.0, "id": "e29"}, {"category": "🍽️ Cibo e bevande", "label": "Gelato (1 occasione)", "price": "2 × 4 € × 1~8 €", "paid": false, "estMin": 8.0, "estMax": 8.0, "id": "e30"}, {"category": "🍽️ Cibo e bevande", "label": "Spesa generica (grigliate, pasti a casa, snack)", "price": "forfait~200 €", "paid": false, "estMin": 200.0, "estMax": 200.0, "id": "e31"}, {"category": "🏠 Alloggi", "label": "Casa a Ischia (Barano, 8 notti)", "price": "460 €", "paid": true, "estMin": 460.0, "estMax": 460.0, "id": "e32"}, {"category": "🏠 Alloggi", "label": "Casa a Scala (Costiera, 4 notti)", "price": "286 €", "paid": false, "estMin": 286.0, "estMax": 286.0, "id": "e33"}, {"category": "🏠 Alloggi", "label": "Tassa di soggiorno Ischia (4 € a testa × 2 persone × 8 notti)", "price": "64 €", "paid": false, "estMin": 64.0, "estMax": 64.0, "id": "e34"}, {"category": "🏠 Alloggi", "label": "Campeggio Sabaudia (4 notti)", "price": "160–220 €", "paid": false, "estMin": 220.0, "estMax": 220.0, "id": "e35"}, {"category": "🏠 Alloggi", "label": "Campeggio Maremma (1 notte)", "price": "40–55 €", "paid": false, "estMin": 55.0, "estMax": 55.0, "id": "e36"}], "packing": [{"category": "⛺ Campeggio (Sabaudia, Maremma)", "label": "Tenda + picchetti + martello", "id": "p1"}, {"category": "⛺ Campeggio (Sabaudia, Maremma)", "label": "Sacchi a pelo / lenzuola da campeggio", "id": "p2"}, {"category": "⛺ Campeggio (Sabaudia, Maremma)", "label": "Materassini gonfiabili + pompa", "id": "p3"}, {"category": "⛺ Campeggio (Sabaudia, Maremma)", "label": "Cuscini da campeggio", "id": "p4"}, {"category": "⛺ Campeggio (Sabaudia, Maremma)", "label": "Torcia frontale/lanterna", "id": "p5"}, {"category": "⛺ Campeggio (Sabaudia, Maremma)", "label": "Power bank o batteria portatile", "id": "p6"}, {"category": "⛺ Campeggio (Sabaudia, Maremma)", "label": "Telo impermeabile/teli per terra", "id": "p7"}, {"category": "⛺ Campeggio (Sabaudia, Maremma)", "label": "Corda per stendere/asciugare", "id": "p8"}, {"category": "⛺ Campeggio (Sabaudia, Maremma)", "label": "Tavolo con scacchiera", "id": "p9"}, {"category": "🔥 Grigliata", "label": "Griglia portatile (a carbone o elettrica, se ammessa nei campeggi)", "id": "p10"}, {"category": "🔥 Grigliata", "label": "Carbonella + accendifuoco", "id": "p11"}, {"category": "🔥 Grigliata", "label": "Pinze/posate da barbecue", "id": "p12"}, {"category": "🔥 Grigliata", "label": "Piatti, bicchieri, posate riutilizzabili", "id": "p13"}, {"category": "🔥 Grigliata", "label": "Un coltello da cucina decente + tagliere", "id": "p14"}, {"category": "🔥 Grigliata", "label": "Sale, olio, spezie base", "id": "p15"}, {"category": "🔥 Grigliata", "label": "Contenitori/borsa frigo per la spesa", "id": "p16"}, {"category": "🌊 Mare e canoa", "label": "Canoa gonfiabile + pompa + remi", "id": "p17"}, {"category": "🌊 Mare e canoa", "label": "Costumi (più di uno a testa)", "id": "p18"}, {"category": "🌊 Mare e canoa", "label": "Teli mare, stuoia", "id": "p19"}, {"category": "🌊 Mare e canoa", "label": "Scarpette da scoglio/acqua (Sorgeto, Maronti, Circeo)", "id": "p20"}, {"category": "🌊 Mare e canoa", "label": "Crema solare (alta protezione, resistente all'acqua)", "id": "p21"}, {"category": "🌊 Mare e canoa", "label": "Maschera e boccaglio (per Baia, se preferite le vostre)", "id": "p22"}, {"category": "🌊 Mare e canoa", "label": "Occhiali da sole", "id": "p23"}, {"category": "🌊 Mare e canoa", "label": "Sacca stagna per telefono/oggetti in canoa", "id": "p24"}, {"category": "🌊 Mare e canoa", "label": "Ombrellone", "id": "p25"}, {"category": "🌊 Mare e canoa", "label": "Giochi da spiaggia (racchettoni, ecc.)", "id": "p26"}, {"category": "⛺ Campeggio (Sabaudia, Maremma)", "label": "Lampada", "id": "p27"}, {"category": "🌊 Mare e canoa", "label": "Sacca subacquea stagna", "id": "p28"}, {"category": "🌊 Mare e canoa", "label": "Ancora per canoa", "id": "p29"}, {"category": "🌊 Mare e canoa", "label": "Carrellino per canoa", "id": "p30"}, {"category": "🥾 Trekking (Monte Circeo, Monte Epomeo)", "label": "Scarpe da trekking o comunque scarpe chiuse buone", "id": "p31"}, {"category": "🥾 Trekking (Monte Circeo, Monte Epomeo)", "label": "Zainetto leggero + borraccia", "id": "p32"}, {"category": "🥾 Trekking (Monte Circeo, Monte Epomeo)", "label": "Cappellino", "id": "p33"}, {"category": "📄 Documenti e pratico", "label": "Carte d'identità/documenti", "id": "p34"}, {"category": "📄 Documenti e pratico", "label": "Patente e libretto auto", "id": "p35"}, {"category": "📄 Documenti e pratico", "label": "Conferme prenotazioni (case, campeggi, immersione, traghetti)", "id": "p36"}, {"category": "📄 Documenti e pratico", "label": "Contanti (parcheggi, Sorgeto, mercati)", "id": "p37"}, {"category": "📄 Documenti e pratico", "label": "Copia assicurazione auto", "id": "p38"}, {"category": "📄 Documenti e pratico", "label": "Chiave di scorta auto", "id": "p39"}, {"category": "👕 Abbigliamento", "label": "Abbigliamento leggero/estivo (fine agosto-metà settembre)", "id": "p40"}, {"category": "👕 Abbigliamento", "label": "Un paio di outfit \"da sera\" per le cene fuori/centri storici", "id": "p41"}, {"category": "👕 Abbigliamento", "label": "Costume + copricostume", "id": "p42"}, {"category": "👕 Abbigliamento", "label": "Felpa leggera per le sere più fresche (Circeo/Epomeo)", "id": "p43"}, {"category": "👕 Abbigliamento", "label": "Ciabatte e scarpe comode per camminare nei borghi", "id": "p44"}, {"category": "🔌 Elettronica", "label": "Caricabatterie/cavi", "id": "p45"}, {"category": "🔌 Elettronica", "label": "Fotocamera, se non usate solo il telefono", "id": "p46"}, {"category": "🔌 Elettronica", "label": "Adattatori se necessario", "id": "p47"}, {"category": "💊 Farmacia", "label": "Kit pronto soccorso base (cerotti, disinfettante)", "id": "p48"}, {"category": "💊 Farmacia", "label": "Doposole", "id": "p49"}, {"category": "💊 Farmacia", "label": "Repellente zanzare", "id": "p50"}, {"category": "💊 Farmacia", "label": "Medicinali personali eventuali", "id": "p51"}, {"category": "🍳 Casa (Ischia/Ravello)", "label": "Eventuali spezie/prodotti che usate spesso", "id": "p52"}, {"category": "🍳 Casa (Ischia/Ravello)", "label": "Sacchetti per la spesa/borsa termica", "id": "p53"}, {"category": "🍳 Casa (Ischia/Ravello)", "label": "Carte da gioco", "id": "p54"}], "food": [{"category": "🌿 Lazio — Sabaudia, Circeo, Gaeta", "label": "Tiella di Gaeta (torta salata ripiena, spesso con polpo o alici)", "id": "f1"}, {"category": "🌿 Lazio — Sabaudia, Circeo, Gaeta", "label": "Olive di Gaeta", "id": "f2"}, {"category": "🌿 Lazio — Sabaudia, Circeo, Gaeta", "label": "Fritto misto di paranza (pesce fritto minuto, tipico della costa)", "id": "f3"}, {"category": "🌿 Lazio — Sabaudia, Circeo, Gaeta", "label": "Mozzarella di bufala della zona pontina", "id": "f4"}, {"category": "♨️ Ischia", "label": "Coniglio all'ischitana — il piatto simbolo dell'isola", "id": "f5"}, {"category": "♨️ Ischia", "label": "Frittatina al coniglio a Forio", "id": "f6"}, {"category": "♨️ Ischia", "label": "Zingara ischitana — il panino simbolo di Ischia, nato negli anni '70 al pub La Virgola a Ischia Ponte, oggi fatta benissimo anche al Panificio Boccia lì vicino", "id": "f7"}, {"category": "♨️ Ischia", "label": "Salumi e focacce vicino al Castello Aragonese, Ischia Ponte", "id": "f8"}, {"category": "♨️ Ischia", "label": "Brioche ischitana a colazione, magari col granita di limone o caffè", "id": "f9"}, {"category": "♨️ Ischia", "label": "Vino Ischia DOC (Biancolella, Per' e Palummo)", "id": "f10"}, {"category": "♨️ Ischia", "label": "Genovese (ragù di cipolle napoletano)", "id": "f11"}, {"category": "♨️ Ischia", "label": "Sfogliatella (riccia o frolla) e babà", "id": "f12"}, {"category": "♨️ Ischia", "label": "Pizza fritta", "id": "f13"}, {"category": "♨️ Ischia", "label": "Taralli napoletani \"'nzogna e pepe\"", "id": "f14"}, {"category": "♨️ Ischia", "label": "Limoncello", "id": "f15"}, {"category": "🛥️ Procida", "label": "Lingua di bue — il dolce tipico dell'isola (Bar Pasticceria Roma)", "id": "f16"}, {"category": "🛵 Capri", "label": "Torta caprese — dolce al cioccolato e mandorle, senza farina (Pasticceria Buonocore)", "id": "f17"}, {"category": "🍋 Costiera Amalfitana — Ravello", "label": "Pasticciotto e delizia al limone alla Pasticceria Andrea Pansa, Amalfi", "id": "f18"}, {"category": "🍋 Costiera Amalfitana — Ravello", "label": "Scialatielli ai frutti di mare", "id": "f19"}, {"category": "🍋 Costiera Amalfitana — Ravello", "label": "Colatura di alici di Cetara", "id": "f20"}, {"category": "🍋 Costiera Amalfitana — Ravello", "label": "Provolone del Monaco", "id": "f21"}, {"category": "🍋 Costiera Amalfitana — Ravello", "label": "Melanzane alla parmigiana / \"a scarpone\"", "id": "f22"}, {"category": "🍋 Costiera Amalfitana — Ravello", "label": "Delizia al limone", "id": "f23"}, {"category": "🍋 Costiera Amalfitana — Ravello", "label": "Casatiello", "id": "f24"}, {"category": "🍋 Costiera Amalfitana — Ravello", "label": "Limoncello della costiera (i limoni sono ovunque, vale la pena assaggiarne diverse versioni)", "id": "f25"}]};
+const SEED = {"days": [{"id": "d1", "title": "Parma → Sabaudia (Sab 29 agosto)", "links": [{"label": "Parma", "url": "https://maps.apple.com/?ll=44.8015,10.3279&q=Parma"}, {"label": "Sabaudia", "url": "https://maps.apple.com/?ll=41.3009,13.0269&q=Sabaudia"}, {"label": "Lago di Bolsena", "url": "https://maps.apple.com/?ll=42.6100,11.9750&q=Lago%20di%20Bolsena"}], "M": "partenza da Parma.", "P": "viaggio verso Sabaudia (~5h30/6h totali), con sosta al Lago di Bolsena (uscita A1 Orvieto, circa a metà strada) per un bagno rinfrescante e uno spuntino veloce sul lungolago.\n🥪 Pranzo semplice (panino) sul lungolago di Bolsena.", "S": "arrivo e sistemazione.\n🍕 Pizza direttamente al campeggio, per la prima sera senza pensieri."}, {"id": "d2", "title": "Sabaudia (Dom 30 agosto)", "links": [{"label": "Sabaudia", "url": "https://maps.apple.com/?ll=41.3009,13.0269&q=Sabaudia"}, {"label": "Lago di Paola", "url": "https://maps.apple.com/?ll=41.2967,13.0500&q=Lago%20di%20Paola"}, {"label": "Sperlonga", "url": "https://maps.apple.com/?ll=41.2540,13.4330&q=Sperlonga"}, {"label": "Terracina", "url": "https://maps.apple.com/?ll=41.2926,13.2496&q=Terracina"}], "M": "mare con calma, spiaggia del Lido di Sabaudia.\n🥪 Pranzo semplice (panino) in spiaggia.", "P": "canoa sul Lago di Paola (unico lago del Circeo dove è permessa la canoa libera), poi una breve passeggiata nella foresta del Parco Nazionale del Circeo (foresta pluviale mediterranea, rara in Italia).", "S": "spesa a Sabaudia prima che chiudano i negozi, poi relax al campeggio (o, in alternativa, una delle novità nei dintorni come Sperlonga o Terracina).\n🔥 Grigliata di carne al campeggio."}, {"id": "d3", "title": "Sabaudia (Lun 31 agosto)", "links": [{"label": "Sabaudia", "url": "https://maps.apple.com/?ll=41.3009,13.0269&q=Sabaudia"}, {"label": "Monte Circeo", "url": "https://maps.apple.com/?ll=41.2380,13.0550&q=Monte%20Circeo"}, {"label": "San Felice Circeo", "url": "https://maps.apple.com/?ll=41.2439,13.0872&q=San%20Felice%20Circeo"}], "M": "spiaggia, mare con calma.", "P": "trekking sul Monte Circeo fino alla cima — sentiero impegnativo ma con vista straordinaria su tutto il promontorio, le isole Ponziane e la costa.\n🥪 Panino/pranzo al sacco durante il trekking.", "S": "spesa a San Felice Circeo prima che chiudano i negozi, rientro al campeggio.\n🐟 Grigliata di pesce al campeggio."}, {"id": "d4", "title": "Sabaudia (Mar 1 settembre)", "links": [{"label": "Sabaudia", "url": "https://maps.apple.com/?ll=41.3009,13.0269&q=Sabaudia"}, {"label": "Terracina", "url": "https://maps.apple.com/?ll=41.2926,13.2496&q=Terracina"}], "M": "giornata a Terracina (~40 min da Sabaudia) — Tempio di Giove Anxur, le rovine romane su uno sperone roccioso con vista mozzafiato sul golfo.\n🥪 Pranzo semplice (panino) a Terracina.", "P": "Spiaggia di Levante, ai piedi del promontorio del tempio — sabbia dorata finissima, acqua bassa, Bandiera Blu.", "S": "ultima serata a Sabaudia.\n🐟 Il ristorante di pesce sul lungomare che conoscete già."}, {"id": "d5", "title": "Sabaudia → Baia → Ischia (Mer 2 settembre)", "links": [{"label": "Sabaudia", "url": "https://maps.apple.com/?ll=41.3009,13.0269&q=Sabaudia"}, {"label": "Baia", "url": "https://maps.apple.com/?ll=40.8236,14.1219&q=Baia%20/%20Pozzuoli"}, {"label": "Pozzuoli", "url": "https://maps.apple.com/?ll=40.8236,14.1219&q=Baia%20/%20Pozzuoli"}, {"label": "Barano", "url": "https://maps.apple.com/?ll=40.7213,13.9114&q=Barano%20d%27Ischia"}, {"label": "Piscina Mirabile", "url": "https://maps.apple.com/?ll=40.7908,14.0842&q=Piscina%20Mirabile"}], "M": "checkout dal campeggio, trasferimento da Sabaudia verso Baia (~2h), in tempo per l'immersione/snorkeling guidata dalle 12:00 alle 14:30 nel Parco Archeologico Sommerso di Baia.", "P": "Piscina Mirabile a Bacoli — la più grande cisterna romana d'epoca imperiale, la \"Cattedrale dell'Acqua\" (visita guidata di 45 min); se le Cento Camerelle sono riaperte, sono a 400m e si vedono con lo stesso biglietto cumulativo. Poi tempo libero prima dell'imbarco.\n🥪 Pranzo semplice (panino) in zona Pozzuoli.", "S": "traghetto Pozzuoli → Ischia delle 19:00, arrivo alle 20:05, check-in e sistemazione.\n🍕 Pizza da Rosa dei Venti a Barano — gourmet, ingredienti locali, comoda per la prima sera."}, {"id": "d6", "title": "Ischia (Gio 3 settembre)", "links": [{"label": "Barano", "url": "https://maps.apple.com/?ll=40.7213,13.9114&q=Barano%20d%27Ischia"}, {"label": "Maronti", "url": "https://maps.apple.com/?ll=40.6980,13.8990&q=Maronti%20/%20Sant%27Angelo"}, {"label": "Sant'Angelo", "url": "https://maps.apple.com/?ll=40.6980,13.8990&q=Maronti%20/%20Sant%27Angelo"}], "M": "spesa con piccola visita a Barano/Testaccio.\n🥐 Colazione in un bar del paese.", "P": "mare alla spiaggia dei Maronti (auto dalla strada panoramica da Testaccio, parcheggi custoditi nei dintorni).\n🍷 Aperitivo con vista in uno dei locali di Sant'Angelo.\nDentro la stessa baia, zona Cavascura: le Fumarole, sabbia calda naturale per l'effetto termale — se volete, ci si arriva a piedi lungo la spiaggia.", "S": "Monte Epomeo al tramonto — si parte da Fontana (Barano, comodo da casa), salita di circa 1h e discesa di 40-50 min, vista a 360° sull'isola; in alternativa, la solita passeggiata nel borgo di Sant'Angelo.\n🔥 Cena a casa con grigliata."}, {"id": "d7", "title": "Ischia (Ven 4 settembre)", "links": [{"label": "Giardini Poseidon", "url": "https://maps.apple.com/?ll=40.7080,13.8590&q=Giardini%20Poseidon"}, {"label": "Forio", "url": "https://maps.apple.com/?ll=40.7386,13.8583&q=Forio"}], "M": "Giardini Poseidon o Negombo, giornata intera (apertura 9:00).\n🥐 Colazione da Divino Cafè (Forio) — ottimi cornetti, babà e cannoli, prima di entrare alle terme.", "P": "ancora Giardini Poseidon (accesso incluso anche alla spiaggia di Citara, sotto il parco), fino alla chiusura alle 19:00.", "S": "relax serale a Forio, passeggiata sul lungomare.\n🍷 Aperitivo tardo a Forio."}, {"id": "d8", "title": "Ischia → Procida → Ischia (Sab 5 settembre)", "links": [{"label": "Procida", "url": "https://maps.apple.com/?ll=40.7597,14.0206&q=Procida"}], "M": "traghetto da Ischia a Procida, arrivo a Marina Grande. Passeggiata veloce nella zona del porto — Via Roma, le casette colorate, Chiesa della Madonna della Pietà. Bus verso Chiaiolella: passeggiata sul lungomare verso Ciraccio, con vista su Vivara e i faraglioni (Vivara si guarda da qui, non serve visitarla a parte). Bus di rientro verso Terra Murata: Piazza dei Martiri, Santuario di Santa Maria delle Grazie, Belvedere dei Cannoni (vista sulla Corricella), Abbazia di San Michele.\n🥐 Caffè con lingua di bue (il dolce tipico di Procida) al Bar Pasticceria Roma (Via Roma 164) — il locale originale dove è stata inventata negli anni '50, considerato il migliore dell'isola.\nPalazzo d'Avalos (ex carcere borbonico), a Terra Murata: probabilmente la visita culturale più interessante dell'isola (~1 ora), ma solo se prenotata in anticipo — altrimenti si salta senza problemi e si prosegue verso la Corricella.", "P": "discesa a piedi da Terra Murata verso Marina Corricella (uno dei tratti più belli dell'isola: case color pastello, scalinate, scorci sul mare), pranzo in uno dei ristoranti sul porticciolo. Poi salita e discesa verso la Spiaggia della Chiaia (la famosa scalinata di 186 gradini), bagno e relax.\n🐟 Pranzo alla Corricella — pasta al limone di Procida, pesce fresco/alici/paranza fritta, granita al limone.", "S": "risalita verso Marina Grande, tempo libero sul porto di Procida prima dell'imbarco, traghetto di rientro a Ischia, poi tramonto sulla Spiaggia dei Pescatori con il Castello Aragonese sullo sfondo (la visita completa è il 9 settembre, con più calma)."}, {"id": "d9", "title": "Ischia (Dom 6 settembre)", "links": [{"label": "Giardino La Mortella", "url": "https://maps.apple.com/?ll=40.7370,13.8600&q=Giardino%20La%20Mortella"}, {"label": "Forio", "url": "https://maps.apple.com/?ll=40.7386,13.8583&q=Forio"}, {"label": "San Montano", "url": "https://maps.apple.com/?ll=40.7550,13.8870&q=San%20Montano"}], "M": "Giardino La Mortella a Forio (aperto la domenica, 9:00-19:00 — prevedere 2-3 ore), poi trasferimento verso la Baia di San Montano — c'è un parcheggio vicino alla baia, ma in alta stagione conviene arrivare presto per trovare posto.\n🥐 Colazione in un bar a Forio, prima di entrare a La Mortella.\nSulla strada verso San Montano: il Fungo di Lacco Ameno, la celebre roccia vulcanica a forma di fungo sul lungomare — bastano 5-10 minuti per una foto.", "P": "mare con calma a San Montano, snorkeling libero.", "S": "relax serale, rientro verso Forio per cena.\n🍕 Pizza da Zi Carmela a Forio — storica, vicino al porticciolo."}, {"id": "d10", "title": "Ischia → Capri → Ischia (Lun 7 settembre)", "links": [{"label": "Capri", "url": "https://maps.apple.com/?ll=40.5532,14.2429&q=Capri"}, {"label": "Marina Grande", "url": "https://maps.apple.com/?ll=40.5532,14.2429&q=Capri"}, {"label": "Anacapri", "url": "https://maps.apple.com/?ll=40.5532,14.2429&q=Capri"}, {"label": "Chiesa di San Michele", "url": "https://maps.apple.com/?ll=40.5546,14.2260&q=Chiesa%20di%20San%20Michele"}, {"label": "Monte Solaro", "url": "https://maps.apple.com/?ll=40.5490,14.2130&q=Monte%20Solaro"}, {"label": "Piazza Vittoria", "url": "https://maps.apple.com/?ll=40.5545,14.2255&q=Piazza%20Vittoria"}, {"label": "Casa Rossa", "url": "https://maps.apple.com/?ll=40.5580,14.2280&q=Casa%20Rossa"}, {"label": "Certosa di San Giacomo", "url": "https://maps.apple.com/?ll=40.5497,14.2445&q=Certosa%20di%20San%20Giacomo"}, {"label": "Belvedere di Tragara", "url": "https://maps.apple.com/?ll=40.5460,14.2470&q=Belvedere%20di%20Tragara"}, {"label": "Arco Naturale", "url": "https://maps.apple.com/?ll=40.5461,14.2586&q=Arco%20Naturale"}], "M": "traghetto da Ischia Porto, arrivo a Marina Grande. Bus verso Anacapri, giro veloce del centro. Poi bus da Anacapri verso Capri centro.\n🥐 Cornetto da Bar Calise a Ischia Porto, prima di imbarcarvi (storico dal 1925, il bar simbolo di Ischia).\nAd Anacapri, se resta tempo: Villa San Michele (giardini e vista sul golfo) Chiesa di San Michele (pavimento in maiolica dipinta) Monte Solaro in seggiovia Piazza Vittoria e Via Giuseppe Orlandi Casa Rossa", "P": "Giardini di Augusto (vista su Via Krupp e sui Faraglioni), poi discesa panoramica per Via Krupp fino alla Scogliera dell'Arsenale/Marina Piccola (verificare che sia aperta) — bagno e pranzo con calma. Al passaggio in centro, torta caprese da Buonocore da portare con voi per Marina Piccola.\n🍰 Torta caprese e gelato alla Pasticceria Buonocore (Via Vittorio Emanuele 35, vicino alla Piazzetta), da gustare a Marina Piccola dopo pranzo.\nA Capri centro, se resta tempo: Certosa di San Giacomo Via Camerelle Belvedere di Tragara Arco Naturale", "S": "risalita verso Marina Grande per le 14:00 — Giro dell'Isola in barca (~2 ore) + sosta alla Grotta Azzurra, poi traghetto di rientro a Ischia.\n🍽️ Cena a Ischia al rientro.\nPer una cena tipica con coniglio all'ischitana: Il Focolare (Barano d'Ischia, via Cretaio — familiare, immerso nel verde) o La Vigna di Alberto (Barano d'Ischia, via Giuseppe Garibaldi 57 — atmosfera intima, prodotti a km 0), entrambi comodi da casa."}, {"id": "d11", "title": "Ischia (Mar 8 settembre)", "links": [{"label": "Forio", "url": "https://maps.apple.com/?ll=40.7386,13.8583&q=Forio"}, {"label": "Spiaggia di San Francesco", "url": "https://maps.apple.com/?ll=40.7350,13.8480&q=Spiaggia%20di%20San%20Francesco"}, {"label": "Sorgeto", "url": "https://maps.apple.com/?ll=40.7030,13.8670&q=Panza%20/%20Sorgeto"}, {"label": "Panza", "url": "https://maps.apple.com/?ll=40.7030,13.8670&q=Panza%20/%20Sorgeto"}], "M": "piccola visita alla Chiesa del Soccorso e al lungomare di Forio, poi mare alla Spiaggia di San Francesco (pochi minuti a piedi dal centro, facile in auto).\n🥐 Colazione da Divino Cafè (Forio) — ottimi cornetti, babà e cannoli.", "P": "ancora mare a San Francesco, oppure Giardini Ravino (Citara) — giardino di piante grasse e cactus, con pavoni liberi e installazioni d'arte, molto diverso da La Mortella; aperto tutti i giorni tranne martedì e giovedì, 10€ a persona.", "S": "Baia di Sorgeto — pozze termali naturali sugli scogli, zona libera e gratuita, suggestiva al tramonto (zona Panza, pochi minuti da Citara)."}, {"id": "d12", "title": "Ischia (Mer 9 settembre)", "links": [{"label": "Spiaggia di Cartaromana", "url": "https://maps.apple.com/?ll=40.7395,13.9560&q=Cartaromana"}, {"label": "Ischia Ponte", "url": "https://maps.apple.com/?ll=40.7360,13.9581&q=Ischia%20Ponte"}, {"label": "Castello Aragonese", "url": "https://maps.apple.com/?ll=40.7333,13.9575&q=Castello%20Aragonese"}], "M": "ultimo mare con calma alla Spiaggia di Cartaromana (Ischia Ponte) — piccola baia di sabbia e ciottoli con sorgenti termali naturali, vista sul Castello Aragonese.\n🥐 Colazione da Bar Ciccio a Ischia Ponte (Piazza Antica Reggia) — ottimi brioches.", "P": "visita completa al Castello Aragonese di Ischia Ponte (1h30-2h con calma) — Terrazzo dell'Immacolata, Chiesa dell'Immacolata, il cimitero delle Monache Clarisse, gallerie scavate nella roccia.\n🍨 Gelato artigianale nel borgo di pescatori, dopo la visita (gusti locali: limone di Ischia, fico bianco).", "S": "relax serale nel borgo di pescatori di Ischia Ponte.\n🍸 Un ultimo drink come saluto a Ischia."}, {"id": "d13", "title": "Ischia → Pozzuoli → Ravello (Gio 10 settembre)", "links": [{"label": "Pozzuoli", "url": "https://maps.apple.com/?ll=40.8236,14.1219&q=Baia%20/%20Pozzuoli"}, {"label": "Ravello", "url": "https://maps.apple.com/?ll=40.6492,14.6114&q=Ravello"}, {"label": "Scala", "url": "https://maps.apple.com/?ll=40.6447,14.5964&q=Scala"}, {"label": "Villa Rufolo", "url": "https://maps.apple.com/?ll=40.6493,14.6117&q=Villa%20Rufolo"}, {"label": "Villa Cimbrone", "url": "https://maps.apple.com/?ll=40.6400,14.6066&q=Villa%20Cimbrone"}], "M": "traghetto Ischia → Pozzuoli delle 11:30, arrivo alle 12:30.", "P": "guida verso la Costiera Amalfitana (uscita autostradale consigliata a Salerno), arrivo a Scala (dove alloggiate, pochi minuti da Ravello), check-in, poi Villa Rufolo e Villa Cimbrone (Terrazza dell'Infinito) nel tardo pomeriggio — la luce di quell'ora è ideale per il panorama.\n🥪 Pranzo semplice (panino) durante il viaggio.", "S": "spesa per la casa, giro del paese di Scala e passeggiata nel centro storico."}, {"id": "d14", "title": "Ravello (Ven 11 settembre)", "links": [{"label": "Ravello", "url": "https://maps.apple.com/?ll=40.6492,14.6114&q=Ravello"}, {"label": "Amalfi", "url": "https://maps.apple.com/?ll=40.6340,14.6027&q=Amalfi"}, {"label": "Atrani", "url": "https://maps.apple.com/?ll=40.6323,14.6108&q=Atrani"}, {"label": "Duomo di Amalfi", "url": "https://maps.apple.com/?ll=40.634,14.6027&q=Duomo%20di%20Amalfi"}], "M": "ad Amalfi: Duomo di Amalfi (Cattedrale di Sant'Andrea) e Chiostro del Paradiso, poi Atrani — il borgo più piccolo della costiera, a 5 minuti a piedi da Amalfi, quasi nessun turista ci arriva.\n🥐 Colazione (pasticciotto) alla Pasticceria Andrea Pansa in Piazza Duomo — storica dal 1830. Se lo trovate, anche un sorbetto da A'Sciulia.", "P": "boat tour della Costiera delle 14:30 da Amalfi (rientro dopo circa 2 ore) — grotte, spiagge raggiungibili solo dal mare, bagno.", "S": "rientro a Ravello, passeggiata nel centro storico.\n🍷 Drink in piazza nel centro storico."}, {"id": "d15", "title": "Ravello (Sab 12 settembre)", "links": [{"label": "Ravello", "url": "https://maps.apple.com/?ll=40.6492,14.6114&q=Ravello"}, {"label": "Sentiero degli Dei", "url": "https://maps.apple.com/?ll=40.6250,14.5000&q=Sentiero%20degli%20Dei"}, {"label": "Nocelle", "url": "https://maps.apple.com/?ll=40.6193,14.4703&q=Nocelle"}, {"label": "Positano", "url": "https://maps.apple.com/?ll=40.6280,14.4848&q=Positano"}, {"label": "Amalfi", "url": "https://maps.apple.com/?ll=40.6340,14.6027&q=Amalfi"}], "M": "Sentiero degli Dei (Bomerano–Nocelle, ~5 km, circa 3 ore), partenza presto la mattina — sosta a Nocelle, il piccolo borgo alla fine del sentiero, prima della discesa verso Positano.\n🥪 Pranzo semplice (panino) durante il cammino.", "P": "arrivo a Positano, esplorazione del paese.", "S": "traghetto di ritorno verso Amalfi, poi rientro a Ravello."}, {"id": "d16", "title": "Ravello (Dom 13 settembre)", "links": [{"label": "Ravello", "url": "https://maps.apple.com/?ll=40.6492,14.6114&q=Ravello"}, {"label": "Minori", "url": "https://maps.apple.com/?ll=40.6499,14.6338&q=Minori"}, {"label": "Maiori", "url": "https://maps.apple.com/?ll=40.6519,14.6383&q=Maiori"}, {"label": "Vietri sul Mare", "url": "https://maps.apple.com/?ll=40.6669,14.7369&q=Vietri%20sul%20Mare"}, {"label": "Cetara", "url": "https://maps.apple.com/?ll=40.6547,14.7003&q=Cetara"}], "M": "noleggio scooter, giro della costiera verso Minori, con calma.\n🍰 Colazione alla Pasticceria Sal De Riso a Minori — una delle pasticcerie più famose d'Italia. Da provare la sfogliatella Santa Rosa, la sua reinterpretazione del dolce originario di Conca dei Marini.", "P": "proseguimento in scooter verso Maiori, poi Vietri sul Mare (le ceramiche) e Cetara — villaggio di pescatori famoso per la colatura di alici e il tonno, con soste libere lungo la costa.", "S": "rientro a Ravello, passeggiata nel centro storico.\n🐟 Cena a Ravello — Da Salvatore (gourmet, vista panoramica, ~60-70€ a persona, chiuso il lunedì), Bella Vista Sul Mare (tra Ravello e Scala, comodo da casa, terrazza con vista mozzafiato, pesce, ~40-50€ a persona, ottime recensioni), oppure Cumpà Cosimo (trattoria storica dal 1929, cucina casereccia, ~20-30€ a persona).\n🍷 Drink serale con vista nel centro di Ravello."}, {"id": "d17", "title": "Ravello → Maremma (Lun 14 settembre)", "links": [{"label": "Ravello", "url": "https://maps.apple.com/?ll=40.6492,14.6114&q=Ravello"}, {"label": "Vesuvio", "url": "https://maps.apple.com/?ll=40.8219,14.4262&q=Vesuvio"}, {"label": "Follonica", "url": "https://maps.apple.com/?ll=42.9186,10.7561&q=Follonica%20/%20Castiglione%20della%20Pescaia"}, {"label": "Castiglione della Pescaia", "url": "https://maps.apple.com/?ll=42.9186,10.7561&q=Follonica%20/%20Castiglione%20della%20Pescaia"}], "M": "con calma a Ravello, checkout.", "P": "sosta al Vesuvio (uscita Ercolano/Torre del Greco dalla A3), salita al Gran Cono, poi dritti verso il campeggio in Maremma (zona Follonica/Castiglione della Pescaia).\n🥪 Pranzo semplice (panino) durante il viaggio.", "S": "arrivo, sistemazione.\n🔥 Cena in pineta con grigliata."}, {"id": "d18", "title": "Maremma → Parma (Mar 15 settembre)", "links": [{"label": "Parma", "url": "https://maps.apple.com/?ll=44.8015,10.3279&q=Parma"}], "M": "ultimo mare/canoa con calma.", "P": "rientro a Parma (~3h).", "S": ""}], "expenses": [{"category": "🚗 Trasporti su gomma", "label": "Carburante (Parma ↔ Sabaudia ↔ Pozzuoli ↔ Ravello ↔ Maremma ↔ Parma, ~1.500 km + spostamenti locali)", "price": "180–220 €", "paid": false, "estMin": 220.0, "estMax": 220.0, "id": "e1"}, {"category": "🚗 Trasporti su gomma", "label": "Pedaggi autostradali (tratte A1/A3 principali)", "price": "90–120 €", "paid": false, "estMin": 120.0, "estMax": 120.0, "id": "e2"}, {"category": "🚗 Trasporti su gomma", "label": "Parcheggio a Scala (per tutto il soggiorno in Costiera)", "price": "40 €", "paid": false, "estMin": 40.0, "estMax": 40.0, "id": "e3"}, {"category": "⛴️ Traghetti", "label": "Pozzuoli ↔ Ischia, andata e ritorno (prenotati)", "price": "180 €", "paid": true, "estMin": 180.0, "estMax": 180.0, "id": "e4"}, {"category": "⛴️ Traghetti", "label": "Procida a/r (2 persone)", "price": "45–60 €", "paid": false, "estMin": 60.0, "estMax": 60.0, "id": "e5"}, {"category": "⛴️ Traghetti", "label": "Capri a/r da Ischia Porto (2 persone, da 21,50€ a tratta)", "price": "85–110 €", "paid": false, "estMin": 110.0, "estMax": 110.0, "id": "e6"}, {"category": "⛴️ Traghetti", "label": "Parcheggio auto a Ischia Porto (1 giorno, giornata Capri)", "price": "~10 €", "paid": false, "estMin": 10.0, "estMax": 10.0, "id": "e7"}, {"category": "🎟️ Attività e ingressi", "label": "Immersione/snorkeling Parco Sommerso di Baia (confermato)", "price": "28 €56 €", "paid": false, "estMin": 56.0, "estMax": 56.0, "id": "e8"}, {"category": "🎟️ Attività e ingressi", "label": "Giardini Poseidon o Negombo (giornata intera)", "price": "45–50 €90–100 €", "paid": false, "estMin": 100.0, "estMax": 100.0, "id": "e9"}, {"category": "🎟️ Attività e ingressi", "label": "Giardini Ravino (opzionale, se visitato)", "price": "10 €20 €", "paid": false, "estMin": 20.0, "estMax": 20.0, "id": "e10"}, {"category": "🎟️ Attività e ingressi", "label": "Castello Aragonese (Ischia)", "price": "10–12 €20–24 €", "paid": false, "estMin": 24.0, "estMax": 24.0, "id": "e11"}, {"category": "🎟️ Attività e ingressi", "label": "Bus/funicolare a Capri (spostamenti della giornata)", "price": "~8 €~16 €", "paid": false, "estMin": 16.0, "estMax": 16.0, "id": "e12"}, {"category": "🎟️ Attività e ingressi", "label": "Tour in barca + Grotta Azzurra", "price": "35–40 €70–80 €", "paid": false, "estMin": 80.0, "estMax": 80.0, "id": "e13"}, {"category": "🎟️ Attività e ingressi", "label": "Villa Rufolo (Ravello)", "price": "8 €16 €", "paid": false, "estMin": 16.0, "estMax": 16.0, "id": "e14"}, {"category": "🎟️ Attività e ingressi", "label": "Villa Cimbrone (Ravello)", "price": "~10 €~20 €", "paid": false, "estMin": 20.0, "estMax": 20.0, "id": "e15"}, {"category": "🎟️ Attività e ingressi", "label": "Noleggio scooter in Costiera (1 giorno)", "price": "—40–60 €", "paid": false, "estMin": 60.0, "estMax": 60.0, "id": "e16"}, {"category": "🎟️ Attività e ingressi", "label": "Duomo di Amalfi / Chiostro del Paradiso", "price": "~4 €~8 €", "paid": false, "estMin": 8.0, "estMax": 8.0, "id": "e17"}, {"category": "🎟️ Attività e ingressi", "label": "Boat tour Costiera da Amalfi (con bagno)", "price": "35 €70 €", "paid": false, "estMin": 70.0, "estMax": 70.0, "id": "e18"}, {"category": "🎟️ Attività e ingressi", "label": "Traghetto Positano→Amalfi (sola andata, dopo il Sentiero degli Dei)", "price": "10–19,50 €20–39 €", "paid": false, "estMin": 39.0, "estMax": 39.0, "id": "e19"}, {"category": "🎟️ Attività e ingressi", "label": "Giardino La Mortella (Forio)", "price": "12 €24 €", "paid": false, "estMin": 24.0, "estMax": 24.0, "id": "e20"}, {"category": "🎟️ Attività e ingressi", "label": "Tempio di Giove Anxur (Terracina)", "price": "7 €14 €", "paid": false, "estMin": 14.0, "estMax": 14.0, "id": "e21"}, {"category": "🎟️ Attività e ingressi", "label": "Piscina Mirabile (Bacoli, con guida)", "price": "7 €14 €", "paid": false, "estMin": 14.0, "estMax": 14.0, "id": "e22"}, {"category": "🎟️ Attività e ingressi", "label": "Gran Cono del Vesuvio (ingresso)", "price": "10 €20 €", "paid": false, "estMin": 20.0, "estMax": 20.0, "id": "e23"}, {"category": "🍽️ Cibo e bevande", "label": "Colazioni fuori (8 mattine)", "price": "2 × 4,5 € × 8~72 €", "paid": false, "estMin": 72.0, "estMax": 72.0, "id": "e24"}, {"category": "🍽️ Cibo e bevande", "label": "Pranzi fuori semplici — panini (9 giorni, 50% dei giorni)", "price": "2 × 6 € × 9~108 €", "paid": false, "estMin": 108.0, "estMax": 108.0, "id": "e25"}, {"category": "🍽️ Cibo e bevande", "label": "Pranzo al ristorante (Corricella, Procida)", "price": "16 €~32 €", "paid": false, "estMin": 32.0, "estMax": 32.0, "id": "e26"}, {"category": "🍽️ Cibo e bevande", "label": "Cene al ristorante (3 occasioni)", "price": "2 × 35 € × 3~210 €", "paid": false, "estMin": 210.0, "estMax": 210.0, "id": "e27"}, {"category": "🍽️ Cibo e bevande", "label": "Pizza (3 serate)", "price": "2 × 18 € × 3~108 €", "paid": false, "estMin": 108.0, "estMax": 108.0, "id": "e28"}, {"category": "🍽️ Cibo e bevande", "label": "Aperitivi/drink serali (5 occasioni)", "price": "2 × 8 € × 5~80 €", "paid": false, "estMin": 80.0, "estMax": 80.0, "id": "e29"}, {"category": "🍽️ Cibo e bevande", "label": "Gelato (1 occasione)", "price": "2 × 4 € × 1~8 €", "paid": false, "estMin": 8.0, "estMax": 8.0, "id": "e30"}, {"category": "🍽️ Cibo e bevande", "label": "Spesa generica (grigliate, pasti a casa, snack)", "price": "forfait~200 €", "paid": false, "estMin": 200.0, "estMax": 200.0, "id": "e31"}, {"category": "🏠 Alloggi", "label": "Casa a Ischia (Barano, 8 notti)", "price": "460 €", "paid": true, "estMin": 460.0, "estMax": 460.0, "id": "e32"}, {"category": "🏠 Alloggi", "label": "Casa a Scala (Costiera, 4 notti)", "price": "286 €", "paid": false, "estMin": 286.0, "estMax": 286.0, "id": "e33"}, {"category": "🏠 Alloggi", "label": "Tassa di soggiorno Ischia (4 € a testa × 2 persone × 8 notti)", "price": "64 €", "paid": false, "estMin": 64.0, "estMax": 64.0, "id": "e34"}, {"category": "🏠 Alloggi", "label": "Campeggio Sabaudia (4 notti)", "price": "160–220 €", "paid": false, "estMin": 220.0, "estMax": 220.0, "id": "e35"}, {"category": "🏠 Alloggi", "label": "Campeggio Maremma (1 notte)", "price": "40–55 €", "paid": false, "estMin": 55.0, "estMax": 55.0, "id": "e36"}], "packing": [{"category": "⛺ Campeggio (Sabaudia, Maremma)", "label": "Tenda + picchetti + martello", "id": "p1"}, {"category": "⛺ Campeggio (Sabaudia, Maremma)", "label": "Sacchi a pelo / lenzuola da campeggio", "id": "p2"}, {"category": "⛺ Campeggio (Sabaudia, Maremma)", "label": "Materassini gonfiabili + pompa", "id": "p3"}, {"category": "⛺ Campeggio (Sabaudia, Maremma)", "label": "Cuscini da campeggio", "id": "p4"}, {"category": "⛺ Campeggio (Sabaudia, Maremma)", "label": "Torcia frontale/lanterna", "id": "p5"}, {"category": "⛺ Campeggio (Sabaudia, Maremma)", "label": "Power bank o batteria portatile", "id": "p6"}, {"category": "⛺ Campeggio (Sabaudia, Maremma)", "label": "Telo impermeabile/teli per terra", "id": "p7"}, {"category": "⛺ Campeggio (Sabaudia, Maremma)", "label": "Corda per stendere/asciugare", "id": "p8"}, {"category": "⛺ Campeggio (Sabaudia, Maremma)", "label": "Tavolo con scacchiera", "id": "p9"}, {"category": "🔥 Grigliata", "label": "Griglia portatile (a carbone o elettrica, se ammessa nei campeggi)", "id": "p10"}, {"category": "🔥 Grigliata", "label": "Carbonella + accendifuoco", "id": "p11"}, {"category": "🔥 Grigliata", "label": "Pinze/posate da barbecue", "id": "p12"}, {"category": "🔥 Grigliata", "label": "Piatti, bicchieri, posate riutilizzabili", "id": "p13"}, {"category": "🔥 Grigliata", "label": "Un coltello da cucina decente + tagliere", "id": "p14"}, {"category": "🔥 Grigliata", "label": "Sale, olio, spezie base", "id": "p15"}, {"category": "🔥 Grigliata", "label": "Contenitori/borsa frigo per la spesa", "id": "p16"}, {"category": "🌊 Mare e canoa", "label": "Canoa gonfiabile + pompa + remi", "id": "p17"}, {"category": "🌊 Mare e canoa", "label": "Costumi (più di uno a testa)", "id": "p18"}, {"category": "🌊 Mare e canoa", "label": "Teli mare, stuoia", "id": "p19"}, {"category": "🌊 Mare e canoa", "label": "Scarpette da scoglio/acqua (Sorgeto, Maronti, Circeo)", "id": "p20"}, {"category": "🌊 Mare e canoa", "label": "Crema solare (alta protezione, resistente all'acqua)", "id": "p21"}, {"category": "🌊 Mare e canoa", "label": "Maschera e boccaglio (per Baia, se preferite le vostre)", "id": "p22"}, {"category": "🌊 Mare e canoa", "label": "Occhiali da sole", "id": "p23"}, {"category": "🌊 Mare e canoa", "label": "Sacca stagna per telefono/oggetti in canoa", "id": "p24"}, {"category": "🌊 Mare e canoa", "label": "Ombrellone", "id": "p25"}, {"category": "🌊 Mare e canoa", "label": "Giochi da spiaggia (racchettoni, ecc.)", "id": "p26"}, {"category": "⛺ Campeggio (Sabaudia, Maremma)", "label": "Lampada", "id": "p27"}, {"category": "🌊 Mare e canoa", "label": "Sacca subacquea stagna", "id": "p28"}, {"category": "🌊 Mare e canoa", "label": "Ancora per canoa", "id": "p29"}, {"category": "🌊 Mare e canoa", "label": "Carrellino per canoa", "id": "p30"}, {"category": "🥾 Trekking (Monte Circeo, Monte Epomeo)", "label": "Scarpe da trekking o comunque scarpe chiuse buone", "id": "p31"}, {"category": "🥾 Trekking (Monte Circeo, Monte Epomeo)", "label": "Zainetto leggero + borraccia", "id": "p32"}, {"category": "🥾 Trekking (Monte Circeo, Monte Epomeo)", "label": "Cappellino", "id": "p33"}, {"category": "📄 Documenti e pratico", "label": "Carte d'identità/documenti", "id": "p34"}, {"category": "📄 Documenti e pratico", "label": "Patente e libretto auto", "id": "p35"}, {"category": "📄 Documenti e pratico", "label": "Conferme prenotazioni (case, campeggi, immersione, traghetti)", "id": "p36"}, {"category": "📄 Documenti e pratico", "label": "Contanti (parcheggi, Sorgeto, mercati)", "id": "p37"}, {"category": "📄 Documenti e pratico", "label": "Copia assicurazione auto", "id": "p38"}, {"category": "📄 Documenti e pratico", "label": "Chiave di scorta auto", "id": "p39"}, {"category": "👕 Abbigliamento", "label": "Abbigliamento leggero/estivo (fine agosto-metà settembre)", "id": "p40"}, {"category": "👕 Abbigliamento", "label": "Un paio di outfit \"da sera\" per le cene fuori/centri storici", "id": "p41"}, {"category": "👕 Abbigliamento", "label": "Costume + copricostume", "id": "p42"}, {"category": "👕 Abbigliamento", "label": "Felpa leggera per le sere più fresche (Circeo/Epomeo)", "id": "p43"}, {"category": "👕 Abbigliamento", "label": "Ciabatte e scarpe comode per camminare nei borghi", "id": "p44"}, {"category": "🔌 Elettronica", "label": "Caricabatterie/cavi", "id": "p45"}, {"category": "🔌 Elettronica", "label": "Fotocamera, se non usate solo il telefono", "id": "p46"}, {"category": "🔌 Elettronica", "label": "Adattatori se necessario", "id": "p47"}, {"category": "💊 Farmacia", "label": "Kit pronto soccorso base (cerotti, disinfettante)", "id": "p48"}, {"category": "💊 Farmacia", "label": "Doposole", "id": "p49"}, {"category": "💊 Farmacia", "label": "Repellente zanzare", "id": "p50"}, {"category": "💊 Farmacia", "label": "Medicinali personali eventuali", "id": "p51"}, {"category": "🍳 Casa (Ischia/Ravello)", "label": "Eventuali spezie/prodotti che usate spesso", "id": "p52"}, {"category": "🍳 Casa (Ischia/Ravello)", "label": "Sacchetti per la spesa/borsa termica", "id": "p53"}, {"category": "🍳 Casa (Ischia/Ravello)", "label": "Carte da gioco", "id": "p54"}], "food": [{"category": "🌿 Lazio — Sabaudia, Circeo, Gaeta", "label": "Tiella di Gaeta (torta salata ripiena, spesso con polpo o alici)", "id": "f1"}, {"category": "🌿 Lazio — Sabaudia, Circeo, Gaeta", "label": "Olive di Gaeta", "id": "f2"}, {"category": "🌿 Lazio — Sabaudia, Circeo, Gaeta", "label": "Fritto misto di paranza (pesce fritto minuto, tipico della costa)", "id": "f3"}, {"category": "🌿 Lazio — Sabaudia, Circeo, Gaeta", "label": "Mozzarella di bufala della zona pontina", "id": "f4"}, {"category": "♨️ Ischia", "label": "Coniglio all'ischitana — il piatto simbolo dell'isola", "id": "f5"}, {"category": "♨️ Ischia", "label": "Frittatina al coniglio a Forio", "id": "f6"}, {"category": "♨️ Ischia", "label": "Zingara ischitana — il panino simbolo di Ischia, nato negli anni '70 al pub La Virgola a Ischia Ponte, oggi fatta benissimo anche al Panificio Boccia lì vicino", "id": "f7"}, {"category": "♨️ Ischia", "label": "Salumi e focacce vicino al Castello Aragonese, Ischia Ponte", "id": "f8"}, {"category": "♨️ Ischia", "label": "Brioche ischitana a colazione, magari col granita di limone o caffè", "id": "f9"}, {"category": "♨️ Ischia", "label": "Vino Ischia DOC (Biancolella, Per' e Palummo)", "id": "f10"}, {"category": "♨️ Ischia", "label": "Genovese (ragù di cipolle napoletano)", "id": "f11"}, {"category": "♨️ Ischia", "label": "Sfogliatella (riccia o frolla) e babà", "id": "f12"}, {"category": "♨️ Ischia", "label": "Pizza fritta", "id": "f13"}, {"category": "♨️ Ischia", "label": "Taralli napoletani \"'nzogna e pepe\"", "id": "f14"}, {"category": "♨️ Ischia", "label": "Limoncello", "id": "f15"}, {"category": "🛥️ Procida", "label": "Lingua di bue — il dolce tipico dell'isola (Bar Pasticceria Roma)", "id": "f16"}, {"category": "🛵 Capri", "label": "Torta caprese — dolce al cioccolato e mandorle, senza farina (Pasticceria Buonocore)", "id": "f17"}, {"category": "🍋 Costiera Amalfitana — Ravello", "label": "Pasticciotto e delizia al limone alla Pasticceria Andrea Pansa, Amalfi", "id": "f18"}, {"category": "🍋 Costiera Amalfitana — Ravello", "label": "Scialatielli ai frutti di mare", "id": "f19"}, {"category": "🍋 Costiera Amalfitana — Ravello", "label": "Colatura di alici di Cetara", "id": "f20"}, {"category": "🍋 Costiera Amalfitana — Ravello", "label": "Provolone del Monaco", "id": "f21"}, {"category": "🍋 Costiera Amalfitana — Ravello", "label": "Melanzane alla parmigiana / \"a scarpone\"", "id": "f22"}, {"category": "🍋 Costiera Amalfitana — Ravello", "label": "Delizia al limone", "id": "f23"}, {"category": "🍋 Costiera Amalfitana — Ravello", "label": "Casatiello", "id": "f24"}, {"category": "🍋 Costiera Amalfitana — Ravello", "label": "Limoncello della costiera (i limoni sono ovunque, vale la pena assaggiarne diverse versioni)", "id": "f25"}]};
 
 let me = localStorage.getItem('vacanza2026_who') || null;
 let diaryState = {};
@@ -411,11 +370,7 @@ let packState = {};
 
 function initLocalDefaults() {
   SEED.days.forEach(d => {
-    const extras = { M: {}, P: {}, S: {} };
-    ['M','P','S'].forEach(k => {
-      (d[k + '_extras'] || []).forEach(x => { extras[k][x.id] = x.text; });
-    });
-    diaryState[d.id] = { M: d.M, P: d.P, S: d.S, extras, by: '', ts: 0 };
+    diaryState[d.id] = { M: d.M, P: d.P, S: d.S, by: '', ts: 0 };
   });
   SEED.expenses.forEach(e => {
     expenseState[e.id] = { actual: null, label: e.label, category: e.category, estMin: e.estMin, estMax: e.estMax };
@@ -456,7 +411,16 @@ function attachSync() {
 
   db.ref('packing').on('value', snap => {
     const val = snap.val() || {};
-    SEED.packing.forEach(p => { if (val[p.id]) packState[p.id] = val[p.id]; });
+    SEED.packing.forEach(p => { if (val[p.id] && val[p.id].done !== undefined) packState[p.id] = val[p.id]; });
+    // remote-added custom items
+    Object.keys(val).forEach(id => {
+      if (!SEED.packing.find(p => p.id === id) && val[id].label) {
+        SEED.packing.push({ id, category: val[id].category, label: val[id].label });
+        packState[id] = val[id];
+      }
+    });
+    // remote-deleted custom items (only custom ones, never touch the baseline list)
+    SEED.packing = SEED.packing.filter(p => !p.id.startsWith('pcustom_') || val[p.id]);
     renderPacking();
   }, err => syncStatusMsg('Errore di sincronizzazione: ' + err.message, true));
 
@@ -497,7 +461,10 @@ function deleteExpense(id) {
 
 function togglePack(id) {
   packState[id].done = !packState[id].done;
-  if (firebaseReady) db.ref('packing/' + id).set(packState[id]);
+  const p = SEED.packing.find(x => x.id === id);
+  const payload = { done: packState[id].done };
+  if (p && id.startsWith('pcustom_')) { payload.label = p.label; payload.category = p.category; }
+  if (firebaseReady) db.ref('packing/' + id).set(payload);
   renderPackingItem(id);
 }
 
@@ -587,20 +554,15 @@ function linkify(text, links, used) {
   return escaped;
 }
 
-function getDayUsedSetUpTo(dayId, stopField, stopKind, stopXid) {
-  // Walks the day's content in reading order (M, M-extras, P, P-extras, S, S-extras)
-  // and marks place labels as "used" up to (but not including) the given stop point.
+function getDayUsedSetUpTo(dayId, stopField) {
+  // Walks the day's content in reading order (M, P, S)
+  // and marks place labels as "used" up to (but not including) the given field.
   const d = SEED.days.find(x => x.id === dayId);
   const used = new Set();
   const order = ['M', 'P', 'S'];
   for (const f of order) {
-    if (stopField === f && stopKind === 'row') return used;
+    if (stopField === f) return used;
     linkify(diaryState[dayId][f] || '', d.links, used);
-    const ex = diaryState[dayId].extras[f] || {};
-    for (const xid of Object.keys(ex)) {
-      if (stopField === f && stopKind === 'extra' && stopXid === xid) return used;
-      linkify(ex[xid], d.links, used);
-    }
   }
   return used;
 }
@@ -613,8 +575,10 @@ const ROW_META = {
 
 function diaryRowHtml(d, field) {
   const rm = ROW_META[field];
-  return `<div class="dayrow"><div class="rlabel" title="${rm.word}">${field}</div><div class="rowcontent" id="rowcontent-${d.id}-${field}">${rowContentHtml(d, field)}</div></div>
-  <div class="extras-list" id="extras-${d.id}-${field}">${extrasListHtml(d, field)}</div>`;
+  return `<div class="dayrow">
+    <div class="rlabel" title="${rm.word}">${field}</div>
+    <div class="rowcontent" id="rowcontent-${d.id}-${field}">${rowContentHtml(d, field)}</div>
+  </div>`;
 }
 
 function rowContentHtml(d, field) {
@@ -623,47 +587,16 @@ function rowContentHtml(d, field) {
   if (editingRows.has(key)) {
     return `<textarea autofocus onblur="finishEdit('${d.id}','${field}',this.value)">${escapeHtml(text)}</textarea>`;
   }
-  const used = getDayUsedSetUpTo(d.id, field, 'row');
-  const linked = text ? linkify(text, d.links, used) : '<span class="rempty">tocca per scrivere…</span>';
-  return `<div class="rdisplay" onclick="startEdit('${d.id}','${field}')">${linked}</div>`;
-}
-
-function extrasListHtml(d, field) {
-  const extras = diaryState[d.id].extras[field] || {};
-  const items = Object.keys(extras).map(xid => {
-    const ekey = d.id + '-' + field + '-' + xid;
-    if (editingRows.has(ekey)) {
-      return `<div class="extra-item"><textarea autofocus onblur="finishEditExtra('${d.id}','${field}','${xid}',this.value)">${escapeHtml(extras[xid])}</textarea></div>`;
-    }
-    const used = getDayUsedSetUpTo(d.id, field, 'extra', xid);
-    return `<div class="extra-item">
-      <div class="extra-text" onclick="startEditExtra('${d.id}','${field}','${xid}')">${linkify(extras[xid], d.links, used)}</div>
-      <button class="extra-del" onclick="event.stopPropagation(); deleteExtra('${d.id}','${field}','${xid}')">✕</button>
-    </div>`;
-  }).join('');
-  const addKey = d.id + '-' + field + '-addnew';
-  const addUi = editingRows.has(addKey)
-    ? `<div class="extra-item">
-        <input type="text" class="extra-add-input" autofocus placeholder="Consiglio, ristorante, nota…" id="newextra-${d.id}-${field}"
-          onkeydown="if(event.key==='Enter'){addExtra('${d.id}','${field}');}"
-          onblur="closeAddExtraIfEmpty('${d.id}','${field}',this.value)">
-      </div>`
-    : `<button class="extra-add-btn" onclick="openAddExtra('${d.id}','${field}')">+ aggiungi consiglio/nota</button>`;
-  return items + addUi;
-}
-
-function openAddExtra(dayId, field) {
-  editingRows.add(dayId + '-' + field + '-addnew');
-  refreshExtras(dayId, field);
-  const input = document.getElementById(`newextra-${dayId}-${field}`);
-  if (input) input.focus();
-}
-
-function closeAddExtraIfEmpty(dayId, field, value) {
-  if (!value.trim()) {
-    editingRows.delete(dayId + '-' + field + '-addnew');
-    refreshExtras(dayId, field);
+  if (!text) {
+    return `<div class="rdisplay" onclick="startEdit('${d.id}','${field}')"><span class="rempty">tocca per scrivere…</span></div>`;
   }
+  const used = getDayUsedSetUpTo(d.id, field);
+  const lines = text.split('\n').filter(l => l.length > 0);
+  const linesHtml = lines.map((line, i) => {
+    const linked = linkify(line, d.links, used);
+    return i === 0 ? `<div class="rline-main">${linked}</div>` : `<div class="rline-note">${linked}</div>`;
+  }).join('');
+  return `<div class="rdisplay" onclick="startEdit('${d.id}','${field}')">${linesHtml}</div>`;
 }
 
 function startEdit(dayId, field) {
@@ -683,53 +616,6 @@ function finishEdit(dayId, field, value) {
   if (el) el.innerHTML = rowContentHtml(d, field);
 }
 
-function startEditExtra(dayId, field, xid) {
-  editingRows.add(dayId + '-' + field + '-' + xid);
-  refreshExtras(dayId, field);
-  const wrap = document.getElementById('extras-' + dayId + '-' + field);
-  const ta = wrap ? wrap.querySelector('textarea') : null;
-  if (ta) { ta.focus(); ta.setSelectionRange(ta.value.length, ta.value.length); }
-}
-
-function finishEditExtra(dayId, field, xid, value) {
-  editingRows.delete(dayId + '-' + field + '-' + xid);
-  diaryState[dayId].extras[field][xid] = value;
-  diaryState[dayId].by = me || '?';
-  diaryState[dayId].ts = Date.now();
-  if (firebaseReady) db.ref('diary/' + dayId).set(diaryState[dayId]);
-  renderDiaryMeta(dayId);
-  refreshExtras(dayId, field);
-}
-
-function deleteExtra(dayId, field, xid) {
-  delete diaryState[dayId].extras[field][xid];
-  diaryState[dayId].by = me || '?';
-  diaryState[dayId].ts = Date.now();
-  if (firebaseReady) db.ref('diary/' + dayId).set(diaryState[dayId]);
-  renderDiaryMeta(dayId);
-  refreshExtras(dayId, field);
-}
-
-function addExtra(dayId, field) {
-  const input = document.getElementById(`newextra-${dayId}-${field}`);
-  const text = input.value.trim();
-  if (!text) return;
-  const xid = 'x_' + Date.now();
-  diaryState[dayId].extras[field][xid] = text;
-  diaryState[dayId].by = me || '?';
-  diaryState[dayId].ts = Date.now();
-  if (firebaseReady) db.ref('diary/' + dayId).set(diaryState[dayId]);
-  renderDiaryMeta(dayId);
-  editingRows.delete(dayId + '-' + field + '-addnew');
-  refreshExtras(dayId, field);
-}
-
-function refreshExtras(dayId, field) {
-  const d = SEED.days.find(x => x.id === dayId);
-  const el = document.getElementById('extras-' + dayId + '-' + field);
-  if (el) el.innerHTML = extrasListHtml(d, field);
-}
-
 function saveDiaryFieldNow(dayId, field, value) {
   diaryState[dayId][field] = value;
   diaryState[dayId].by = me || '?';
@@ -747,7 +633,6 @@ function renderDiary() {
         if (editingRows.has(key)) return;
         const el = document.getElementById('rowcontent-' + d.id + '-' + f);
         if (el) el.innerHTML = rowContentHtml(d, f);
-        refreshExtras(d.id, f);
       });
       renderDiaryMeta(d.id);
     });
@@ -783,9 +668,10 @@ function renderDiaryMeta(dayId) {
 }
 
 function escapeHtml(s) {
-  const d = document.createElement('div');
-  d.innerText = s || '';
-  return d.innerHTML;
+  return (s || '')
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;');
 }
 
 /* ---------------------- Spese ---------------------- */
@@ -866,24 +752,54 @@ function renderPacking() {
   const c = document.getElementById('packCategories');
   c.innerHTML = cats.map(cat => {
     const items = SEED.packing.filter(p => p.category === cat);
-    return `<div class="pack-cat"><h3>${cat}</h3>${items.map(p => packItemHtml(p)).join('')}</div>`;
+    return `<div class="pack-cat"><h3>${cat}</h3>${items.map(p => packItemHtml(p)).join('')}
+      <div class="add-row">
+        <input type="text" placeholder="Nuovo oggetto…" id="newpack-${safeId(cat)}"
+          onkeydown="if(event.key==='Enter'){addPackItem('${escapeAttr(cat)}');}">
+        <button onclick="addPackItem('${escapeAttr(cat)}')">+</button>
+      </div>
+    </div>`;
   }).join('');
 }
 
 function packItemHtml(p) {
   const st = packState[p.id] || { done: false };
   return `
-    <label class="pack-item" id="packrow-${p.id}">
-      <input type="checkbox" class="p-checkbox" ${st.done ? 'checked' : ''} onchange="togglePack('${p.id}')">
-      <span class="p-label ${st.done ? 'is-done' : ''}">${p.label}</span>
-    </label>
+    <div class="pack-item" id="packrow-${p.id}">
+      <label class="pack-item-label">
+        <input type="checkbox" class="p-checkbox" ${st.done ? 'checked' : ''} onchange="togglePack('${p.id}')">
+        <span class="p-label ${st.done ? 'is-done' : ''}">${p.label}</span>
+      </label>
+      <button class="del-btn" title="Rimuovi" onclick="deletePackItem('${p.id}')">✕</button>
+    </div>
   `;
+}
+
+function addPackItem(cat) {
+  const input = document.getElementById('newpack-' + safeId(cat));
+  const label = input.value.trim();
+  if (!label) return;
+  const id = 'pcustom_' + Date.now();
+  const item = { id, category: cat, label };
+  SEED.packing.push(item);
+  packState[id] = { done: false };
+  if (firebaseReady) db.ref('packing/' + id).set(packState[id]);
+  renderPacking();
+}
+
+function deletePackItem(id) {
+  const idx = SEED.packing.findIndex(p => p.id === id);
+  if (idx > -1) SEED.packing.splice(idx, 1);
+  delete packState[id];
+  if (firebaseReady) db.ref('packing/' + id).remove();
+  renderPacking();
 }
 
 function renderPackingItem(id) {
   const el = document.getElementById('packrow-' + id);
   if (!el) return;
   const p = SEED.packing.find(x => x.id === id);
+  if (!p) return;
   el.outerHTML = packItemHtml(p);
 }
 
@@ -931,12 +847,5 @@ renderPacking();
 renderFood();
 attachSync();
 </script>
-    <!-- eventuale tuo codice -->
-
-    <script type="module">
-      // codice Firebase qui
-    </script>
-
 </body>
 </html>
-
