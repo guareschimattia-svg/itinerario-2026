@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, viewport-fit=cover">
-<title>Vacanza 2026 — Diario condiviso</title>
+<title>Capodanno 2027 — Germania e Austria</title>
 <style>
   :root {
     --ink: #24292e;
@@ -31,6 +31,7 @@
     display: flex; align-items: center; justify-content: space-between;
   }
   .topbar h1 { font-size: 1.1rem; font-weight: 700; }
+  .topbar .trip-subtitle { font-size: .68rem; font-weight: 500; color: var(--ink-soft); margin-top: 3px; }
   .who-btn {
     background: #f6f8fa;
     border: 1px solid var(--line);
@@ -57,6 +58,7 @@
     z-index: 9;
     border-bottom: 1px solid var(--line);
   }
+  .calendar-caption { font-weight: 600; text-align: center; margin: 0 0 .55rem; color: var(--ink-soft); font-size: .78rem; }
   .cal-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 5px; }
   .cal-wd { font-size: 0.72rem; color: var(--ink-soft); text-align: center; font-weight: 700; padding-bottom: 4px; }
   .cal-cell {
@@ -188,6 +190,40 @@
   .exp-hero-row .val { font-weight: 700; font-size: 1.1rem; }
   .exp-hero-row.grand { border-top: 2px solid var(--ink); margin-top: 0.4rem; padding-top: 0.6rem; }
   .exp-hero-row.grand .val { font-size: 1.4rem; color: var(--accent); }
+  .exp-note { font-size: .75rem; line-height: 1.45; color: var(--ink-soft); margin-top: .7rem; }
+  .exp-label-group { display: inline-flex; align-items: center; gap: .4rem; }
+  .exp-info-btn { display: inline-flex; align-items: center; justify-content: center; width: 23px; height: 23px;
+    border: 1px solid #afc5e0; background: #f0f6ff; color: var(--accent); border-radius: 50%;
+    font-size: .78rem; font-family: Georgia, serif; font-weight: 700; cursor: pointer; }
+  .exp-info-btn:focus-visible, .budget-modal button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+  .exp-hero-row { gap: .5rem; }
+  .exp-hero-row .val { text-align: right; white-space: nowrap; }
+  .exp-hero-row .val.negative { color: #c13432; }
+  .exp-intro { font-size: .82rem; color: var(--ink-soft); margin: 0 0 .9rem; line-height: 1.5; }
+  .exp-empty-cat { font-size: .78rem; color: #87919b; padding: .45rem .2rem; }
+  .budget-modal { max-width: 650px; max-height: min(88vh, 790px); overflow: auto; padding: 1.1rem; }
+  .budget-modal-head { display: flex; justify-content: space-between; gap: 1rem; align-items: center; margin-bottom: .5rem; }
+  .budget-modal-head h2 { margin: 0; }
+  .budget-x { font-size: 1.25rem; border: 0; background: #f1f3f5; width: 32px; height: 32px; border-radius: 50%; cursor: pointer; }
+  .budget-desc { font-size: .8rem; line-height: 1.45; color: var(--ink-soft); margin: 0 0 1rem; }
+  .budget-cat { margin-bottom: 1.1rem; }
+  .budget-cat-head { display: flex; align-items: center; justify-content: space-between; gap: .6rem; margin-bottom: .4rem;
+    padding-bottom: .35rem; border-bottom: 1px solid var(--line); font-size: .83rem; font-weight: 700; }
+  .budget-cat-head span:last-child { color: var(--accent); white-space: nowrap; }
+  .budget-line { display: flex; align-items: center; gap: .4rem; margin: .4rem 0; }
+  .budget-line input { min-width: 0; border: 1px solid var(--line); background: #fff; padding: .48rem .42rem; border-radius: 7px; font: inherit; font-size: .8rem; }
+  .budget-line input[type=text] { flex: 1; }
+  .budget-line input[type=number] { flex: 0 0 80px; width: 80px; text-align: right; }
+  .budget-remove { border: none; background: #fff1ef; color: #a22f2b; border-radius: 7px; height: 32px; width: 29px; font-size: 1rem; cursor: pointer; }
+  .budget-add { color: var(--accent); background: none; border: 0; font-weight: 600; font-size: .79rem; cursor: pointer; padding: .4rem 0; }
+  .budget-footer { position: sticky; bottom: -1.1rem; background: #fff; padding: .8rem 0 .1rem; border-top: 1px solid var(--line); }
+  .budget-grand { display: flex; justify-content: space-between; align-items: center; font-size: .9rem; font-weight: 700; margin-bottom: .6rem; }
+  .budget-grand strong { font-size: 1.15rem; color: var(--accent); }
+  .budget-btns { display: flex; gap: .6rem; }
+  .budget-btns button { padding: .7rem .85rem; border-radius: 8px; border: 1px solid var(--line); font-weight: 700; font-size: .87rem; cursor: pointer; flex: 1; }
+  .budget-btns .budget-save { background: var(--accent); border-color: var(--accent); color: white; }
+  @media(max-width:375px) { .budget-line input[type=number] { flex-basis: 71px; width: 71px; } .budget-modal { padding: .85rem; } }
+
   .exp-cat { margin-bottom: 1rem; }
   .exp-cat h3 { font-size: 0.95rem; margin-bottom: 0.5rem; }
   .cat-header-content {
@@ -381,7 +417,7 @@
 <body>
 
 <div class="topbar" id="topbar">
-  <h1>🌊 Vacanza 2026</h1>
+  <div><h1>🏔️ Capodanno 2027</h1><div class="trip-subtitle">Germania e Austria · 31 dic – 4 gen</div></div>
   <button class="who-btn" id="whoBtn"><span class="who-dot" id="whoDot"></span><span id="whoLabel">Chi sei?</span></button>
 </div>
 
@@ -393,10 +429,12 @@
 
   <section id="view-spese" class="view">
     <div class="exp-hero">
-      <div class="exp-hero-row"><span class="lbl">Stima totale</span><span class="val" id="expEstTotal">—</span></div>
-      <div class="exp-hero-row"><span class="lbl">Speso finora (importi confermati)</span><span class="val" id="expActualTotal">—</span></div>
-      <div class="exp-hero-row grand"><span class="lbl">Rimane da spendere</span><span class="val" id="expRemaining">—</span></div>
+      <div class="exp-hero-row"><span class="exp-label-group"><span class="lbl" id="expEstLabel">Stima totale · 2 persone</span><button type="button" class="exp-info-btn" onclick="openBudgetModal()" aria-label="Visualizza e modifica le voci del preventivo" title="Dettaglio e modifica del preventivo">i</button></span><span class="val" id="expEstTotal">—</span></div>
+      <div class="exp-hero-row"><span class="lbl">Speso finora</span><span class="val" id="expActualTotal">—</span></div>
+      <div class="exp-hero-row grand"><span class="lbl">Budget residuo</span><span class="val" id="expRemaining">—</span></div>
+      <div class="exp-note" id="expPending">Il preventivo è indipendente dalle spese registrate.</div>
     </div>
+    <p class="exp-intro">Spese effettive: aggiungi qui gli importi man mano che spendete. Per modificare il preventivo, usa la <strong>i</strong> accanto alla stima totale.</p>
     <div id="expCatAddArea" class="cat-add-area"></div>
     <div id="expCategories"></div>
   </section>
@@ -428,6 +466,18 @@
   </div>
 </div>
 
+<div class="modal-backdrop" id="budgetModal" role="dialog" aria-modal="true" aria-label="Modifica la stima del viaggio" onclick="if(event.target === this) closeBudgetModal()">
+  <div class="modal budget-modal">
+    <div class="budget-modal-head"><h2>Preventivo di viaggio</h2><button type="button" class="budget-x" onclick="closeBudgetModal()" aria-label="Chiudi preventivo">×</button></div>
+    <p class="budget-desc">Modifica le voci e gli importi previsti. La stima non cambia quando inserisci una spesa effettiva. Le cifre sono per entrambi.</p>
+    <div id="budgetEditor"></div>
+    <div class="budget-footer">
+      <div class="budget-grand"><span>Stima totale</span><strong id="budgetEditorTotal">—</strong></div>
+      <div class="budget-btns"><button type="button" onclick="closeBudgetModal()">Annulla</button><button type="button" class="budget-save" onclick="saveBudget()">Salva preventivo</button></div>
+    </div>
+  </div>
+</div>
+
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-database-compat.js"></script>
 <script>
@@ -455,9 +505,20 @@ try {
   firebaseReady = true;
 } catch (e) { console.error("Firebase non configurato:", e); }
 
-const SEED = {"days": [{"id": "d1", "title": "Parma → Sabaudia (Sab 29 agosto)", "links": [{"label": "Parma", "url": "https://maps.apple.com/?ll=44.8015,10.3279&q=Parma"}, {"label": "Sabaudia", "url": "https://maps.apple.com/?ll=41.3009,13.0269&q=Sabaudia"}, {"label": "Lago di Bolsena", "url": "https://maps.apple.com/?ll=42.6100,11.9750&q=Lago%20di%20Bolsena"}], "M": "partenza da Parma.", "P": "viaggio verso Sabaudia (~5h30/6h totali), con sosta al Lago di Bolsena (uscita A1 Orvieto, circa a metà strada) per un bagno rinfrescante e uno spuntino veloce sul lungolago.\n🥪 Pranzo semplice (panino) sul lungolago di Bolsena.", "S": "arrivo e sistemazione.\n🍕 Pizza direttamente al campeggio, per la prima sera senza pensieri."}, {"id": "d2", "title": "Sabaudia (Dom 30 agosto)", "links": [{"label": "Sabaudia", "url": "https://maps.apple.com/?ll=41.3009,13.0269&q=Sabaudia"}, {"label": "Lago di Paola", "url": "https://maps.apple.com/?ll=41.2967,13.0500&q=Lago%20di%20Paola"}, {"label": "Sperlonga", "url": "https://maps.apple.com/?ll=41.2540,13.4330&q=Sperlonga"}, {"label": "Terracina", "url": "https://maps.apple.com/?ll=41.2926,13.2496&q=Terracina"}], "M": "mare con calma, spiaggia del Lido di Sabaudia.\n🥪 Pranzo semplice (panino) in spiaggia.", "P": "canoa sul Lago di Paola (unico lago del Circeo dove è permessa la canoa libera), poi una breve passeggiata nella foresta del Parco Nazionale del Circeo (foresta pluviale mediterranea, rara in Italia).", "S": "spesa a Sabaudia prima che chiudano i negozi, poi relax al campeggio (o, in alternativa, una delle novità nei dintorni come Sperlonga o Terracina).\n🔥 Grigliata di carne al campeggio."}, {"id": "d3", "title": "Sabaudia (Lun 31 agosto)", "links": [{"label": "Sabaudia", "url": "https://maps.apple.com/?ll=41.3009,13.0269&q=Sabaudia"}, {"label": "Monte Circeo", "url": "https://maps.apple.com/?ll=41.2380,13.0550&q=Monte%20Circeo"}, {"label": "San Felice Circeo", "url": "https://maps.apple.com/?ll=41.2439,13.0872&q=San%20Felice%20Circeo"}], "M": "spiaggia, mare con calma.", "P": "trekking sul Monte Circeo fino alla cima — sentiero impegnativo ma con vista straordinaria su tutto il promontorio, le isole Ponziane e la costa.\n🥪 Panino/pranzo al sacco durante il trekking.", "S": "spesa a San Felice Circeo prima che chiudano i negozi, rientro al campeggio.\n🐟 Grigliata di pesce al campeggio."}, {"id": "d4", "title": "Sabaudia (Mar 1 settembre)", "links": [{"label": "Sabaudia", "url": "https://maps.apple.com/?ll=41.3009,13.0269&q=Sabaudia"}, {"label": "Terracina", "url": "https://maps.apple.com/?ll=41.2926,13.2496&q=Terracina"}], "M": "giornata a Terracina (~40 min da Sabaudia) — Tempio di Giove Anxur, le rovine romane su uno sperone roccioso con vista mozzafiato sul golfo.\n🥪 Pranzo semplice (panino) a Terracina.", "P": "Spiaggia di Levante, ai piedi del promontorio del tempio — sabbia dorata finissima, acqua bassa, Bandiera Blu.", "S": "ultima serata a Sabaudia.\n🐟 Il ristorante di pesce sul lungomare che conoscete già."}, {"id": "d5", "title": "Sabaudia → Baia → Ischia (Mer 2 settembre)", "links": [{"label": "Sabaudia", "url": "https://maps.apple.com/?ll=41.3009,13.0269&q=Sabaudia"}, {"label": "Baia", "url": "https://maps.apple.com/?ll=40.8236,14.1219&q=Baia%20/%20Pozzuoli"}, {"label": "Pozzuoli", "url": "https://maps.apple.com/?ll=40.8236,14.1219&q=Baia%20/%20Pozzuoli"}, {"label": "Barano", "url": "https://maps.apple.com/?ll=40.7213,13.9114&q=Barano%20d%27Ischia"}, {"label": "Piscina Mirabile", "url": "https://maps.apple.com/?ll=40.7908,14.0842&q=Piscina%20Mirabile"}], "M": "checkout dal campeggio, trasferimento da Sabaudia verso Baia (~2h), in tempo per l'immersione/snorkeling guidata dalle 12:00 alle 14:30 nel Parco Archeologico Sommerso di Baia.", "P": "Piscina Mirabile a Bacoli — la più grande cisterna romana d'epoca imperiale, la \"Cattedrale dell'Acqua\" (visita guidata di 45 min); se le Cento Camerelle sono riaperte, sono a 400m e si vedono con lo stesso biglietto cumulativo. Poi tempo libero prima dell'imbarco.\n🥪 Pranzo semplice (panino) in zona Pozzuoli.", "S": "traghetto Pozzuoli → Ischia delle 19:00, arrivo alle 20:05, check-in e sistemazione.\n🍕 Pizza da Rosa dei Venti a Barano — gourmet, ingredienti locali, comoda per la prima sera."}, {"id": "d6", "title": "Ischia (Gio 3 settembre)", "links": [{"label": "Barano", "url": "https://maps.apple.com/?ll=40.7213,13.9114&q=Barano%20d%27Ischia"}, {"label": "Maronti", "url": "https://maps.apple.com/?ll=40.6980,13.8990&q=Maronti%20/%20Sant%27Angelo"}, {"label": "Sant'Angelo", "url": "https://maps.apple.com/?ll=40.6980,13.8990&q=Maronti%20/%20Sant%27Angelo"}], "M": "spesa con piccola visita a Barano/Testaccio.\n🥐 Colazione in un bar del paese.", "P": "mare alla spiaggia dei Maronti (auto dalla strada panoramica da Testaccio, parcheggi custoditi nei dintorni).\n🍷 Aperitivo con vista in uno dei locali di Sant'Angelo.\nDentro la stessa baia, zona Cavascura: le Fumarole, sabbia calda naturale per l'effetto termale — se volete, ci si arriva a piedi lungo la spiaggia.", "S": "Monte Epomeo al tramonto — si parte da Fontana (Barano, comodo da casa), salita di circa 1h e discesa di 40-50 min, vista a 360° sull'isola; in alternativa, la solita passeggiata nel borgo di Sant'Angelo.\n🔥 Cena a casa con grigliata."}, {"id": "d7", "title": "Ischia (Ven 4 settembre)", "links": [{"label": "Giardini Poseidon", "url": "https://maps.apple.com/?ll=40.7080,13.8590&q=Giardini%20Poseidon"}, {"label": "Forio", "url": "https://maps.apple.com/?ll=40.7386,13.8583&q=Forio"}], "M": "Giardini Poseidon o Negombo, giornata intera (apertura 9:00).\n🥐 Colazione da Divino Cafè (Forio) — ottimi cornetti, babà e cannoli, prima di entrare alle terme.", "P": "ancora Giardini Poseidon (accesso incluso anche alla spiaggia di Citara, sotto il parco), fino alla chiusura alle 19:00.", "S": "relax serale a Forio, passeggiata sul lungomare.\n🍷 Aperitivo tardo a Forio."}, {"id": "d8", "title": "Ischia → Procida → Ischia (Sab 5 settembre)", "links": [{"label": "Procida", "url": "https://maps.apple.com/?ll=40.7597,14.0206&q=Procida"}], "M": "traghetto da Ischia a Procida, arrivo a Marina Grande. Passeggiata veloce nella zona del porto — Via Roma, le casette colorate, Chiesa della Madonna della Pietà. Bus verso Chiaiolella: passeggiata sul lungomare verso Ciraccio, con vista su Vivara e i faraglioni (Vivara si guarda da qui, non serve visitarla a parte). Bus di rientro verso Terra Murata: Piazza dei Martiri, Santuario di Santa Maria delle Grazie, Belvedere dei Cannoni (vista sulla Corricella), Abbazia di San Michele.\n🥐 Caffè con lingua di bue (il dolce tipico di Procida) al Bar Pasticceria Roma (Via Roma 164) — il locale originale dove è stata inventata negli anni '50, considerato il migliore dell'isola.\nPalazzo d'Avalos (ex carcere borbonico), a Terra Murata: probabilmente la visita culturale più interessante dell'isola (~1 ora), ma solo se prenotata in anticipo — altrimenti si salta senza problemi e si prosegue verso la Corricella.", "P": "discesa a piedi da Terra Murata verso Marina Corricella (uno dei tratti più belli dell'isola: case color pastello, scalinate, scorci sul mare), pranzo in uno dei ristoranti sul porticciolo. Poi salita e discesa verso la Spiaggia della Chiaia (la famosa scalinata di 186 gradini), bagno e relax.\n🐟 Pranzo alla Corricella — pasta al limone di Procida, pesce fresco/alici/paranza fritta, granita al limone.", "S": "risalita verso Marina Grande, tempo libero sul porto di Procida prima dell'imbarco, traghetto di rientro a Ischia, poi tramonto sulla Spiaggia dei Pescatori con il Castello Aragonese sullo sfondo (la visita completa è il 9 settembre, con più calma)."}, {"id": "d9", "title": "Ischia (Dom 6 settembre)", "links": [{"label": "Giardino La Mortella", "url": "https://maps.apple.com/?ll=40.7370,13.8600&q=Giardino%20La%20Mortella"}, {"label": "Forio", "url": "https://maps.apple.com/?ll=40.7386,13.8583&q=Forio"}, {"label": "San Montano", "url": "https://maps.apple.com/?ll=40.7550,13.8870&q=San%20Montano"}], "M": "Giardino La Mortella a Forio (aperto la domenica, 9:00-19:00 — prevedere 2-3 ore), poi trasferimento verso la Baia di San Montano — c'è un parcheggio vicino alla baia, ma in alta stagione conviene arrivare presto per trovare posto.\n🥐 Colazione in un bar a Forio, prima di entrare a La Mortella.\nSulla strada verso San Montano: il Fungo di Lacco Ameno, la celebre roccia vulcanica a forma di fungo sul lungomare — bastano 5-10 minuti per una foto.", "P": "mare con calma a San Montano, snorkeling libero.", "S": "relax serale, rientro verso Forio per cena.\n🍕 Pizza da Zi Carmela a Forio — storica, vicino al porticciolo."}, {"id": "d10", "title": "Ischia → Capri → Ischia (Lun 7 settembre)", "links": [{"label": "Capri", "url": "https://maps.apple.com/?ll=40.5532,14.2429&q=Capri"}, {"label": "Marina Grande", "url": "https://maps.apple.com/?ll=40.5532,14.2429&q=Capri"}, {"label": "Anacapri", "url": "https://maps.apple.com/?ll=40.5532,14.2429&q=Capri"}, {"label": "Chiesa di San Michele", "url": "https://maps.apple.com/?ll=40.5546,14.2260&q=Chiesa%20di%20San%20Michele"}, {"label": "Monte Solaro", "url": "https://maps.apple.com/?ll=40.5490,14.2130&q=Monte%20Solaro"}, {"label": "Piazza Vittoria", "url": "https://maps.apple.com/?ll=40.5545,14.2255&q=Piazza%20Vittoria"}, {"label": "Casa Rossa", "url": "https://maps.apple.com/?ll=40.5580,14.2280&q=Casa%20Rossa"}, {"label": "Certosa di San Giacomo", "url": "https://maps.apple.com/?ll=40.5497,14.2445&q=Certosa%20di%20San%20Giacomo"}, {"label": "Belvedere di Tragara", "url": "https://maps.apple.com/?ll=40.5460,14.2470&q=Belvedere%20di%20Tragara"}, {"label": "Arco Naturale", "url": "https://maps.apple.com/?ll=40.5461,14.2586&q=Arco%20Naturale"}], "M": "traghetto da Ischia Porto, arrivo a Marina Grande. Bus verso Anacapri, giro veloce del centro. Poi bus da Anacapri verso Capri centro.\n🥐 Cornetto da Bar Calise a Ischia Porto, prima di imbarcarvi (storico dal 1925, il bar simbolo di Ischia).\nAd Anacapri, se resta tempo: Villa San Michele (giardini e vista sul golfo) Chiesa di San Michele (pavimento in maiolica dipinta) Monte Solaro in seggiovia Piazza Vittoria e Via Giuseppe Orlandi Casa Rossa", "P": "Giardini di Augusto (vista su Via Krupp e sui Faraglioni), poi discesa panoramica per Via Krupp fino alla Scogliera dell'Arsenale/Marina Piccola (verificare che sia aperta) — bagno e pranzo con calma. Al passaggio in centro, torta caprese da Buonocore da portare con voi per Marina Piccola.\n🍰 Torta caprese e gelato alla Pasticceria Buonocore (Via Vittorio Emanuele 35, vicino alla Piazzetta), da gustare a Marina Piccola dopo pranzo.\nA Capri centro, se resta tempo: Certosa di San Giacomo Via Camerelle Belvedere di Tragara Arco Naturale", "S": "risalita verso Marina Grande per le 14:00 — Giro dell'Isola in barca (~2 ore) + sosta alla Grotta Azzurra, poi traghetto di rientro a Ischia.\n🍽️ Cena a Ischia al rientro.\nPer una cena tipica con coniglio all'ischitana: Il Focolare (Barano d'Ischia, via Cretaio — familiare, immerso nel verde) o La Vigna di Alberto (Barano d'Ischia, via Giuseppe Garibaldi 57 — atmosfera intima, prodotti a km 0), entrambi comodi da casa."}, {"id": "d11", "title": "Ischia (Mar 8 settembre)", "links": [{"label": "Forio", "url": "https://maps.apple.com/?ll=40.7386,13.8583&q=Forio"}, {"label": "Spiaggia di San Francesco", "url": "https://maps.apple.com/?ll=40.7350,13.8480&q=Spiaggia%20di%20San%20Francesco"}, {"label": "Sorgeto", "url": "https://maps.apple.com/?ll=40.7030,13.8670&q=Panza%20/%20Sorgeto"}, {"label": "Panza", "url": "https://maps.apple.com/?ll=40.7030,13.8670&q=Panza%20/%20Sorgeto"}], "M": "piccola visita alla Chiesa del Soccorso e al lungomare di Forio, poi mare alla Spiaggia di San Francesco (pochi minuti a piedi dal centro, facile in auto).\n🥐 Colazione da Divino Cafè (Forio) — ottimi cornetti, babà e cannoli.", "P": "ancora mare a San Francesco, oppure Giardini Ravino (Citara) — giardino di piante grasse e cactus, con pavoni liberi e installazioni d'arte, molto diverso da La Mortella; aperto tutti i giorni tranne martedì e giovedì, 10€ a persona.", "S": "Baia di Sorgeto — pozze termali naturali sugli scogli, zona libera e gratuita, suggestiva al tramonto (zona Panza, pochi minuti da Citara)."}, {"id": "d12", "title": "Ischia (Mer 9 settembre)", "links": [{"label": "Spiaggia di Cartaromana", "url": "https://maps.apple.com/?ll=40.7395,13.9560&q=Cartaromana"}, {"label": "Ischia Ponte", "url": "https://maps.apple.com/?ll=40.7360,13.9581&q=Ischia%20Ponte"}, {"label": "Castello Aragonese", "url": "https://maps.apple.com/?ll=40.7333,13.9575&q=Castello%20Aragonese"}], "M": "ultimo mare con calma alla Spiaggia di Cartaromana (Ischia Ponte) — piccola baia di sabbia e ciottoli con sorgenti termali naturali, vista sul Castello Aragonese.\n🥐 Colazione da Bar Ciccio a Ischia Ponte (Piazza Antica Reggia) — ottimi brioches.", "P": "visita completa al Castello Aragonese di Ischia Ponte (1h30-2h con calma) — Terrazzo dell'Immacolata, Chiesa dell'Immacolata, il cimitero delle Monache Clarisse, gallerie scavate nella roccia.\n🍨 Gelato artigianale nel borgo di pescatori, dopo la visita (gusti locali: limone di Ischia, fico bianco).", "S": "relax serale nel borgo di pescatori di Ischia Ponte.\n🍸 Un ultimo drink come saluto a Ischia."}, {"id": "d13", "title": "Ischia → Pozzuoli → Ravello (Gio 10 settembre)", "links": [{"label": "Pozzuoli", "url": "https://maps.apple.com/?ll=40.8236,14.1219&q=Baia%20/%20Pozzuoli"}, {"label": "Ravello", "url": "https://maps.apple.com/?ll=40.6492,14.6114&q=Ravello"}, {"label": "Scala", "url": "https://maps.apple.com/?ll=40.6447,14.5964&q=Scala"}, {"label": "Villa Rufolo", "url": "https://maps.apple.com/?ll=40.6493,14.6117&q=Villa%20Rufolo"}, {"label": "Villa Cimbrone", "url": "https://maps.apple.com/?ll=40.6400,14.6066&q=Villa%20Cimbrone"}], "M": "traghetto Ischia → Pozzuoli delle 11:30, arrivo alle 12:30.", "P": "guida verso la Costiera Amalfitana (uscita autostradale consigliata a Salerno), arrivo a Scala (dove alloggiate, pochi minuti da Ravello), check-in, poi Villa Rufolo e Villa Cimbrone (Terrazza dell'Infinito) nel tardo pomeriggio — la luce di quell'ora è ideale per il panorama.\n🥪 Pranzo semplice (panino) durante il viaggio.", "S": "spesa per la casa, giro del paese di Scala e passeggiata nel centro storico."}, {"id": "d14", "title": "Ravello (Ven 11 settembre)", "links": [{"label": "Ravello", "url": "https://maps.apple.com/?ll=40.6492,14.6114&q=Ravello"}, {"label": "Amalfi", "url": "https://maps.apple.com/?ll=40.6340,14.6027&q=Amalfi"}, {"label": "Atrani", "url": "https://maps.apple.com/?ll=40.6323,14.6108&q=Atrani"}, {"label": "Duomo di Amalfi", "url": "https://maps.apple.com/?ll=40.634,14.6027&q=Duomo%20di%20Amalfi"}], "M": "ad Amalfi: Duomo di Amalfi (Cattedrale di Sant'Andrea) e Chiostro del Paradiso, poi Atrani — il borgo più piccolo della costiera, a 5 minuti a piedi da Amalfi, quasi nessun turista ci arriva.\n🥐 Colazione (pasticciotto) alla Pasticceria Andrea Pansa in Piazza Duomo — storica dal 1830. Se lo trovate, anche un sorbetto da A'Sciulia.", "P": "boat tour della Costiera delle 14:30 da Amalfi (rientro dopo circa 2 ore) — grotte, spiagge raggiungibili solo dal mare, bagno.", "S": "rientro a Ravello, passeggiata nel centro storico.\n🍷 Drink in piazza nel centro storico."}, {"id": "d15", "title": "Ravello (Sab 12 settembre)", "links": [{"label": "Ravello", "url": "https://maps.apple.com/?ll=40.6492,14.6114&q=Ravello"}, {"label": "Sentiero degli Dei", "url": "https://maps.apple.com/?ll=40.6250,14.5000&q=Sentiero%20degli%20Dei"}, {"label": "Nocelle", "url": "https://maps.apple.com/?ll=40.6193,14.4703&q=Nocelle"}, {"label": "Positano", "url": "https://maps.apple.com/?ll=40.6280,14.4848&q=Positano"}, {"label": "Amalfi", "url": "https://maps.apple.com/?ll=40.6340,14.6027&q=Amalfi"}], "M": "Sentiero degli Dei (Bomerano–Nocelle, ~5 km, circa 3 ore), partenza presto la mattina — sosta a Nocelle, il piccolo borgo alla fine del sentiero, prima della discesa verso Positano.\n🥪 Pranzo semplice (panino) durante il cammino.", "P": "arrivo a Positano, esplorazione del paese.", "S": "traghetto di ritorno verso Amalfi, poi rientro a Ravello."}, {"id": "d16", "title": "Ravello (Dom 13 settembre)", "links": [{"label": "Ravello", "url": "https://maps.apple.com/?ll=40.6492,14.6114&q=Ravello"}, {"label": "Minori", "url": "https://maps.apple.com/?ll=40.6499,14.6338&q=Minori"}, {"label": "Maiori", "url": "https://maps.apple.com/?ll=40.6519,14.6383&q=Maiori"}, {"label": "Vietri sul Mare", "url": "https://maps.apple.com/?ll=40.6669,14.7369&q=Vietri%20sul%20Mare"}, {"label": "Cetara", "url": "https://maps.apple.com/?ll=40.6547,14.7003&q=Cetara"}], "M": "noleggio scooter, giro della costiera verso Minori, con calma.\n🍰 Colazione alla Pasticceria Sal De Riso a Minori — una delle pasticcerie più famose d'Italia. Da provare la sfogliatella Santa Rosa, la sua reinterpretazione del dolce originario di Conca dei Marini.", "P": "proseguimento in scooter verso Maiori, poi Vietri sul Mare (le ceramiche) e Cetara — villaggio di pescatori famoso per la colatura di alici e il tonno, con soste libere lungo la costa.", "S": "rientro a Ravello, passeggiata nel centro storico.\n🐟 Cena a Ravello — Da Salvatore (gourmet, vista panoramica, ~60-70€ a persona, chiuso il lunedì), Bella Vista Sul Mare (tra Ravello e Scala, comodo da casa, terrazza con vista mozzafiato, pesce, ~40-50€ a persona, ottime recensioni), oppure Cumpà Cosimo (trattoria storica dal 1929, cucina casereccia, ~20-30€ a persona).\n🍷 Drink serale con vista nel centro di Ravello."}, {"id": "d17", "title": "Ravello → Maremma (Lun 14 settembre)", "links": [{"label": "Ravello", "url": "https://maps.apple.com/?ll=40.6492,14.6114&q=Ravello"}, {"label": "Vesuvio", "url": "https://maps.apple.com/?ll=40.8219,14.4262&q=Vesuvio"}, {"label": "Follonica", "url": "https://maps.apple.com/?ll=42.9186,10.7561&q=Follonica%20/%20Castiglione%20della%20Pescaia"}, {"label": "Castiglione della Pescaia", "url": "https://maps.apple.com/?ll=42.9186,10.7561&q=Follonica%20/%20Castiglione%20della%20Pescaia"}], "M": "con calma a Ravello, checkout.", "P": "sosta al Vesuvio (uscita Ercolano/Torre del Greco dalla A3), salita al Gran Cono, poi dritti verso il campeggio in Maremma (zona Follonica/Castiglione della Pescaia).\n🥪 Pranzo semplice (panino) durante il viaggio.", "S": "arrivo, sistemazione.\n🔥 Cena in pineta con grigliata."}, {"id": "d18", "title": "Maremma → Parma (Mar 15 settembre)", "links": [{"label": "Parma", "url": "https://maps.apple.com/?ll=44.8015,10.3279&q=Parma"}], "M": "ultimo mare/canoa con calma.", "P": "rientro a Parma (~3h).", "S": ""}], "expenses": [{"label": "Carburante (Parma ↔ Sabaudia ↔ Pozzuoli ↔ Ravello ↔ Maremma ↔ Parma, ~1.500 km + spostamenti locali)", "price": "180–220 €", "paid": false, "estMin": 220.0, "estMax": 220.0, "id": "e1", "catId": "ec1"}, {"label": "Pedaggi autostradali (tratte A1/A3 principali)", "price": "90–120 €", "paid": false, "estMin": 120.0, "estMax": 120.0, "id": "e2", "catId": "ec1"}, {"label": "Parcheggio a Scala (per tutto il soggiorno in Costiera)", "price": "40 €", "paid": false, "estMin": 40.0, "estMax": 40.0, "id": "e3", "catId": "ec1"}, {"label": "Pozzuoli ↔ Ischia, andata e ritorno (prenotati)", "price": "180 €", "paid": true, "estMin": 180.0, "estMax": 180.0, "id": "e4", "catId": "ec2"}, {"label": "Procida a/r (2 persone)", "price": "45–60 €", "paid": false, "estMin": 60.0, "estMax": 60.0, "id": "e5", "catId": "ec2"}, {"label": "Capri a/r da Ischia Porto (2 persone, da 21,50€ a tratta)", "price": "85–110 €", "paid": false, "estMin": 110.0, "estMax": 110.0, "id": "e6", "catId": "ec2"}, {"label": "Parcheggio auto a Ischia Porto (1 giorno, giornata Capri)", "price": "~10 €", "paid": false, "estMin": 10.0, "estMax": 10.0, "id": "e7", "catId": "ec2"}, {"label": "Immersione/snorkeling Parco Sommerso di Baia (confermato)", "price": "28 €56 €", "paid": false, "estMin": 56.0, "estMax": 56.0, "id": "e8", "catId": "ec3"}, {"label": "Giardini Poseidon o Negombo (giornata intera)", "price": "45–50 €90–100 €", "paid": false, "estMin": 100.0, "estMax": 100.0, "id": "e9", "catId": "ec3"}, {"label": "Giardini Ravino (opzionale, se visitato)", "price": "10 €20 €", "paid": false, "estMin": 20.0, "estMax": 20.0, "id": "e10", "catId": "ec3"}, {"label": "Castello Aragonese (Ischia)", "price": "10–12 €20–24 €", "paid": false, "estMin": 24.0, "estMax": 24.0, "id": "e11", "catId": "ec3"}, {"label": "Bus/funicolare a Capri (spostamenti della giornata)", "price": "~8 €~16 €", "paid": false, "estMin": 16.0, "estMax": 16.0, "id": "e12", "catId": "ec3"}, {"label": "Tour in barca + Grotta Azzurra", "price": "35–40 €70–80 €", "paid": false, "estMin": 80.0, "estMax": 80.0, "id": "e13", "catId": "ec3"}, {"label": "Villa Rufolo (Ravello)", "price": "8 €16 €", "paid": false, "estMin": 16.0, "estMax": 16.0, "id": "e14", "catId": "ec3"}, {"label": "Villa Cimbrone (Ravello)", "price": "~10 €~20 €", "paid": false, "estMin": 20.0, "estMax": 20.0, "id": "e15", "catId": "ec3"}, {"label": "Noleggio scooter in Costiera (1 giorno)", "price": "—40–60 €", "paid": false, "estMin": 60.0, "estMax": 60.0, "id": "e16", "catId": "ec3"}, {"label": "Duomo di Amalfi / Chiostro del Paradiso", "price": "~4 €~8 €", "paid": false, "estMin": 8.0, "estMax": 8.0, "id": "e17", "catId": "ec3"}, {"label": "Boat tour Costiera da Amalfi (con bagno)", "price": "35 €70 €", "paid": false, "estMin": 70.0, "estMax": 70.0, "id": "e18", "catId": "ec3"}, {"label": "Traghetto Positano→Amalfi (sola andata, dopo il Sentiero degli Dei)", "price": "10–19,50 €20–39 €", "paid": false, "estMin": 39.0, "estMax": 39.0, "id": "e19", "catId": "ec3"}, {"label": "Giardino La Mortella (Forio)", "price": "12 €24 €", "paid": false, "estMin": 24.0, "estMax": 24.0, "id": "e20", "catId": "ec3"}, {"label": "Tempio di Giove Anxur (Terracina)", "price": "7 €14 €", "paid": false, "estMin": 14.0, "estMax": 14.0, "id": "e21", "catId": "ec3"}, {"label": "Piscina Mirabile (Bacoli, con guida)", "price": "7 €14 €", "paid": false, "estMin": 14.0, "estMax": 14.0, "id": "e22", "catId": "ec3"}, {"label": "Gran Cono del Vesuvio (ingresso)", "price": "10 €20 €", "paid": false, "estMin": 20.0, "estMax": 20.0, "id": "e23", "catId": "ec3"}, {"label": "Colazioni fuori (8 mattine)", "price": "2 × 4,5 € × 8~72 €", "paid": false, "estMin": 72.0, "estMax": 72.0, "id": "e24", "catId": "ec4"}, {"label": "Pranzi fuori semplici — panini (9 giorni, 50% dei giorni)", "price": "2 × 6 € × 9~108 €", "paid": false, "estMin": 108.0, "estMax": 108.0, "id": "e25", "catId": "ec4"}, {"label": "Pranzo al ristorante (Corricella, Procida)", "price": "16 €~32 €", "paid": false, "estMin": 32.0, "estMax": 32.0, "id": "e26", "catId": "ec4"}, {"label": "Cene al ristorante (3 occasioni)", "price": "2 × 35 € × 3~210 €", "paid": false, "estMin": 210.0, "estMax": 210.0, "id": "e27", "catId": "ec4"}, {"label": "Pizza (3 serate)", "price": "2 × 18 € × 3~108 €", "paid": false, "estMin": 108.0, "estMax": 108.0, "id": "e28", "catId": "ec4"}, {"label": "Aperitivi/drink serali (5 occasioni)", "price": "2 × 8 € × 5~80 €", "paid": false, "estMin": 80.0, "estMax": 80.0, "id": "e29", "catId": "ec4"}, {"label": "Gelato (1 occasione)", "price": "2 × 4 € × 1~8 €", "paid": false, "estMin": 8.0, "estMax": 8.0, "id": "e30", "catId": "ec4"}, {"label": "Spesa generica (grigliate, pasti a casa, snack)", "price": "forfait~200 €", "paid": false, "estMin": 200.0, "estMax": 200.0, "id": "e31", "catId": "ec4"}, {"label": "Casa a Ischia (Barano, 8 notti)", "price": "460 €", "paid": true, "estMin": 460.0, "estMax": 460.0, "id": "e32", "catId": "ec5"}, {"label": "Casa a Scala (Costiera, 4 notti)", "price": "286 €", "paid": false, "estMin": 286.0, "estMax": 286.0, "id": "e33", "catId": "ec5"}, {"label": "Tassa di soggiorno Ischia (4 € a testa × 2 persone × 8 notti)", "price": "64 €", "paid": false, "estMin": 64.0, "estMax": 64.0, "id": "e34", "catId": "ec5"}, {"label": "Campeggio Sabaudia (4 notti)", "price": "160–220 €", "paid": false, "estMin": 220.0, "estMax": 220.0, "id": "e35", "catId": "ec5"}, {"label": "Campeggio Maremma (1 notte)", "price": "40–55 €", "paid": false, "estMin": 55.0, "estMax": 55.0, "id": "e36", "catId": "ec5"}], "packing": [{"label": "Tenda + picchetti + martello", "id": "p1", "catId": "pc1"}, {"label": "Sacchi a pelo / lenzuola da campeggio", "id": "p2", "catId": "pc1"}, {"label": "Materassini gonfiabili + pompa", "id": "p3", "catId": "pc1"}, {"label": "Cuscini da campeggio", "id": "p4", "catId": "pc1"}, {"label": "Torcia frontale/lanterna", "id": "p5", "catId": "pc1"}, {"label": "Power bank o batteria portatile", "id": "p6", "catId": "pc1"}, {"label": "Telo impermeabile/teli per terra", "id": "p7", "catId": "pc1"}, {"label": "Corda per stendere/asciugare", "id": "p8", "catId": "pc1"}, {"label": "Tavolo con scacchiera", "id": "p9", "catId": "pc1"}, {"label": "Griglia portatile (a carbone o elettrica, se ammessa nei campeggi)", "id": "p10", "catId": "pc2"}, {"label": "Carbonella + accendifuoco", "id": "p11", "catId": "pc2"}, {"label": "Pinze/posate da barbecue", "id": "p12", "catId": "pc2"}, {"label": "Piatti, bicchieri, posate riutilizzabili", "id": "p13", "catId": "pc2"}, {"label": "Un coltello da cucina decente + tagliere", "id": "p14", "catId": "pc2"}, {"label": "Sale, olio, spezie base", "id": "p15", "catId": "pc2"}, {"label": "Contenitori/borsa frigo per la spesa", "id": "p16", "catId": "pc2"}, {"label": "Canoa gonfiabile + pompa + remi", "id": "p17", "catId": "pc3"}, {"label": "Costumi (più di uno a testa)", "id": "p18", "catId": "pc3"}, {"label": "Teli mare, stuoia", "id": "p19", "catId": "pc3"}, {"label": "Scarpette da scoglio/acqua (Sorgeto, Maronti, Circeo)", "id": "p20", "catId": "pc3"}, {"label": "Crema solare (alta protezione, resistente all'acqua)", "id": "p21", "catId": "pc3"}, {"label": "Maschera e boccaglio (per Baia, se preferite le vostre)", "id": "p22", "catId": "pc3"}, {"label": "Occhiali da sole", "id": "p23", "catId": "pc3"}, {"label": "Sacca stagna per telefono/oggetti in canoa", "id": "p24", "catId": "pc3"}, {"label": "Ombrellone", "id": "p25", "catId": "pc3"}, {"label": "Giochi da spiaggia (racchettoni, ecc.)", "id": "p26", "catId": "pc3"}, {"label": "Lampada", "id": "p27", "catId": "pc1"}, {"label": "Sacca subacquea stagna", "id": "p28", "catId": "pc3"}, {"label": "Ancora per canoa", "id": "p29", "catId": "pc3"}, {"label": "Carrellino per canoa", "id": "p30", "catId": "pc3"}, {"label": "Scarpe da trekking o comunque scarpe chiuse buone", "id": "p31", "catId": "pc4"}, {"label": "Zainetto leggero + borraccia", "id": "p32", "catId": "pc4"}, {"label": "Cappellino", "id": "p33", "catId": "pc4"}, {"label": "Carte d'identità/documenti", "id": "p34", "catId": "pc5"}, {"label": "Patente e libretto auto", "id": "p35", "catId": "pc5"}, {"label": "Conferme prenotazioni (case, campeggi, immersione, traghetti)", "id": "p36", "catId": "pc5"}, {"label": "Contanti (parcheggi, Sorgeto, mercati)", "id": "p37", "catId": "pc5"}, {"label": "Copia assicurazione auto", "id": "p38", "catId": "pc5"}, {"label": "Chiave di scorta auto", "id": "p39", "catId": "pc5"}, {"label": "Abbigliamento leggero/estivo (fine agosto-metà settembre)", "id": "p40", "catId": "pc6"}, {"label": "Un paio di outfit \"da sera\" per le cene fuori/centri storici", "id": "p41", "catId": "pc6"}, {"label": "Costume + copricostume", "id": "p42", "catId": "pc6"}, {"label": "Felpa leggera per le sere più fresche (Circeo/Epomeo)", "id": "p43", "catId": "pc6"}, {"label": "Ciabatte e scarpe comode per camminare nei borghi", "id": "p44", "catId": "pc6"}, {"label": "Caricabatterie/cavi", "id": "p45", "catId": "pc7"}, {"label": "Fotocamera, se non usate solo il telefono", "id": "p46", "catId": "pc7"}, {"label": "Adattatori se necessario", "id": "p47", "catId": "pc7"}, {"label": "Kit pronto soccorso base (cerotti, disinfettante)", "id": "p48", "catId": "pc8"}, {"label": "Doposole", "id": "p49", "catId": "pc8"}, {"label": "Repellente zanzare", "id": "p50", "catId": "pc8"}, {"label": "Medicinali personali eventuali", "id": "p51", "catId": "pc8"}, {"label": "Eventuali spezie/prodotti che usate spesso", "id": "p52", "catId": "pc9"}, {"label": "Sacchetti per la spesa/borsa termica", "id": "p53", "catId": "pc9"}, {"label": "Carte da gioco", "id": "p54", "catId": "pc9"}], "food": [{"label": "Tiella di Gaeta (torta salata ripiena, spesso con polpo o alici)", "id": "f1", "catId": "fc1"}, {"label": "Olive di Gaeta", "id": "f2", "catId": "fc1"}, {"label": "Fritto misto di paranza (pesce fritto minuto, tipico della costa)", "id": "f3", "catId": "fc1"}, {"label": "Mozzarella di bufala della zona pontina", "id": "f4", "catId": "fc1"}, {"label": "Coniglio all'ischitana — il piatto simbolo dell'isola", "id": "f5", "catId": "fc2"}, {"label": "Frittatina al coniglio a Forio", "id": "f6", "catId": "fc2"}, {"label": "Zingara ischitana — il panino simbolo di Ischia, nato negli anni '70 al pub La Virgola a Ischia Ponte, oggi fatta benissimo anche al Panificio Boccia lì vicino", "id": "f7", "catId": "fc2"}, {"label": "Salumi e focacce vicino al Castello Aragonese, Ischia Ponte", "id": "f8", "catId": "fc2"}, {"label": "Brioche ischitana a colazione, magari col granita di limone o caffè", "id": "f9", "catId": "fc2"}, {"label": "Vino Ischia DOC (Biancolella, Per' e Palummo)", "id": "f10", "catId": "fc2"}, {"label": "Genovese (ragù di cipolle napoletano)", "id": "f11", "catId": "fc2"}, {"label": "Sfogliatella (riccia o frolla) e babà", "id": "f12", "catId": "fc2"}, {"label": "Pizza fritta", "id": "f13", "catId": "fc2"}, {"label": "Taralli napoletani \"'nzogna e pepe\"", "id": "f14", "catId": "fc2"}, {"label": "Limoncello", "id": "f15", "catId": "fc2"}, {"label": "Lingua di bue — il dolce tipico dell'isola (Bar Pasticceria Roma)", "id": "f16", "catId": "fc3"}, {"label": "Torta caprese — dolce al cioccolato e mandorle, senza farina (Pasticceria Buonocore)", "id": "f17", "catId": "fc4"}, {"label": "Pasticciotto e delizia al limone alla Pasticceria Andrea Pansa, Amalfi", "id": "f18", "catId": "fc5"}, {"label": "Scialatielli ai frutti di mare", "id": "f19", "catId": "fc5"}, {"label": "Colatura di alici di Cetara", "id": "f20", "catId": "fc5"}, {"label": "Provolone del Monaco", "id": "f21", "catId": "fc5"}, {"label": "Melanzane alla parmigiana / \"a scarpone\"", "id": "f22", "catId": "fc5"}, {"label": "Delizia al limone", "id": "f23", "catId": "fc5"}, {"label": "Casatiello", "id": "f24", "catId": "fc5"}, {"label": "Limoncello della costiera (i limoni sono ovunque, vale la pena assaggiarne diverse versioni)", "id": "f25", "catId": "fc5"}], "expCats": [{"id": "ec1", "name": "🚗 Trasporti su gomma"}, {"id": "ec2", "name": "⛴️ Traghetti"}, {"id": "ec3", "name": "🎟️ Attività e ingressi"}, {"id": "ec4", "name": "🍽️ Cibo e bevande"}, {"id": "ec5", "name": "🏠 Alloggi"}], "packCats": [{"id": "pc1", "name": "⛺ Campeggio (Sabaudia, Maremma)"}, {"id": "pc2", "name": "🔥 Grigliata"}, {"id": "pc3", "name": "🌊 Mare e canoa"}, {"id": "pc4", "name": "🥾 Trekking (Monte Circeo, Monte Epomeo)"}, {"id": "pc5", "name": "📄 Documenti e pratico"}, {"id": "pc6", "name": "👕 Abbigliamento"}, {"id": "pc7", "name": "🔌 Elettronica"}, {"id": "pc8", "name": "💊 Farmacia"}, {"id": "pc9", "name": "🍳 Casa (Ischia/Ravello)"}], "foodCats": [{"id": "fc1", "name": "🌿 Lazio — Sabaudia, Circeo, Gaeta"}, {"id": "fc2", "name": "♨️ Ischia"}, {"id": "fc3", "name": "🛥️ Procida"}, {"id": "fc4", "name": "🛵 Capri"}, {"id": "fc5", "name": "🍋 Costiera Amalfitana — Ravello"}]};
+const SEED = {"days":[{"id":"d1","title":"Cavalese → Neuschwanstein → Monaco (Gio 31 dic)","links":[{"label":"Cavalese","url":"https://maps.apple.com/?q=Cavalese"},{"label":"Neuschwanstein","url":"https://maps.apple.com/?q=Schloss%20Neuschwanstein%2C%20Schwangau"},{"label":"Marienbrücke","url":"https://maps.apple.com/?q=Marienbr%C3%BCcke%2C%20Schwangau"},{"label":"Alpsee","url":"https://maps.apple.com/?q=Alpsee%2C%20Schwangau"},{"label":"Marienplatz","url":"https://maps.apple.com/?q=Marienplatz%2C%20M%C3%BCnchen"},{"label":"Odeonsplatz","url":"https://maps.apple.com/?q=Odeonsplatz%2C%20M%C3%BCnchen"},{"label":"Viktualienmarkt","url":"https://maps.apple.com/?q=Viktualienmarkt%2C%20M%C3%BCnchen"},{"label":"Conlon House Lower East Side","url":"https://maps.apple.com/?q=Deisenhofener%20Stra%C3%9Fe%202B%2C%2081539%20M%C3%BCnchen"},{"label":"Augustiner Stammhaus","url":"https://maps.apple.com/?q=Neuhauser%20Str.%2027%2C%20M%C3%BCnchen"}],"M":"07:00 — Partenza in auto da Cavalese.\n10:00–13:30 — Neuschwanstein: castello (esterno o visita, se prenotata), ponte Marienbrücke se accessibile, passeggiata al lago Alpsee e pranzo.\nGli orari di guida sono indicativi: considerare traffico e condizioni invernali.","P":"13:30 — Partenza verso Monaco.\n16:30 — Arrivo indicativo, sistemazione e check-in al Conlon House Lower East Side (prenotato 31/12–02/01; Deisenhofener Str. 2B).\n17:00–19:00 — Marienplatz, Odeonsplatz e Viktualienmarkt.","S":"20:00 — Cena di Capodanno in centro: ristorante da prenotare (Augustiner Stammhaus fra le opzioni).\n23:30 — Passeggiata per Monaco e brindisi di mezzanotte.\n🏨 Conlon House Lower East Side — 2 notti, prenotazione confermata (254,34 €)."},{"id":"d2","title":"Monaco di Baviera (Ven 1 gen)","links":[{"label":"Giardino Inglese","url":"https://maps.apple.com/?q=Englischer%20Garten%20M%C3%BCnchen"},{"label":"Eisbach","url":"https://maps.apple.com/?q=Eisbachwelle%20M%C3%BCnchen"},{"label":"Schwabing","url":"https://maps.apple.com/?q=Schwabing%20M%C3%BCnchen"},{"label":"BMW Welt","url":"https://maps.apple.com/?q=BMW%20Welt%20M%C3%BCnchen"},{"label":"Olympiapark","url":"https://maps.apple.com/?q=Olympiapark%20M%C3%BCnchen"},{"label":"Therme Erding","url":"https://maps.apple.com/?q=Therme%20Erding"},{"label":"Conlon House Lower East Side","url":"https://maps.apple.com/?q=Deisenhofener%20Stra%C3%9Fe%202B%2C%2081539%20M%C3%BCnchen"}],"M":"Mattinata tranquilla e senza sveglia presto.\n11:00–13:30 — Passeggiata nel Giardino Inglese, Eisbach e quartiere Schwabing.","P":"Due alternative per il pomeriggio:\nA) BMW Welt (verificare apertura il 1° gennaio) e Olympiapark.\nB) Relax alle Therme Erding (orari e biglietti da verificare).","S":"Cena tradizionale bavarese e passeggiata serale.\n🏨 Seconda notte al Conlon House Lower East Side (già prenotata)."},{"id":"d3","title":"Monaco → Chiemsee → Salisburgo (Sab 2 gen)","links":[{"label":"Monaco","url":"https://maps.apple.com/?q=Monaco"},{"label":"Chiemsee","url":"https://maps.apple.com/?q=Prien%20am%20Chiemsee"},{"label":"Herreninsel","url":"https://maps.apple.com/?q=Herreninsel%2C%20Chiemsee"},{"label":"Salisburgo","url":"https://maps.apple.com/?q=Altstadt%20Salzburg"},{"label":"Fortezza Hohensalzburg","url":"https://maps.apple.com/?q=Festung%20Hohensalzburg%2C%20Salzburg"},{"label":"Getreidegasse","url":"https://maps.apple.com/?q=Getreidegasse%2C%20Salzburg"},{"label":"Duomo","url":"https://maps.apple.com/?q=Salzburger%20Dom"},{"label":"Mönchsberg","url":"https://maps.apple.com/?q=M%C3%B6nchsberg%2C%20Salzburg"},{"label":"Salzach","url":"https://maps.apple.com/?q=Salzach%2C%20Salzburg"},{"label":"VELUNA One Hotel Salzburg","url":"https://maps.apple.com/?q=Neutorstra%C3%9Fe%2045%2C%205020%20Salzburg"}],"M":"09:00 — Partenza da Monaco.\n10:00–13:00 — Chiemsee: passeggiata sul lago, eventuale battello per Herreninsel (solo se operativo e compatibile con gli orari), pranzo.","P":"15:00 — Arrivo indicativo a Salisburgo; check-in al VELUNA One Hotel Salzburg (Neutorstraße 45).\nPasseggiata nel centro storico: Fortezza Hohensalzburg, Getreidegasse e Duomo.\nMönchsberg per il tramonto solo se il tempo lo permette: in inverno fa buio presto.","S":"Passeggiata sul Salzach e cena nel centro storico.\n🏨 VELUNA One Hotel Salzburg — 1 notte, prenotazione confermata (115,83 €).\nVerificare in anticipo istruzioni del self-check-in e parcheggio."},{"id":"d4","title":"Laghi, Hallstatt → Pfarrwerfen (Dom 3 gen)","links":[{"label":"Salisburgo","url":"https://maps.apple.com/?q=Salisburgo"},{"label":"St. Gilgen","url":"https://maps.apple.com/?q=St.%20Gilgen%2C%20Wolfgangsee"},{"label":"Wolfgangsee","url":"https://maps.apple.com/?q=Wolfgangsee%2C%20Austria"},{"label":"St. Wolfgang","url":"https://maps.apple.com/?q=St.%20Wolfgang%20im%20Salzkammergut"},{"label":"Bad Ischl","url":"https://maps.apple.com/?q=Bad%20Ischl%2C%20Austria"},{"label":"Pasticceria Zauner","url":"https://maps.apple.com/?q=Konditorei%20Zauner%2C%20Bad%20Ischl"},{"label":"Traun","url":"https://maps.apple.com/?q=Traun%20river%2C%20Bad%20Ischl"},{"label":"Hallstatt","url":"https://maps.apple.com/?q=Hallstatt%2C%20Austria"},{"label":"Skywalk","url":"https://maps.apple.com/?q=Hallstatt%20Skywalk%20Austria"},{"label":"Pension Sonneck","url":"https://maps.apple.com/?q=Laubichl%2014%2C%205452%20Pfarrwerfen"}],"M":"09:00 — Partenza da Salisburgo.\n09:30–10:15 — St. Gilgen: passeggiata sul Wolfgangsee.\n10:30–11:45 — St. Wolfgang: centro storico e lungolago.","P":"12:00–14:00 — Bad Ischl: centro, Pasticceria Zauner, passeggiata sul Traun e pranzo.\n14:30–17:30 — Hallstatt: borgo, piazza centrale e lungolago; Skywalk solo se aperto e raggiungibile.\nNota: visita nel tardo pomeriggio con luce limitata, prima del buio privilegiare i punti panoramici.","S":"Dopo Hallstatt — Trasferimento verso Pfarrwerfen (circa 1 ora, condizioni permettendo).\nCena e pernottamento alla Pension Sonneck, Laubichl 14.\n🏨 Pension Sonneck — 1 notte, prenotazione confermata (104,76 €)."},{"id":"d5","title":"Pfarrwerfen → Kitzbühel → Innsbruck → Cavalese (Lun 4 gen)","links":[{"label":"Pension Sonneck","url":"https://maps.apple.com/?q=Laubichl%2014%2C%205452%20Pfarrwerfen"},{"label":"Kitzbühel","url":"https://maps.apple.com/?q=Kitzb%C3%BChel%2C%20Austria"},{"label":"Rathausplatz","url":"https://maps.apple.com/?q=Rathausplatz%2C%20Kitzb%C3%BChel"},{"label":"Innsbruck","url":"https://maps.apple.com/?q=Innsbruck%2C%20Austria"},{"label":"Tettuccio d’Oro","url":"https://maps.apple.com/?q=Goldenes%20Dachl%2C%20Innsbruck"},{"label":"Herzog-Friedrich-Straße","url":"https://maps.apple.com/?q=Herzog-Friedrich-Stra%C3%9Fe%20Innsbruck"},{"label":"Duomo","url":"https://maps.apple.com/?q=Dom%20zu%20St.%20Jakob%2C%20Innsbruck"},{"label":"fiume Inn","url":"https://maps.apple.com/?q=Inn%20river%2C%20Innsbruck"},{"label":"Bergisel","url":"https://maps.apple.com/?q=Bergisel%20Innsbruck"},{"label":"Cavalese","url":"https://maps.apple.com/?q=Cavalese%2C%20Trentino"}],"M":"08:30–09:00 — Partenza dalla Pension Sonneck a Pfarrwerfen, dopo il check-out.\n10:30–13:30 circa — Kitzbühel: centro storico, Rathausplatz, vie del paese e pranzo.\nTrasferimento Pfarrwerfen → Kitzbühel: prevedere circa 1 h 30–2 h.","P":"14:30 — Partenza verso Innsbruck.\n16:00–20:00 — Innsbruck: Tettuccio d’Oro, Herzog-Friedrich-Straße, Duomo e passeggiata lungo il fiume Inn.\nBergisel soltanto se rimane tempo e con luce sufficiente.","S":"Cena presto in centro oppure sosta veloce prima della partenza.\n20:00 circa — Partenza da Innsbruck.\n22:00–23:00 — Arrivo indicativo a Cavalese, in base a traffico e condizioni stradali.\n🏁 Fine del viaggio."}],"expenses":[{"id":"e1","catId":"ec1","label":"CONFERMATO · Conlon House Lower East Side, Monaco (31/12–02/01, 2 notti)","estMin":254.34,"estMax":254.34},{"id":"e2","catId":"ec1","label":"CONFERMATO · VELUNA One Hotel, Salisburgo (02/01–03/01, 1 notte)","estMin":115.83,"estMax":115.83},{"id":"e3","catId":"ec1","label":"CONFERMATO · Pension Sonneck, Pfarrwerfen (03/01–04/01, 1 notte)","estMin":104.76,"estMax":104.76},{"id":"e4","catId":"ec2","label":"Carburante per il road trip (stima, 2 persone)","estMin":170.0,"estMax":170.0},{"id":"e5","catId":"ec2","label":"Pedaggi stradali, tratte a pagamento e autostrade (stima)","estMin":45.0,"estMax":45.0},{"id":"e6","catId":"ec2","label":"Vignetta autostradale Austria (stima; da acquistare se necessaria)","estMin":15.0,"estMax":15.0},{"id":"e7","catId":"ec2","label":"Parcheggi durante le tappe e presso gli alloggi (stima)","estMin":50.0,"estMax":50.0},{"id":"e8","catId":"ec2","label":"Metro e trasporti pubblici a Monaco (stima, 2 persone)","estMin":20.0,"estMax":20.0},{"id":"e9","catId":"ec3","label":"Cena di Capodanno a Monaco (2 persone; da prenotare)","estMin":100.0,"estMax":100.0},{"id":"e10","catId":"ec3","label":"Altre 4 cene (2 persone)","estMin":160.0,"estMax":160.0},{"id":"e11","catId":"ec3","label":"Snack, dolci tipici, caffè, bevande e aperitivi (2 persone)","estMin":35.0,"estMax":35.0},{"id":"e12","catId":"ec4","label":"Neuschwanstein: visita esterna (interni chiusi il 31/12)","estMin":0.0,"estMax":0.0},{"id":"e13","catId":"ec4","label":"Chiemsee: quota prevista per eventuale battello (2 persone)","estMin":15.0,"estMax":15.0},{"id":"e14","catId":"ec4","label":"Salisburgo: quota ingressi e visite (2 persone)","estMin":35.0,"estMax":35.0},{"id":"e15","catId":"ec4","label":"FACOLTATIVO · Therme Erding (esclusa dal budget; inserire spesa se scelta)","estMin":0.0,"estMax":0.0},{"id":"e16","catId":"ec4","label":"FACOLTATIVO · Hallstatt Skywalk/funicolare (escluso dal budget; verificare apertura)","estMin":0.0,"estMax":0.0},{"id":"e17","catId":"ec5","label":"Fondo per tasse di soggiorno/supplementi eventualmente esclusi","estMin":25.0,"estMax":25.0},{"id":"e18","catId":"ec5","label":"Fondo imprevisti e piccoli acquisti","estMin":25.0,"estMax":25.0},{"id":"e19","catId":"ec2","label":"Bollino ambientale tedesco (Umweltplakette), una tantum","estMin":20,"estMax":20},{"id":"e20","catId":"ec3","label":"Colazioni per 5 giorni (2 persone)","estMin":45,"estMax":45},{"id":"e21","catId":"ec3","label":"Pranzi semplici per 5 giorni (2 persone)","estMin":90,"estMax":90}],"packing":[{"id":"p1","catId":"pc1","label":"Piumino/cappotto caldo e giacca antivento"},{"id":"p2","catId":"pc1","label":"Maglie termiche e pile/felpe"},{"id":"p3","catId":"pc1","label":"Maglioni e pantaloni lunghi"},{"id":"p4","catId":"pc1","label":"Pantaloni comodi per le passeggiate"},{"id":"p5","catId":"pc1","label":"Calze calde e ricambi"},{"id":"p6","catId":"pc1","label":"Scarpe invernali impermeabili con suola antiscivolo"},{"id":"p7","catId":"pc1","label":"Guanti, cappello e sciarpa/scaldacollo"},{"id":"p8","catId":"pc1","label":"Cambio per la cena di Capodanno"},{"id":"p9","catId":"pc1","label":"Biancheria intima e pigiama"},{"id":"p10","catId":"pc2","label":"Pneumatici idonei all’inverno; catene/calze se richieste o utili"},{"id":"p11","catId":"pc2","label":"Liquido lavavetri antigelo e raschietto per il ghiaccio"},{"id":"p12","catId":"pc2","label":"Controllo pressione gomme, liquidi e carburante"},{"id":"p13","catId":"pc2","label":"Cavo di ricarica/USB per l’auto"},{"id":"p14","catId":"pc2","label":"Navigatore e mappe offline Germania/Austria"},{"id":"p15","catId":"pc2","label":"Vignetta autostradale Austria: verificare itinerario e validità"},{"id":"p16","catId":"pc2","label":"Bollino ambientale tedesco (Umweltplakette) per Monaco · budget 20 €"},{"id":"p17","catId":"pc2","label":"Parcheggi e accessi agli alloggi: controllare prima di arrivare"},{"id":"p18","catId":"pc3","label":"Carta d’identità/passaporto validi per entrambi"},{"id":"p19","catId":"pc3","label":"Patente, libretto e assicurazione auto"},{"id":"p20","catId":"pc3","label":"Tessera sanitaria europea"},{"id":"p21","catId":"pc3","label":"Conferma Conlon House (31/12–02/01) e istruzioni self-check-in"},{"id":"p22","catId":"pc3","label":"Conferma VELUNA One Hotel (02/01–03/01) e codice accesso"},{"id":"p23","catId":"pc3","label":"Conferma Pension Sonneck (03/01–04/01)"},{"id":"p24","catId":"pc3","label":"Biglietti visite/terme, se acquistati"},{"id":"p25","catId":"pc3","label":"Carte di pagamento e un po’ di contanti"},{"id":"p26","catId":"pc4","label":"Smartphone e caricabatterie"},{"id":"p27","catId":"pc4","label":"Power bank"},{"id":"p28","catId":"pc4","label":"Fotocamera e batterie/schede, se usata"},{"id":"p29","catId":"pc4","label":"Auricolari"},{"id":"p30","catId":"pc4","label":"Adattatore o multipresa compatibile"},{"id":"p31","catId":"pc4","label":"Occhiali da sole per la neve"},{"id":"p32","catId":"pc4","label":"Zainetto leggero e borraccia"},{"id":"p33","catId":"pc5","label":"Spazzolino, dentifricio e prodotti per la doccia"},{"id":"p34","catId":"pc5","label":"Farmaci personali e piccolo kit di primo soccorso"},{"id":"p35","catId":"pc5","label":"Burrocacao e crema per il freddo"},{"id":"p36","catId":"pc5","label":"Fazzoletti e salviette"},{"id":"p37","catId":"pc5","label":"Costume e ciabatte, se scegliete Therme Erding"},{"id":"p38","catId":"pc5","label":"Snack e acqua per i trasferimenti"}],"food":[{"id":"f1","catId":"fc1","label":"Brezn (pretzel bavarese)"},{"id":"f2","catId":"fc1","label":"Schweinshaxe (stinco di maiale)"},{"id":"f3","catId":"fc1","label":"Weißwurst con senape dolce"},{"id":"f4","catId":"fc1","label":"Obatzda (crema di formaggio bavarese)"},{"id":"f5","catId":"fc1","label":"Käsespätzle (gnocchetti al formaggio)"},{"id":"f6","catId":"fc2","label":"Salzburger Nockerl (dolce tipico soffice)"},{"id":"f7","catId":"fc2","label":"Mozartkugeln (cioccolatini)"},{"id":"f8","catId":"fc2","label":"Schnitzel viennese o austriaca"},{"id":"f9","catId":"fc2","label":"Apfelstrudel con crema alla vaniglia"},{"id":"f10","catId":"fc3","label":"Dolce o torta alla Pasticceria Zauner di Bad Ischl"},{"id":"f11","catId":"fc3","label":"Zaunerstollen, specialità di Bad Ischl"},{"id":"f12","catId":"fc3","label":"Kaiserschmarrn (frittata dolce spezzettata)"},{"id":"f13","catId":"fc3","label":"Gulasch caldo durante le tappe"},{"id":"f14","catId":"fc4","label":"Tiroler Gröstl (patate, carne e cipolla)"},{"id":"f15","catId":"fc4","label":"Canederli / Knödel"},{"id":"f16","catId":"fc4","label":"Speck tirolese con pane di segale"},{"id":"f17","catId":"fc4","label":"Strudel in una pasticceria storica"}],"expCats":[{"id":"ec1","name":"🏨 Alloggi prenotati"},{"id":"ec2","name":"🚗 Auto, pedaggi, parcheggi e trasporti"},{"id":"ec3","name":"🍽️ Pasti e bevande"},{"id":"ec4","name":"🎟️ Visite e attività (facoltative escluse)"},{"id":"ec5","name":"🧾 Extra e imprevisti"}],"packCats":[{"id":"pc1","name":"🧥 Abbigliamento invernale"},{"id":"pc2","name":"🚙 Auto e inverno"},{"id":"pc3","name":"🪪 Documenti e prenotazioni"},{"id":"pc4","name":"🔌 Tecnologia e utilità"},{"id":"pc5","name":"🧴 Cura personale e viaggio"}],"foodCats":[{"id":"fc1","name":"🍺 Monaco e Baviera"},{"id":"fc2","name":"🎂 Salisburgo"},{"id":"fc3","name":"☕ Bad Ischl e laghi"},{"id":"fc4","name":"🏔️ Tirolo e Innsbruck"}]};
+// Il preventivo è indipendente dalle spese reali. I vecchi dati /expenses
+// restano nel database come archivio e non vengono modificati.
+const BUDGET_SEED = SEED.expenses.map(e => ({
+  id: 'budget_' + e.id, catId: e.catId, label: e.label,
+  amount: Number(e.estMin ?? e.estMax ?? 0)
+}));
+SEED.expenses = []; // inizialmente nessuna spesa effettiva
+let budgetItems = BUDGET_SEED.map(e => ({ ...e }));
+let budgetDraft = null;
+const tripDb = firebaseReady ? db.ref('trips/capodanno_2026_2027') : null;
+// I dati delle vacanze precedenti rimangono nei vecchi nodi Firebase.
 
-let me = localStorage.getItem('vacanza2026_who') || null;
+let me = localStorage.getItem('capodanno2027_who') || null;
 let diaryState = {};
 let expenseState = {};
 let packState = {};
@@ -467,9 +528,8 @@ function initLocalDefaults() {
   SEED.days.forEach(d => {
     diaryState[d.id] = { M: d.M, P: d.P, S: d.S, by: '', ts: 0 };
   });
-  SEED.expenses.forEach(e => {
-    expenseState[e.id] = { actual: null, label: e.label, catId: e.catId, estMin: e.estMin, estMax: e.estMax };
-  });
+  // Le spese reali verranno aggiunte durante il viaggio.
+
   SEED.packing.forEach(p => { packState[p.id] = { A: false, B: false }; });
   SEED.food.forEach(f => { foodState[f.id] = { label: f.label }; });
 }
@@ -485,31 +545,36 @@ function attachSync() {
     syncStatusMsg('Firebase non configurato: le modifiche restano solo su questo telefono. Vedi le istruzioni per collegare il database condiviso.', true);
     return;
   }
-  db.ref('diary').on('value', snap => {
+  tripDb.ref('diary').on('value', snap => {
     const val = snap.val() || {};
     SEED.days.forEach(d => { if (val[d.id]) diaryState[d.id] = val[d.id]; });
     renderDiary();
   }, err => syncStatusMsg('Errore di sincronizzazione: ' + err.message, true));
 
-  db.ref('expenses').on('value', snap => {
-    const val = snap.val() || {};
-    SEED.expenses.forEach(e => {
-      if (val[e.id]) {
-        if (val[e.id].actual !== undefined) expenseState[e.id].actual = val[e.id].actual;
-        if (val[e.id].label) e.label = val[e.id].label;
-      }
-    });
-    Object.keys(val).forEach(id => {
-      if (!SEED.expenses.find(e => e.id === id) && val[id].label) {
-        expenseState[id] = val[id];
-        SEED.expenses.push({ id, catId: val[id].catId, label: val[id].label, estMin: val[id].estMin, estMax: val[id].estMax });
-      }
-    });
-    SEED.expenses = SEED.expenses.filter(e => !e.id.startsWith('custom_') || val[e.id]);
-    renderExpenses();
-  }, err => syncStatusMsg('Errore di sincronizzazione: ' + err.message, true));
+  // Nuovi nodi Firebase indipendenti: budgetV2 e actualExpenses.
+  // Il precedente nodo expenses non viene letto né modificato.
+  tripDb.ref('budgetV2').on('value', snap => {
+    const val = snap.val();
+    if (val && Array.isArray(val.items)) {
+      budgetItems = val.items.filter(x => x && x.id && x.catId && typeof x.label === 'string' && Number.isFinite(Number(x.amount)))
+        .map(x => ({ id: x.id, catId: x.catId, label: x.label, amount: Number(x.amount) }));
+    } else {
+      budgetItems = BUDGET_SEED.map(x => ({ ...x }));
+    }
+    renderExpTotals();
+    // Non sovrascrivere eventuali modifiche ancora non salvate nel popup.
+  }, err => syncStatusMsg('Errore di sincronizzazione preventivo: ' + err.message, true));
 
-  db.ref('expCats').on('value', snap => {
+  tripDb.ref('actualExpenses').on('value', snap => {
+    const val = snap.val() || {};
+    SEED.expenses = Object.keys(val).map(id => ({ ...val[id], id }))
+      .filter(e => e.label && e.catId)
+      .sort((a,b) => (a.createdAt || 0) - (b.createdAt || 0));
+    expenseState = Object.fromEntries(SEED.expenses.map(e => [e.id, e]));
+    renderExpenses();
+  }, err => syncStatusMsg('Errore di sincronizzazione delle spese: ' + err.message, true));
+
+  tripDb.ref('expCats').on('value', snap => {
     const val = snap.val() || {};
     SEED.expCats.forEach(c => { if (val[c.id]) c.name = val[c.id]; });
     Object.keys(val).forEach(id => {
@@ -519,7 +584,7 @@ function attachSync() {
     renderExpenses();
   }, err => syncStatusMsg('Errore di sincronizzazione: ' + err.message, true));
 
-  db.ref('packing').on('value', snap => {
+  tripDb.ref('packing').on('value', snap => {
     const val = snap.val() || {};
     SEED.packing.forEach(p => {
       if (val[p.id]) {
@@ -539,7 +604,7 @@ function attachSync() {
     renderPacking();
   }, err => syncStatusMsg('Errore di sincronizzazione: ' + err.message, true));
 
-  db.ref('packCats').on('value', snap => {
+  tripDb.ref('packCats').on('value', snap => {
     const val = snap.val() || {};
     SEED.packCats.forEach(c => { if (val[c.id]) c.name = val[c.id]; });
     Object.keys(val).forEach(id => {
@@ -549,7 +614,7 @@ function attachSync() {
     renderPacking();
   }, err => syncStatusMsg('Errore di sincronizzazione: ' + err.message, true));
 
-  db.ref('food').on('value', snap => {
+  tripDb.ref('food').on('value', snap => {
     const val = snap.val() || {};
     SEED.food.forEach(f => {
       if (val[f.id] && val[f.id].label) {
@@ -569,7 +634,7 @@ function attachSync() {
     renderFood();
   }, err => syncStatusMsg('Errore di sincronizzazione: ' + err.message, true));
 
-  db.ref('foodCats').on('value', snap => {
+  tripDb.ref('foodCats').on('value', snap => {
     const val = snap.val() || {};
     SEED.foodCats.forEach(c => { if (val[c.id]) c.name = val[c.id]; });
     Object.keys(val).forEach(id => {
@@ -591,26 +656,36 @@ const saveDiaryField = debounce((dayId, field, value) => {
   diaryState[dayId][field] = value;
   diaryState[dayId].by = me || '?';
   diaryState[dayId].ts = Date.now();
-  if (firebaseReady) db.ref('diary/' + dayId).set(diaryState[dayId]);
+  if (firebaseReady) tripDb.ref('diary/' + dayId).set(diaryState[dayId]);
   renderDiaryMeta(dayId);
 }, 500);
 
-function saveExpenseActual(id, actual) {
-  expenseState[id].actual = actual;
-  if (firebaseReady) db.ref('expenses/' + id).set(expenseState[id]);
+function saveExpenseActual(id, rawValue) {
+  const e = SEED.expenses.find(x => x.id === id);
+  if (!e) return;
+  const value = String(rawValue).trim();
+  const amount = value === '' ? null : Number(value);
+  if (amount !== null && (!Number.isFinite(amount) || amount < 0)) {
+    alert('Inserisci un importo valido, maggiore o uguale a zero.');
+    renderExpenses();
+    return;
+  }
+  e.amount = amount;
+  expenseState[id] = { ...e };
+  if (firebaseReady) tripDb.ref('actualExpenses/' + id).update({ amount, updatedAt: Date.now() });
   renderExpTotals();
 }
 
 function saveExpenseNew(item) {
   expenseState[item.id] = item;
-  if (firebaseReady) db.ref('expenses/' + item.id).set(item);
+  if (firebaseReady) tripDb.ref('actualExpenses/' + item.id).set(item);
 }
 
 function deleteExpense(id) {
   delete expenseState[id];
   const idx = SEED.expenses.findIndex(e => e.id === id);
   if (idx > -1) SEED.expenses.splice(idx, 1);
-  if (firebaseReady) db.ref('expenses/' + id).remove();
+  if (firebaseReady) tripDb.ref('actualExpenses/' + id).remove();
   renderExpenses();
 }
 
@@ -620,17 +695,17 @@ function togglePackMe(id) {
   const p = SEED.packing.find(x => x.id === id);
   const payload = { A: !!packState[id].A, B: !!packState[id].B };
   if (p && id.startsWith('pcustom_')) { payload.label = p.label; payload.catId = p.catId; }
-  if (firebaseReady) db.ref('packing/' + id).set(payload);
+  if (firebaseReady) tripDb.ref('packing/' + id).set(payload);
   renderPackingItem(id);
 }
 
 /* ---------------------- Diario ---------------------- */
-const CAL_CELLS = [{"day": 24, "dayId": null}, {"day": 25, "dayId": null}, {"day": 26, "dayId": null}, {"day": 27, "dayId": null}, {"day": 28, "dayId": null}, {"day": 29, "dayId": "d1"}, {"day": 30, "dayId": "d2"}, {"day": 31, "dayId": "d3"}, {"day": 1, "dayId": "d4"}, {"day": 2, "dayId": "d5"}, {"day": 3, "dayId": "d6"}, {"day": 4, "dayId": "d7"}, {"day": 5, "dayId": "d8"}, {"day": 6, "dayId": "d9"}, {"day": 7, "dayId": "d10"}, {"day": 8, "dayId": "d11"}, {"day": 9, "dayId": "d12"}, {"day": 10, "dayId": "d13"}, {"day": 11, "dayId": "d14"}, {"day": 12, "dayId": "d15"}, {"day": 13, "dayId": "d16"}, {"day": 14, "dayId": "d17"}, {"day": 15, "dayId": "d18"}, {"day": 16, "dayId": null}, {"day": 17, "dayId": null}, {"day": 18, "dayId": null}, {"day": 19, "dayId": null}, {"day": 20, "dayId": null}];
+const CAL_CELLS = [{"day":28,"dayId":null,"month":12,"year":2026},{"day":29,"dayId":null,"month":12,"year":2026},{"day":30,"dayId":null,"month":12,"year":2026},{"day":31,"dayId":"d1","month":12,"year":2026},{"day":1,"dayId":"d2","month":1,"year":2027},{"day":2,"dayId":"d3","month":1,"year":2027},{"day":3,"dayId":"d4","month":1,"year":2027},{"day":4,"dayId":"d5","month":1,"year":2027},{"day":5,"dayId":null,"month":1,"year":2027},{"day":6,"dayId":null,"month":1,"year":2027},{"day":7,"dayId":null,"month":1,"year":2027},{"day":8,"dayId":null,"month":1,"year":2027},{"day":9,"dayId":null,"month":1,"year":2027},{"day":10,"dayId":null,"month":1,"year":2027}];
 const CAL_WD = ['L','M','M','G','V','S','D'];
 
 function renderCalendar() {
   const c = document.getElementById('calendarGrid');
-  let html = '<div class="cal-grid">';
+  let html = '<div class="calendar-caption">31 dicembre 2026 – 4 gennaio 2027</div><div class="cal-grid">';
   CAL_WD.forEach(wd => html += `<div class="cal-wd">${wd}</div>`);
   CAL_CELLS.forEach(cell => {
     if (cell.dayId) {
@@ -792,7 +867,7 @@ function saveDiaryFieldNow(dayId, field, value) {
   diaryState[dayId][field] = value;
   diaryState[dayId].by = me || '?';
   diaryState[dayId].ts = Date.now();
-  if (firebaseReady) db.ref('diary/' + dayId).set(diaryState[dayId]);
+  if (firebaseReady) tripDb.ref('diary/' + dayId).set(diaryState[dayId]);
   renderDiaryMeta(dayId);
 }
 
@@ -961,7 +1036,7 @@ function finishEditCat(listKey, catId, value) {
   if (name) {
     const cat = SEED[listKey].find(c => c.id === catId);
     if (cat) cat.name = name;
-    if (firebaseReady) db.ref(listKey + '/' + catId).set(name);
+    if (firebaseReady) tripDb.ref(listKey + '/' + catId).set(name);
   }
   refreshCatHeader(listKey, catId);
 }
@@ -975,17 +1050,21 @@ function refreshCatHeader(listKey, catId) {
 function deleteCat(combined) {
   const [listKey, catId] = combined.split('|');
   const itemsArr = ITEMS_KEY[listKey];
-  const stateObj = window[STATE_KEY[listKey]];
+  if (listKey === 'expCats' && budgetItems.some(x => x.catId === catId)) {
+    alert('Questa categoria contiene voci del preventivo. Per eliminarla, rimuovi prima le sue voci dal popup della stima.');
+    return;
+  }
+  const stateObj = listKey === 'expCats' ? expenseState : listKey === 'packCats' ? packState : foodState;
   const toDelete = SEED[itemsArr].filter(i => i.catId === catId);
   toDelete.forEach(i => {
     const idx = SEED[itemsArr].indexOf(i);
     if (idx > -1) SEED[itemsArr].splice(idx, 1);
-    if (firebaseReady) db.ref(itemsArr + '/' + i.id).remove();
+    if (firebaseReady) tripDb.ref((listKey === 'expCats' ? 'actualExpenses' : itemsArr) + '/' + i.id).remove();
     delete stateObj[i.id];
   });
   const idx2 = SEED[listKey].findIndex(c => c.id === catId);
   if (idx2 > -1) SEED[listKey].splice(idx2, 1);
-  if (firebaseReady) db.ref(listKey + '/' + catId).remove();
+  if (firebaseReady) tripDb.ref(listKey + '/' + catId).remove();
   rerenderForList(listKey);
 }
 
@@ -1019,7 +1098,7 @@ function addCat(listKey) {
   const prefix = listKey === 'expCats' ? 'ec' : listKey === 'packCats' ? 'pc' : 'fc';
   const id = prefix + '_' + Date.now();
   SEED[listKey].push({ id, name });
-  if (firebaseReady) db.ref(listKey + '/' + id).set(name);
+  if (firebaseReady) tripDb.ref(listKey + '/' + id).set(name);
   addFormOpen.delete('newcat-' + listKey);
   rerenderForList(listKey);
 }
@@ -1030,8 +1109,8 @@ function renderExpenses() {
     const items = SEED.expenses.filter(e => e.catId === cat.id);
     return `
       <div class="exp-cat">
-        ${catHeaderHtml(cat, 'expCats', items.length)}
-        ${items.map(e => expItemHtml(e)).join('')}
+        ${catHeaderHtml(cat, 'expCats')}
+        ${items.length ? items.map(e => expItemHtml(e)).join('') : '<div class="exp-empty-cat">Nessuna spesa registrata</div>'}
         ${expAddRowHtml(cat.id)}
       </div>
     `;
@@ -1044,13 +1123,13 @@ function renderExpenses() {
 function expAddRowHtml(catId) {
   const key = 'exp-' + catId;
   if (!addFormOpen.has(key)) {
-    return `<button class="add-link" onclick="openExpAdd('${catId}')">+ Aggiungi</button>`;
+    return `<button class="add-link" onclick="openExpAdd('${catId}')">+ Aggiungi spesa</button>`;
   }
   return `
     <div class="add-row">
-      <input type="text" placeholder="Nuova voce…" id="newlabel-${catId}"
+      <input type="text" placeholder="Descrizione spesa…" id="newlabel-${catId}"
         onkeydown="if(event.key==='Enter'){document.getElementById('newamt-${catId}').focus();}">
-      <input type="number" placeholder="€" class="short" id="newamt-${catId}"
+      <input type="number" step="0.01" min="0" placeholder="€" class="short" id="newamt-${catId}"
         onkeydown="if(event.key==='Enter'){addExpense('${catId}');}">
       <button onclick="addExpense('${catId}')">+</button>
     </div>
@@ -1071,23 +1150,21 @@ function escapeAttr(s) { return s.replace(/'/g, "\\'"); }
 
 function expItemHtml(e) {
   const key = 'exp-label-' + e.id;
-  const st = expenseState[e.id] || { actual: null };
-  const placeholder = (e.estMin === e.estMax || e.estMax == null) ? `${fmtEuroPlain(e.estMin)}` : `${fmtEuroPlain(e.estMin)}–${fmtEuroPlain(e.estMax)}`;
   const labelHtml = editingRows.has(key)
     ? `<input type="text" class="inline-edit-input" autofocus value="${escapeAttrValue(e.label)}"
         onblur="finishEditExpLabel('${e.id}', this.value)"
         onkeydown="if(event.key==='Enter'){this.blur();}">`
-    : `<div class="exp-label">${e.label}</div>`;
+    : `<div class="exp-label">${escapeAttrValue(e.label)}</div>`;
   return `
     <div class="swipe-wrap" id="exprow-${e.id}">
       <div class="swipe-actions-bg">
         <button class="swipe-act act-edit" data-fn="startEditExpLabel" data-id="${e.id}">Modifica</button>
         <button class="swipe-act act-delete" data-fn="deleteExpense" data-id="${e.id}">Elimina</button>
       </div>
-      <div class="swipe-content item-cell exp-item ${st.actual != null ? 'is-actual' : ''}">
+      <div class="swipe-content item-cell exp-item is-actual">
         ${labelHtml}
-        <input type="number" placeholder="${placeholder}" value="${st.actual != null ? st.actual : ''}"
-          onchange="saveExpenseActual('${e.id}', this.value === '' ? null : parseFloat(this.value))">
+        <input type="number" step="0.01" min="0" aria-label="Costo in euro: ${escapeAttrValue(e.label)}" placeholder="€" value="${e.amount != null ? e.amount : ''}"
+          onchange="saveExpenseActual('${e.id}', this.value)">
       </div>
     </div>
   `;
@@ -1106,7 +1183,7 @@ function finishEditExpLabel(id, value) {
     if (e) e.label = label;
     if (!expenseState[id]) expenseState[id] = {};
     expenseState[id].label = label;
-    if (firebaseReady) db.ref('expenses/' + id).set(expenseState[id]);
+    if (firebaseReady) tripDb.ref('actualExpenses/' + id).update({label, updatedAt: Date.now()});
   }
   refreshExpItem(id);
 }
@@ -1127,34 +1204,124 @@ function fmtEuro(n) { return n == null ? '—' : fmtEuroPlain(n) + '€'; }
 function addExpense(catId) {
   const labelEl = document.getElementById('newlabel-' + catId);
   const amtEl = document.getElementById('newamt-' + catId);
+  if (!labelEl || !amtEl) return;
   const label = labelEl.value.trim();
-  const amt = parseFloat(amtEl.value);
-  if (!label) return;
-  const id = 'custom_' + Date.now();
-  const item = { id, catId, label, estMin: isNaN(amt) ? 0 : amt, estMax: isNaN(amt) ? 0 : amt, actual: isNaN(amt) ? null : amt };
+  const value = amtEl.value.trim();
+  const amount = Number(value);
+  if (!label || value === '' || !Number.isFinite(amount) || amount < 0) {
+    alert('Inserisci una descrizione e un importo valido.');
+    return;
+  }
+  const id = 'custom_' + Date.now() + '_' + Math.random().toString(36).slice(2,6);
+  const item = { id, catId, label, amount: Math.round(amount * 100) / 100, createdAt: Date.now() };
   SEED.expenses.push(item);
   saveExpenseNew(item);
   addFormOpen.delete('exp-' + catId);
   renderExpenses();
 }
 
+// Il riepilogo usa due insiemi separati: budget previsto e registrazioni effettive.
 function renderExpTotals() {
-  let estTotalMin = 0, estTotalMax = 0, actualTotal = 0, actualCount = 0;
-  SEED.expenses.forEach(e => {
-    const st = expenseState[e.id] || {};
-    if (st.actual != null && !isNaN(st.actual)) {
-      actualTotal += st.actual;
-      actualCount++;
-    } else {
-      estTotalMin += (e.estMin || 0);
-      estTotalMax += (e.estMax != null ? e.estMax : e.estMin || 0);
-    }
+  const estimate = Math.round(budgetItems.reduce((sum, e) => sum + (Number(e.amount) || 0), 0) * 100) / 100;
+  const spent = Math.round(SEED.expenses.reduce((sum, e) => sum + (e.amount == null ? 0 : Number(e.amount) || 0), 0) * 100) / 100;
+  const remaining = Math.round((estimate - spent) * 100) / 100;
+  document.getElementById('expEstTotal').textContent = fmtEuro(estimate);
+  document.getElementById('expActualTotal').textContent = fmtEuro(spent);
+  const remEl = document.getElementById('expRemaining');
+  remEl.textContent = fmtEuro(remaining);
+  remEl.classList.toggle('negative', remaining < 0);
+  document.getElementById('expPending').textContent = remaining < 0
+    ? 'Avete superato la stima di ' + fmtEuro(Math.abs(remaining)) + '. Le spese reali non hanno modificato il preventivo.'
+    : 'La stima resta fissa finché non la modificate dalla i. Registrate gli alloggi come spesa effettiva quando vengono pagati.';
+}
+
+function openBudgetModal() {
+  budgetDraft = budgetItems.map(x => ({ ...x }));
+  renderBudgetEditor();
+  document.getElementById('budgetModal').classList.add('show');
+}
+
+function closeBudgetModal() {
+  document.getElementById('budgetModal').classList.remove('show');
+  budgetDraft = null; // Annulla le modifiche non salvate.
+}
+
+function renderBudgetEditor() {
+  if (!budgetDraft) return;
+  document.getElementById('budgetEditor').innerHTML = SEED.expCats.map(cat => {
+    const items = budgetDraft.filter(x => x.catId === cat.id);
+    const subtotal = items.reduce((sum,x) => sum + (Number(x.amount)||0), 0);
+    return `<div class="budget-cat">
+      <div class="budget-cat-head"><span>${escapeAttrValue(cat.name)}</span><span data-budget-subtotal="${cat.id}">${fmtEuro(Math.round(subtotal * 100)/100)}</span></div>
+      ${items.map(e => `<div class="budget-line">
+        <input type="text" aria-label="Descrizione previsione" value="${escapeAttrValue(e.label)}" oninput="updateBudgetLabel('${e.id}',this.value)">
+        <input type="number" aria-label="Importo stimato in euro" min="0" step="0.01" value="${e.amount}" oninput="updateBudgetAmount('${e.id}',this.value)">
+        <button type="button" class="budget-remove" aria-label="Rimuovi voce" onclick="removeBudgetItem('${e.id}')">×</button>
+      </div>`).join('')}
+      <button type="button" class="budget-add" onclick="addBudgetItem('${cat.id}')">+ Aggiungi voce al preventivo</button>
+    </div>`;
+  }).join('');
+  updateBudgetModalTotal();
+}
+
+function updateBudgetLabel(id, value) {
+  if (!budgetDraft) return;
+  const item = budgetDraft.find(x => x.id === id);
+  if (item) item.label = value;
+}
+
+function updateBudgetAmount(id, value) {
+  if (!budgetDraft) return;
+  const item = budgetDraft.find(x => x.id === id);
+  if (item) item.amount = value === '' ? 0 : Number(value);
+  updateBudgetModalTotal();
+}
+
+function updateBudgetModalTotal() {
+  if (!budgetDraft) return;
+  let sum = 0;
+  SEED.expCats.forEach(cat => {
+    const sub = budgetDraft.filter(x => x.catId === cat.id).reduce((s,x) => s + (Number(x.amount) || 0), 0);
+    sum += sub;
+    const el = document.querySelector(`[data-budget-subtotal="${cat.id}"]`);
+    if (el) el.textContent = fmtEuro(Math.round(sub * 100) / 100);
   });
-  const grandMin = estTotalMin + actualTotal;
-  const grandMax = estTotalMax + actualTotal;
-  document.getElementById('expEstTotal').textContent = grandMin === grandMax ? fmtEuro(grandMin) : `${fmtEuro(grandMin)}–${fmtEuro(grandMax)}`;
-  document.getElementById('expActualTotal').textContent = fmtEuro(actualTotal) + (actualCount ? ` (${actualCount} voci confermate)` : '');
-  document.getElementById('expRemaining').textContent = estTotalMin === estTotalMax ? fmtEuro(estTotalMin) : `${fmtEuro(estTotalMin)}–${fmtEuro(estTotalMax)}`;
+  document.getElementById('budgetEditorTotal').textContent = fmtEuro(Math.round(sum * 100) / 100);
+}
+
+function addBudgetItem(catId) {
+  if (!budgetDraft) return;
+  const id = 'budget_custom_' + Date.now() + '_' + Math.random().toString(36).slice(2,6);
+  budgetDraft.push({ id, catId, label: '', amount: 0 });
+  renderBudgetEditor();
+  const inputs = document.querySelectorAll('#budgetEditor .budget-line input[type="text"]');
+  if (inputs.length) inputs[inputs.length - 1].focus();
+}
+
+function removeBudgetItem(id) {
+  if (!budgetDraft) return;
+  budgetDraft = budgetDraft.filter(x => x.id !== id);
+  renderBudgetEditor();
+}
+
+function saveBudget() {
+  if (!budgetDraft) return;
+  for (const item of budgetDraft) {
+    if (!item.label.trim() || !Number.isFinite(Number(item.amount)) || Number(item.amount) < 0) {
+      alert('Completa le descrizioni e inserisci importi validi (almeno 0 €).');
+      return;
+    }
+  }
+  budgetItems = budgetDraft.map(item => ({ id: item.id, catId: item.catId,
+    label: item.label.trim(), amount: Math.round(Number(item.amount) * 100) / 100 }));
+  if (firebaseReady) {
+    tripDb.ref('budgetV2').set({ items: budgetItems, updatedAt: Date.now() })
+      .catch(err => alert('Il preventivo non è stato sincronizzato: ' + err.message));
+  } else {
+    alert('Firebase non è disponibile: il preventivo modificato è visibile solo finché questa pagina resta aperta.');
+  }
+  closeBudgetModal();
+  renderExpTotals();
 }
 
 /* ---------------------- Da portare ---------------------- */
@@ -1235,7 +1402,7 @@ function finishEditPackLabel(id, value) {
     if (p) p.label = label;
     if (!packState[id]) packState[id] = { A: false, B: false };
     const payload = { A: !!packState[id].A, B: !!packState[id].B, label, catId: p ? p.catId : undefined };
-    if (firebaseReady) db.ref('packing/' + id).set(payload);
+    if (firebaseReady) tripDb.ref('packing/' + id).set(payload);
   }
   renderPackingItem(id);
 }
@@ -1248,7 +1415,7 @@ function addPackItem(catId) {
   const item = { id, catId, label };
   SEED.packing.push(item);
   packState[id] = { A: false, B: false };
-  if (firebaseReady) db.ref('packing/' + id).set(Object.assign({ label, catId }, packState[id]));
+  if (firebaseReady) tripDb.ref('packing/' + id).set(Object.assign({ label, catId }, packState[id]));
   addFormOpen.delete('pack-' + catId);
   renderPacking();
 }
@@ -1257,7 +1424,7 @@ function deletePackItem(id) {
   const idx = SEED.packing.findIndex(p => p.id === id);
   if (idx > -1) SEED.packing.splice(idx, 1);
   delete packState[id];
-  if (firebaseReady) db.ref('packing/' + id).remove();
+  if (firebaseReady) tripDb.ref('packing/' + id).remove();
   renderPacking();
 }
 
@@ -1336,7 +1503,7 @@ function finishEditFood(id, value) {
     foodState[id] = { label };
     const f = SEED.food.find(x => x.id === id);
     if (f) f.label = label;
-    if (firebaseReady) db.ref('food/' + id).set({ label, catId: f ? f.catId : undefined });
+    if (firebaseReady) tripDb.ref('food/' + id).set({ label, catId: f ? f.catId : undefined });
   }
   refreshFoodItem(id);
 }
@@ -1355,7 +1522,7 @@ function addFoodItem(catId) {
   const item = { id, catId, label };
   SEED.food.push(item);
   foodState[id] = { label };
-  if (firebaseReady) db.ref('food/' + id).set({ label, catId });
+  if (firebaseReady) tripDb.ref('food/' + id).set({ label, catId });
   addFormOpen.delete('food-' + catId);
   renderFood();
 }
@@ -1364,7 +1531,7 @@ function deleteFoodItem(id) {
   const idx = SEED.food.findIndex(f => f.id === id);
   if (idx > -1) SEED.food.splice(idx, 1);
   delete foodState[id];
-  if (firebaseReady) db.ref('food/' + id).remove();
+  if (firebaseReady) tripDb.ref('food/' + id).remove();
   renderFood();
 }
 
@@ -1389,7 +1556,7 @@ const PERSON_COLORS = { A: '#0969da', B: '#c07a1e' };
 
 function setWho(p) {
   me = p;
-  localStorage.setItem('vacanza2026_who', p);
+  localStorage.setItem('capodanno2027_who', p);
   whoLabelEl.textContent = p === 'A' ? PERSON_A : PERSON_B;
   whoDotEl.style.background = PERSON_COLORS[p];
   whoModal.classList.remove('show');
