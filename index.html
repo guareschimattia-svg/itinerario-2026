@@ -199,13 +199,10 @@
   .exp-hero-row { gap: .5rem; }
   .exp-hero-row .val { text-align: right; white-space: nowrap; }
   .exp-hero-row .val.negative { color: #c13432; }
-  .exp-intro { font-size: .82rem; color: var(--ink-soft); margin: 0 0 .9rem; line-height: 1.5; }
-  .exp-empty-cat { font-size: .78rem; color: #87919b; padding: .45rem .2rem; }
   .budget-modal { max-width: 650px; max-height: min(88vh, 790px); overflow: auto; padding: 1.1rem; }
   .budget-modal-head { display: flex; justify-content: space-between; gap: 1rem; align-items: center; margin-bottom: .5rem; }
   .budget-modal-head h2 { margin: 0; }
   .budget-x { font-size: 1.25rem; border: 0; background: #f1f3f5; width: 32px; height: 32px; border-radius: 50%; cursor: pointer; }
-  .budget-desc { font-size: .8rem; line-height: 1.45; color: var(--ink-soft); margin: 0 0 1rem; }
   .budget-cat { margin-bottom: 1.1rem; }
   .budget-cat-head { display: flex; align-items: center; justify-content: space-between; gap: .6rem; margin-bottom: .4rem;
     padding-bottom: .35rem; border-bottom: 1px solid var(--line); font-size: .83rem; font-weight: 700; }
@@ -432,9 +429,8 @@
       <div class="exp-hero-row"><span class="exp-label-group"><span class="lbl" id="expEstLabel">Stima totale · 2 persone</span><button type="button" class="exp-info-btn" onclick="openBudgetModal()" aria-label="Visualizza e modifica le voci del preventivo" title="Dettaglio e modifica del preventivo">i</button></span><span class="val" id="expEstTotal">—</span></div>
       <div class="exp-hero-row"><span class="lbl">Speso finora</span><span class="val" id="expActualTotal">—</span></div>
       <div class="exp-hero-row grand"><span class="lbl">Budget residuo</span><span class="val" id="expRemaining">—</span></div>
-      <div class="exp-note" id="expPending">Il preventivo è indipendente dalle spese registrate.</div>
+      <div class="exp-note" id="expPending" hidden></div>
     </div>
-    <p class="exp-intro">Spese effettive: aggiungi qui gli importi man mano che spendete. Per modificare il preventivo, usa la <strong>i</strong> accanto alla stima totale.</p>
     <div id="expCatAddArea" class="cat-add-area"></div>
     <div id="expCategories"></div>
   </section>
@@ -469,7 +465,6 @@
 <div class="modal-backdrop" id="budgetModal" role="dialog" aria-modal="true" aria-label="Modifica la stima del viaggio" onclick="if(event.target === this) closeBudgetModal()">
   <div class="modal budget-modal">
     <div class="budget-modal-head"><h2>Preventivo di viaggio</h2><button type="button" class="budget-x" onclick="closeBudgetModal()" aria-label="Chiudi preventivo">×</button></div>
-    <p class="budget-desc">Modifica le voci e gli importi previsti. La stima non cambia quando inserisci una spesa effettiva. Le cifre sono per entrambi.</p>
     <div id="budgetEditor"></div>
     <div class="budget-footer">
       <div class="budget-grand"><span>Stima totale</span><strong id="budgetEditorTotal">—</strong></div>
@@ -542,7 +537,7 @@ function syncStatusMsg(msg, isErr) {
 
 function attachSync() {
   if (!firebaseReady) {
-    syncStatusMsg('Firebase non configurato: le modifiche restano solo su questo telefono. Vedi le istruzioni per collegare il database condiviso.', true);
+    syncStatusMsg('Firebase non disponibile', true);
     return;
   }
   tripDb.ref('diary').on('value', snap => {
@@ -644,7 +639,7 @@ function attachSync() {
     renderFood();
   }, err => syncStatusMsg('Errore di sincronizzazione: ' + err.message, true));
 
-  syncStatusMsg('Connesso — le modifiche si vedono su entrambi i telefoni.', false);
+  syncStatusMsg('Connesso', false);
 }
 
 function debounce(fn, wait) {
@@ -1110,7 +1105,7 @@ function renderExpenses() {
     return `
       <div class="exp-cat">
         ${catHeaderHtml(cat, 'expCats')}
-        ${items.length ? items.map(e => expItemHtml(e)).join('') : '<div class="exp-empty-cat">Nessuna spesa registrata</div>'}
+        ${items.map(e => expItemHtml(e)).join('')}
         ${expAddRowHtml(cat.id)}
       </div>
     `;
@@ -1230,9 +1225,9 @@ function renderExpTotals() {
   const remEl = document.getElementById('expRemaining');
   remEl.textContent = fmtEuro(remaining);
   remEl.classList.toggle('negative', remaining < 0);
-  document.getElementById('expPending').textContent = remaining < 0
-    ? 'Avete superato la stima di ' + fmtEuro(Math.abs(remaining)) + '. Le spese reali non hanno modificato il preventivo.'
-    : 'La stima resta fissa finché non la modificate dalla i. Registrate gli alloggi come spesa effettiva quando vengono pagati.';
+  const warningEl = document.getElementById('expPending');
+  warningEl.hidden = remaining >= 0;
+  warningEl.textContent = remaining < 0 ? 'Budget superato di ' + fmtEuro(Math.abs(remaining)) : '';
 }
 
 function openBudgetModal() {
