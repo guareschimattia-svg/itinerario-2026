@@ -32,7 +32,6 @@
     display: flex; align-items: center; justify-content: space-between;
   }
   .topbar h1 { font-size: 1.1rem; font-weight: 700; }
-  .topbar .trip-subtitle { font-size: .68rem; font-weight: 500; color: var(--ink-soft); margin-top: 3px; }
   .who-btn {
     background: #f6f8fa;
     border: 1px solid var(--line);
@@ -125,8 +124,7 @@
     padding: 0.28rem 0.6rem;
     text-decoration: none;
   }
-  .maps-chip:before { content: "📍"; font-size: 0.7rem; margin-right: 0.2rem; }
-  .dayrow { display: flex; gap: 0.6rem; margin-bottom: 0.6rem; align-items: flex-start; }
+.dayrow { display: flex; gap: 0.6rem; margin-bottom: 0.6rem; align-items: flex-start; }
   .dayrow .rlabel {
     flex: 0 0 24px;
     height: 26px;
@@ -178,6 +176,72 @@
   }
   .diary-meta { font-size: 0.7rem; color: var(--ink-soft); margin-top: 0.5rem; min-height: 1em; }
 
+  /* Full-screen itinerary editor: keeps the day card and page scroll untouched. */
+  .diary-editor-modal {
+    position: fixed; inset: 0; z-index: 1000;
+    display: none; flex-direction: column;
+    width: 100%; height: 100vh; height: 100dvh;
+    padding-top: env(safe-area-inset-top);
+    padding-bottom: env(safe-area-inset-bottom);
+    background: #fff; color: var(--ink); color-scheme: light;
+    overscroll-behavior: contain;
+  }
+  .diary-editor-modal.show { display: flex; }
+  .diary-editor-head {
+    flex: 0 0 auto; min-height: 58px;
+    display: grid; grid-template-columns: 76px minmax(0, 1fr) 76px;
+    align-items: center; gap: .35rem;
+    padding: .35rem .7rem;
+    border-bottom: 1px solid var(--line);
+    background: #fff;
+  }
+  .diary-editor-head h2 {
+    min-width: 0; text-align: center; font-size: .98rem; font-weight: 700;
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  }
+  .diary-editor-head button {
+    min-height: 42px; border: 0; border-radius: 9px;
+    padding: .45rem .55rem; font: inherit; font-size: .88rem; font-weight: 650;
+    cursor: pointer; touch-action: manipulation;
+  }
+  .diary-editor-cancel { color: var(--ink-soft); background: #f1f3f5; }
+  .diary-editor-save { color: #fff; background: var(--accent); }
+  .diary-editor-body {
+    display: flex; flex: 1 1 auto; min-height: 0; min-width: 0;
+    flex-direction: column; gap: .85rem;
+    padding: .8rem .85rem 1rem;
+    overflow-y: auto; -webkit-overflow-scrolling: touch;
+    overscroll-behavior: contain;
+  }
+  .diary-editor-field { display: flex; flex-direction: column; gap: .35rem; min-width: 0; }
+  .diary-editor-field label {
+    display: block; font-size: .76rem; line-height: 1.2;
+    font-weight: 750; color: var(--ink-soft); letter-spacing: .01em;
+  }
+  .diary-editor-textarea {
+    display: block; width: 100%; min-width: 0; min-height: 0;
+    border: 1px solid var(--line); border-radius: 10px;
+    padding: .8rem; margin: 0;
+    background: #fff !important; color: var(--ink) !important;
+    -webkit-text-fill-color: var(--ink) !important;
+    font-family: inherit; font-size: 16px; line-height: 1.5;
+    resize: none; overflow-y: auto; -webkit-overflow-scrolling: touch;
+    overscroll-behavior: contain; color-scheme: light; caret-color: var(--accent);
+  }
+  .diary-editor-main-textarea {
+    flex: 0 0 auto; min-height: 88px; font-size: 16px; line-height: 1.45;
+    font-weight: 600; color: var(--ink) !important;
+    -webkit-text-fill-color: var(--ink) !important;
+  }
+  .diary-editor-notes-textarea {
+    flex: 1 1 auto; min-height: 150px; font-size: 14px; line-height: 1.5;
+    color: var(--ink-soft) !important; -webkit-text-fill-color: var(--ink-soft) !important;
+    border-top-style: dotted;
+  }
+  .diary-editor-textarea:focus { outline: 2px solid rgba(9,105,218,.22); border-color: var(--accent); }
+  body.diary-editor-locked, body.budget-modal-locked { position: fixed; overflow: hidden; width: 100%; left: 0; right: 0; }
+  html.diary-editor-locked, html.budget-modal-locked { overflow: hidden; }
+
   /* Expenses */
   .exp-hero {
     background: var(--bg);
@@ -200,9 +264,27 @@
   .exp-hero-row { gap: .5rem; }
   .exp-hero-row .val { text-align: right; white-space: nowrap; }
   .exp-hero-row .val.negative { color: #c13432; }
-  .budget-modal { max-width: 650px; max-height: min(88vh, 790px); overflow: auto; padding: 1.1rem; color-scheme: light; color: var(--ink); background: #fff; }
-  .budget-modal-head { display: flex; justify-content: space-between; gap: 1rem; align-items: center; margin-bottom: .5rem; }
+  /* Budget editor: true full-screen sheet; only its list scrolls, never the page behind it. */
+  .budget-modal-backdrop {
+    position: fixed; inset: 0; z-index: 1001; display: none;
+    align-items: stretch; justify-content: stretch; padding: 0;
+    background: #fff; overscroll-behavior: none; touch-action: none;
+  }
+  .budget-modal-backdrop.show { display: flex; }
+  .budget-modal {
+    display: flex; flex-direction: column; width: 100%; height: 100vh; height: 100dvh;
+    max-width: none; max-height: none; min-height: 0; overflow: hidden;
+    border-radius: 0; padding: calc(.75rem + env(safe-area-inset-top)) .9rem calc(.55rem + env(safe-area-inset-bottom));
+    color-scheme: light; color: var(--ink); background: #fff;
+    overscroll-behavior: contain; touch-action: pan-y;
+  }
+  .budget-modal-head { display: flex; flex: 0 0 auto; justify-content: space-between; gap: 1rem; align-items: center; margin-bottom: .5rem; padding-bottom: .65rem; border-bottom: 1px solid var(--line); }
   .budget-modal-head h2 { margin: 0; }
+  #budgetEditor {
+    flex: 1 1 auto; min-height: 0; overflow-y: auto; overflow-x: hidden;
+    -webkit-overflow-scrolling: touch; overscroll-behavior: contain;
+    padding: .25rem 0 .7rem; touch-action: pan-y;
+  }
   .budget-x { font-size: 1.25rem; border: 0; background: #f1f3f5; color: var(--ink); width: 32px; height: 32px; border-radius: 50%; cursor: pointer; }
   .budget-cat { margin-bottom: 1.1rem; }
   .budget-cat-head { display: flex; align-items: center; justify-content: space-between; gap: .6rem; margin-bottom: .4rem;
@@ -214,7 +296,7 @@
   .budget-line input[type=number] { flex: 0 0 80px; width: 80px; text-align: right; }
   .budget-remove { border: none; background: #fff1ef; color: #a22f2b; border-radius: 7px; height: 32px; width: 29px; font-size: 1rem; cursor: pointer; }
   .budget-add { color: var(--accent); background: none; border: 0; font-weight: 600; font-size: .79rem; cursor: pointer; padding: .4rem 0; }
-  .budget-footer { position: sticky; bottom: -1.1rem; background: #fff; padding: .8rem 0 .1rem; border-top: 1px solid var(--line); }
+  .budget-footer { position: relative; bottom: auto; flex: 0 0 auto; background: #fff; padding: .75rem 0 .15rem; border-top: 1px solid var(--line); }
   .budget-grand { display: flex; justify-content: space-between; align-items: center; font-size: .9rem; font-weight: 700; margin-bottom: .6rem; }
   .budget-grand strong { font-size: 1.15rem; color: var(--accent); }
   .budget-btns { display: flex; gap: .6rem; }
@@ -353,9 +435,17 @@
   .pack-cat h3 { font-size: 0.95rem; margin-bottom: 0.5rem; }
   .pack-item { justify-content: space-between; }
   .p-label {
-    font-size: 0.85rem; color: var(--ink); flex: 1; min-width: 0; word-break: break-word;
-    cursor: pointer; -webkit-tap-highlight-color: transparent;
+    appearance: none; -webkit-appearance: none;
+    display: block; width: 100%; min-width: 0; flex: 1;
+    margin: 0; padding: 0; border: 0; border-radius: 0;
+    background: transparent; text-align: left;
+    font-family: inherit; font-size: 0.85rem; line-height: 1.35;
+    color: var(--ink); word-break: break-word;
+    cursor: pointer; touch-action: manipulation;
+    user-select: none; -webkit-user-select: none;
+    -webkit-tap-highlight-color: transparent;
   }
+  .p-label:active { opacity: 0.68; }
   .p-label.is-done { color: var(--ink-soft); text-decoration: line-through; }
   .p-label.done-a { text-decoration-color: #0969da; }
   .p-label.done-b { text-decoration-color: #c07a1e; }
@@ -400,6 +490,28 @@
     display: none; align-items: center; justify-content: center; padding: 1.2rem;
   }
   .modal-backdrop.show { display: flex; }
+  /* Override the generic centered dialog rules for the full-screen budget editor. */
+  #budgetModal {
+    position: fixed; inset: 0; z-index: 1001; display: none;
+    align-items: stretch; justify-content: stretch; padding: 0;
+    background: #fff; overscroll-behavior: none; touch-action: pan-y;
+  }
+  #budgetModal.show { display: flex; }
+  #budgetModal > .budget-modal {
+    display: flex; flex-direction: column; width: 100%; height: 100vh; height: 100dvh;
+    max-width: none; max-height: none; min-height: 0; overflow: hidden; border-radius: 0;
+    padding: calc(.75rem + env(safe-area-inset-top)) .9rem calc(.55rem + env(safe-area-inset-bottom));
+    color-scheme: light; color: var(--ink); background: #fff;
+    overscroll-behavior: contain; touch-action: pan-y;
+  }
+  #budgetModal #budgetEditor {
+    flex: 1 1 auto; min-height: 0; overflow-y: auto; overflow-x: hidden;
+    -webkit-overflow-scrolling: touch; overscroll-behavior: contain; touch-action: pan-y;
+  }
+  #budgetModal .budget-footer { position: relative; bottom: auto; flex: 0 0 auto; }
+  @media(max-width:375px) {
+    #budgetModal > .budget-modal { padding: calc(.65rem + env(safe-area-inset-top)) .75rem calc(.45rem + env(safe-area-inset-bottom)); }
+  }
   .modal { background: #fff; border-radius: 12px; padding: 1.3rem; max-width: 300px; width: 100%; }
   .modal h2 { font-size: 1.05rem; margin-bottom: 0.9rem; }
   .modal button.who-pick {
@@ -415,7 +527,7 @@
 <body>
 
 <div class="topbar" id="topbar">
-  <div><h1>🏔️ Capodanno 2027</h1><div class="trip-subtitle">Germania e Austria · 31 dic – 4 gen</div></div>
+  <div><h1>Capodanno 2027</h1></div>
   <button class="who-btn" id="whoBtn"><span class="who-dot" id="whoDot"></span><span id="whoLabel">Chi sei?</span></button>
 </div>
 
@@ -451,7 +563,7 @@
   <button class="nav-btn active" data-view="diario"><span class="ic">📅</span>Itinerario</button>
   <button class="nav-btn" data-view="spese"><span class="ic">💶</span>Spese</button>
   <button class="nav-btn" data-view="portare"><span class="ic">🎒</span>Da portare</button>
-  <button class="nav-btn" data-view="assaggiare"><span class="ic">🍋</span>Da assaggiare</button>
+  <button class="nav-btn" data-view="assaggiare"><span class="ic">🍽️</span>Da assaggiare</button>
 </nav>
 
 <div class="modal-backdrop" id="whoModal">
@@ -463,13 +575,31 @@
   </div>
 </div>
 
-<div class="modal-backdrop" id="budgetModal" role="dialog" aria-modal="true" aria-label="Modifica la stima del viaggio" onclick="if(event.target === this) closeBudgetModal()">
-  <div class="modal budget-modal">
+<div class="modal-backdrop budget-modal-backdrop" id="budgetModal" role="dialog" aria-modal="true" aria-label="Modifica la stima del viaggio" aria-hidden="true" onclick="if(event.target === this) closeBudgetModal()">
+  <div class="budget-modal">
     <div class="budget-modal-head"><h2>Preventivo di viaggio</h2><button type="button" class="budget-x" onclick="closeBudgetModal()" aria-label="Chiudi preventivo">×</button></div>
     <div id="budgetEditor"></div>
     <div class="budget-footer">
       <div class="budget-grand"><span>Stima totale</span><strong id="budgetEditorTotal">—</strong></div>
       <div class="budget-btns"><button type="button" onclick="closeBudgetModal()">Annulla</button><button type="button" class="budget-save" onclick="saveBudget()">Salva preventivo</button></div>
+    </div>
+  </div>
+</div>
+
+<div class="diary-editor-modal" id="diaryEditorModal" role="dialog" aria-modal="true" aria-labelledby="diaryEditorTitle" aria-hidden="true">
+  <div class="diary-editor-head">
+    <button type="button" class="diary-editor-cancel" onclick="cancelDiaryEdit()">Annulla</button>
+    <h2 id="diaryEditorTitle">Modifica itinerario</h2>
+    <button type="button" class="diary-editor-save" onclick="saveDiaryEdit()">Salva</button>
+  </div>
+  <div class="diary-editor-body">
+    <div class="diary-editor-field">
+      <label for="diaryEditorMain">Testo principale</label>
+      <textarea id="diaryEditorMain" class="diary-editor-textarea diary-editor-main-textarea" rows="2" spellcheck="true" autocapitalize="sentences" autocomplete="off" aria-label="Testo principale dell’itinerario"></textarea>
+    </div>
+    <div class="diary-editor-field" style="flex:1 1 auto;min-height:0">
+      <label for="diaryEditorNotes">Dettagli e note</label>
+      <textarea id="diaryEditorNotes" class="diary-editor-textarea diary-editor-notes-textarea" rows="6" spellcheck="true" autocapitalize="sentences" autocomplete="off" aria-label="Dettagli e note dell’itinerario"></textarea>
     </div>
   </div>
 </div>
@@ -490,6 +620,13 @@ const firebaseConfig = {
   appId: "1:797697030290:web:e732c04442db00c89c0e4b"
 };
 
+function stripEmoji(value) {
+  return String(value ?? '')
+    .replace(/[\u{1F000}-\u{1FAFF}\u{2600}-\u{27BF}\u{2300}-\u{23FF}\u{2B00}-\u{2BFF}\u{FE0F}\u{200D}\u{20E3}]/gu, '')
+    .replace(/[ \t]{2,}/g, ' ')
+    .trim();
+}
+
 const PERSON_A = "Mattia";
 const PERSON_B = "Adriana";
 
@@ -501,7 +638,7 @@ try {
   firebaseReady = true;
 } catch (e) { console.error("Firebase non configurato:", e); }
 
-const SEED = {"days":[{"id":"d1","title":"Cavalese → Neuschwanstein → Monaco (Gio 31 dic)","links":[{"label":"Cavalese","url":"https://maps.apple.com/?q=Cavalese"},{"label":"Neuschwanstein","url":"https://maps.apple.com/?q=Schloss%20Neuschwanstein%2C%20Schwangau"},{"label":"Marienbrücke","url":"https://maps.apple.com/?q=Marienbr%C3%BCcke%2C%20Schwangau"},{"label":"Alpsee","url":"https://maps.apple.com/?q=Alpsee%2C%20Schwangau"},{"label":"Marienplatz","url":"https://maps.apple.com/?q=Marienplatz%2C%20M%C3%BCnchen"},{"label":"Odeonsplatz","url":"https://maps.apple.com/?q=Odeonsplatz%2C%20M%C3%BCnchen"},{"label":"Viktualienmarkt","url":"https://maps.apple.com/?q=Viktualienmarkt%2C%20M%C3%BCnchen"},{"label":"Conlon House Lower East Side","url":"https://maps.apple.com/?q=Deisenhofener%20Stra%C3%9Fe%202B%2C%2081539%20M%C3%BCnchen"},{"label":"Augustiner Stammhaus","url":"https://maps.apple.com/?q=Neuhauser%20Str.%2027%2C%20M%C3%BCnchen"}],"M":"07:00 — Partenza in auto da Cavalese.\n10:00–13:30 — Neuschwanstein: castello (esterno o visita, se prenotata), ponte Marienbrücke se accessibile, passeggiata al lago Alpsee e pranzo.\nGli orari di guida sono indicativi: considerare traffico e condizioni invernali.","P":"13:30 — Partenza verso Monaco.\n16:30 — Arrivo indicativo, sistemazione e check-in al Conlon House Lower East Side (prenotato 31/12–02/01; Deisenhofener Str. 2B).\n17:00–19:00 — Marienplatz, Odeonsplatz e Viktualienmarkt.","S":"20:00 — Cena di Capodanno in centro: ristorante da prenotare (Augustiner Stammhaus fra le opzioni).\n23:30 — Passeggiata per Monaco e brindisi di mezzanotte.\n🏨 Conlon House Lower East Side — 2 notti, prenotazione confermata (254,34 €)."},{"id":"d2","title":"Monaco di Baviera (Ven 1 gen)","links":[{"label":"Giardino Inglese","url":"https://maps.apple.com/?q=Englischer%20Garten%20M%C3%BCnchen"},{"label":"Eisbach","url":"https://maps.apple.com/?q=Eisbachwelle%20M%C3%BCnchen"},{"label":"Schwabing","url":"https://maps.apple.com/?q=Schwabing%20M%C3%BCnchen"},{"label":"BMW Welt","url":"https://maps.apple.com/?q=BMW%20Welt%20M%C3%BCnchen"},{"label":"Olympiapark","url":"https://maps.apple.com/?q=Olympiapark%20M%C3%BCnchen"},{"label":"Therme Erding","url":"https://maps.apple.com/?q=Therme%20Erding"},{"label":"Conlon House Lower East Side","url":"https://maps.apple.com/?q=Deisenhofener%20Stra%C3%9Fe%202B%2C%2081539%20M%C3%BCnchen"}],"M":"Mattinata tranquilla e senza sveglia presto.\n11:00–13:30 — Passeggiata nel Giardino Inglese, Eisbach e quartiere Schwabing.","P":"Due alternative per il pomeriggio:\nA) BMW Welt (verificare apertura il 1° gennaio) e Olympiapark.\nB) Relax alle Therme Erding (orari e biglietti da verificare).","S":"Cena tradizionale bavarese e passeggiata serale.\n🏨 Seconda notte al Conlon House Lower East Side (già prenotata)."},{"id":"d3","title":"Monaco → Chiemsee → Salisburgo (Sab 2 gen)","links":[{"label":"Monaco","url":"https://maps.apple.com/?q=Monaco"},{"label":"Chiemsee","url":"https://maps.apple.com/?q=Prien%20am%20Chiemsee"},{"label":"Herreninsel","url":"https://maps.apple.com/?q=Herreninsel%2C%20Chiemsee"},{"label":"Salisburgo","url":"https://maps.apple.com/?q=Altstadt%20Salzburg"},{"label":"Fortezza Hohensalzburg","url":"https://maps.apple.com/?q=Festung%20Hohensalzburg%2C%20Salzburg"},{"label":"Getreidegasse","url":"https://maps.apple.com/?q=Getreidegasse%2C%20Salzburg"},{"label":"Duomo","url":"https://maps.apple.com/?q=Salzburger%20Dom"},{"label":"Mönchsberg","url":"https://maps.apple.com/?q=M%C3%B6nchsberg%2C%20Salzburg"},{"label":"Salzach","url":"https://maps.apple.com/?q=Salzach%2C%20Salzburg"},{"label":"VELUNA One Hotel Salzburg","url":"https://maps.apple.com/?q=Neutorstra%C3%9Fe%2045%2C%205020%20Salzburg"}],"M":"09:00 — Partenza da Monaco.\n10:00–13:00 — Chiemsee: passeggiata sul lago, eventuale battello per Herreninsel (solo se operativo e compatibile con gli orari), pranzo.","P":"15:00 — Arrivo indicativo a Salisburgo; check-in al VELUNA One Hotel Salzburg (Neutorstraße 45).\nPasseggiata nel centro storico: Fortezza Hohensalzburg, Getreidegasse e Duomo.\nMönchsberg per il tramonto solo se il tempo lo permette: in inverno fa buio presto.","S":"Passeggiata sul Salzach e cena nel centro storico.\n🏨 VELUNA One Hotel Salzburg — 1 notte, prenotazione confermata (115,83 €).\nVerificare in anticipo istruzioni del self-check-in e parcheggio."},{"id":"d4","title":"Laghi, Hallstatt → Pfarrwerfen (Dom 3 gen)","links":[{"label":"Salisburgo","url":"https://maps.apple.com/?q=Salisburgo"},{"label":"St. Gilgen","url":"https://maps.apple.com/?q=St.%20Gilgen%2C%20Wolfgangsee"},{"label":"Wolfgangsee","url":"https://maps.apple.com/?q=Wolfgangsee%2C%20Austria"},{"label":"St. Wolfgang","url":"https://maps.apple.com/?q=St.%20Wolfgang%20im%20Salzkammergut"},{"label":"Bad Ischl","url":"https://maps.apple.com/?q=Bad%20Ischl%2C%20Austria"},{"label":"Pasticceria Zauner","url":"https://maps.apple.com/?q=Konditorei%20Zauner%2C%20Bad%20Ischl"},{"label":"Traun","url":"https://maps.apple.com/?q=Traun%20river%2C%20Bad%20Ischl"},{"label":"Hallstatt","url":"https://maps.apple.com/?q=Hallstatt%2C%20Austria"},{"label":"Skywalk","url":"https://maps.apple.com/?q=Hallstatt%20Skywalk%20Austria"},{"label":"Pension Sonneck","url":"https://maps.apple.com/?q=Laubichl%2014%2C%205452%20Pfarrwerfen"}],"M":"09:00 — Partenza da Salisburgo.\n09:30–10:15 — St. Gilgen: passeggiata sul Wolfgangsee.\n10:30–11:45 — St. Wolfgang: centro storico e lungolago.","P":"12:00–14:00 — Bad Ischl: centro, Pasticceria Zauner, passeggiata sul Traun e pranzo.\n14:30–17:30 — Hallstatt: borgo, piazza centrale e lungolago; Skywalk solo se aperto e raggiungibile.\nNota: visita nel tardo pomeriggio con luce limitata, prima del buio privilegiare i punti panoramici.","S":"Dopo Hallstatt — Trasferimento verso Pfarrwerfen (circa 1 ora, condizioni permettendo).\nCena e pernottamento alla Pension Sonneck, Laubichl 14.\n🏨 Pension Sonneck — 1 notte, prenotazione confermata (104,76 €)."},{"id":"d5","title":"Pfarrwerfen → Kitzbühel → Innsbruck → Cavalese (Lun 4 gen)","links":[{"label":"Pension Sonneck","url":"https://maps.apple.com/?q=Laubichl%2014%2C%205452%20Pfarrwerfen"},{"label":"Kitzbühel","url":"https://maps.apple.com/?q=Kitzb%C3%BChel%2C%20Austria"},{"label":"Rathausplatz","url":"https://maps.apple.com/?q=Rathausplatz%2C%20Kitzb%C3%BChel"},{"label":"Innsbruck","url":"https://maps.apple.com/?q=Innsbruck%2C%20Austria"},{"label":"Tettuccio d’Oro","url":"https://maps.apple.com/?q=Goldenes%20Dachl%2C%20Innsbruck"},{"label":"Herzog-Friedrich-Straße","url":"https://maps.apple.com/?q=Herzog-Friedrich-Stra%C3%9Fe%20Innsbruck"},{"label":"Duomo","url":"https://maps.apple.com/?q=Dom%20zu%20St.%20Jakob%2C%20Innsbruck"},{"label":"fiume Inn","url":"https://maps.apple.com/?q=Inn%20river%2C%20Innsbruck"},{"label":"Bergisel","url":"https://maps.apple.com/?q=Bergisel%20Innsbruck"},{"label":"Cavalese","url":"https://maps.apple.com/?q=Cavalese%2C%20Trentino"}],"M":"08:30–09:00 — Partenza dalla Pension Sonneck a Pfarrwerfen, dopo il check-out.\n10:30–13:30 circa — Kitzbühel: centro storico, Rathausplatz, vie del paese e pranzo.\nTrasferimento Pfarrwerfen → Kitzbühel: prevedere circa 1 h 30–2 h.","P":"14:30 — Partenza verso Innsbruck.\n16:00–20:00 — Innsbruck: Tettuccio d’Oro, Herzog-Friedrich-Straße, Duomo e passeggiata lungo il fiume Inn.\nBergisel soltanto se rimane tempo e con luce sufficiente.","S":"Cena presto in centro oppure sosta veloce prima della partenza.\n20:00 circa — Partenza da Innsbruck.\n22:00–23:00 — Arrivo indicativo a Cavalese, in base a traffico e condizioni stradali.\n🏁 Fine del viaggio."}],"expenses":[{"id":"e1","catId":"ec1","label":"Conlon House · Monaco · 2 notti","estMin":254.34,"estMax":254.34},{"id":"e2","catId":"ec1","label":"VELUNA One Hotel · Salisburgo · 1 notte","estMin":115.83,"estMax":115.83},{"id":"e3","catId":"ec1","label":"Pension Sonneck · Pfarrwerfen · 1 notte","estMin":104.76,"estMax":104.76},{"id":"e4","catId":"ec2","label":"Carburante","estMin":170.0,"estMax":170.0},{"id":"e5","catId":"ec2","label":"Pedaggi stradali","estMin":45.0,"estMax":45.0},{"id":"e6","catId":"ec2","label":"Vignetta autostradale austriaca","estMin":15.0,"estMax":15.0},{"id":"e7","catId":"ec2","label":"Parcheggi","estMin":50.0,"estMax":50.0},{"id":"e8","catId":"ec2","label":"Metro e mezzi pubblici a Monaco","estMin":20.0,"estMax":20.0},{"id":"e9","catId":"ec3","label":"Cena di Capodanno (2 persone)","estMin":100.0,"estMax":100.0},{"id":"e10","catId":"ec3","label":"Altre 4 cene (2 persone)","estMin":160.0,"estMax":160.0},{"id":"e11","catId":"ec3","label":"Snack, dolci, bevande e aperitivi","estMin":35.0,"estMax":35.0},{"id":"e13","catId":"ec4","label":"Battello Chiemsee (eventuale)","estMin":15.0,"estMax":15.0},{"id":"e14","catId":"ec4","label":"Visite e ingressi a Salisburgo","estMin":35.0,"estMax":35.0},{"id":"e17","catId":"ec5","label":"Tasse di soggiorno e supplementi","estMin":25.0,"estMax":25.0},{"id":"e18","catId":"ec5","label":"Imprevisti e piccoli acquisti","estMin":25.0,"estMax":25.0},{"id":"e19","catId":"ec2","label":"Bollino ambientale tedesco","estMin":20,"estMax":20},{"id":"e20","catId":"ec3","label":"Colazioni per 5 giorni (2 persone)","estMin":45,"estMax":45},{"id":"e21","catId":"ec3","label":"Pranzi semplici per 5 giorni (2 persone)","estMin":90,"estMax":90}],"packing":[{"id":"p1","catId":"pc1","label":"Piumino/cappotto caldo e giacca antivento"},{"id":"p2","catId":"pc1","label":"Maglie termiche e pile/felpe"},{"id":"p3","catId":"pc1","label":"Maglioni e pantaloni lunghi"},{"id":"p4","catId":"pc1","label":"Pantaloni comodi per le passeggiate"},{"id":"p5","catId":"pc1","label":"Calze calde e ricambi"},{"id":"p6","catId":"pc1","label":"Scarpe invernali impermeabili con suola antiscivolo"},{"id":"p7","catId":"pc1","label":"Guanti, cappello e sciarpa/scaldacollo"},{"id":"p8","catId":"pc1","label":"Cambio per la cena di Capodanno"},{"id":"p9","catId":"pc1","label":"Biancheria intima e pigiama"},{"id":"p10","catId":"pc2","label":"Pneumatici idonei all’inverno; catene/calze se richieste o utili"},{"id":"p11","catId":"pc2","label":"Liquido lavavetri antigelo e raschietto per il ghiaccio"},{"id":"p12","catId":"pc2","label":"Controllo pressione gomme, liquidi e carburante"},{"id":"p13","catId":"pc2","label":"Cavo di ricarica/USB per l’auto"},{"id":"p14","catId":"pc2","label":"Navigatore e mappe offline Germania/Austria"},{"id":"p15","catId":"pc2","label":"Vignetta autostradale Austria: verificare itinerario e validità"},{"id":"p16","catId":"pc2","label":"Bollino ambientale tedesco (Umweltplakette) per Monaco · budget 20 €"},{"id":"p17","catId":"pc2","label":"Parcheggi e accessi agli alloggi: controllare prima di arrivare"},{"id":"p18","catId":"pc3","label":"Carta d’identità/passaporto validi per entrambi"},{"id":"p19","catId":"pc3","label":"Patente, libretto e assicurazione auto"},{"id":"p20","catId":"pc3","label":"Tessera sanitaria europea"},{"id":"p21","catId":"pc3","label":"Conferma Conlon House (31/12–02/01) e istruzioni self-check-in"},{"id":"p22","catId":"pc3","label":"Conferma VELUNA One Hotel (02/01–03/01) e codice accesso"},{"id":"p23","catId":"pc3","label":"Conferma Pension Sonneck (03/01–04/01)"},{"id":"p24","catId":"pc3","label":"Biglietti visite/terme, se acquistati"},{"id":"p25","catId":"pc3","label":"Carte di pagamento e un po’ di contanti"},{"id":"p26","catId":"pc4","label":"Smartphone e caricabatterie"},{"id":"p27","catId":"pc4","label":"Power bank"},{"id":"p28","catId":"pc4","label":"Fotocamera e batterie/schede, se usata"},{"id":"p29","catId":"pc4","label":"Auricolari"},{"id":"p30","catId":"pc4","label":"Adattatore o multipresa compatibile"},{"id":"p31","catId":"pc4","label":"Occhiali da sole per la neve"},{"id":"p32","catId":"pc4","label":"Zainetto leggero e borraccia"},{"id":"p33","catId":"pc5","label":"Spazzolino, dentifricio e prodotti per la doccia"},{"id":"p34","catId":"pc5","label":"Farmaci personali e piccolo kit di primo soccorso"},{"id":"p35","catId":"pc5","label":"Burrocacao e crema per il freddo"},{"id":"p36","catId":"pc5","label":"Fazzoletti e salviette"},{"id":"p37","catId":"pc5","label":"Costume e ciabatte, se scegliete Therme Erding"},{"id":"p38","catId":"pc5","label":"Snack e acqua per i trasferimenti"}],"food":[{"id":"f1","catId":"fc1","label":"Brezn (pretzel bavarese)"},{"id":"f2","catId":"fc1","label":"Schweinshaxe (stinco di maiale)"},{"id":"f3","catId":"fc1","label":"Weißwurst con senape dolce"},{"id":"f4","catId":"fc1","label":"Obatzda (crema di formaggio bavarese)"},{"id":"f5","catId":"fc1","label":"Käsespätzle (gnocchetti al formaggio)"},{"id":"f6","catId":"fc2","label":"Salzburger Nockerl (dolce tipico soffice)"},{"id":"f7","catId":"fc2","label":"Mozartkugeln (cioccolatini)"},{"id":"f8","catId":"fc2","label":"Schnitzel viennese o austriaca"},{"id":"f9","catId":"fc2","label":"Apfelstrudel con crema alla vaniglia"},{"id":"f10","catId":"fc3","label":"Dolce o torta alla Pasticceria Zauner di Bad Ischl"},{"id":"f11","catId":"fc3","label":"Zaunerstollen, specialità di Bad Ischl"},{"id":"f12","catId":"fc3","label":"Kaiserschmarrn (frittata dolce spezzettata)"},{"id":"f13","catId":"fc3","label":"Gulasch caldo durante le tappe"},{"id":"f14","catId":"fc4","label":"Tiroler Gröstl (patate, carne e cipolla)"},{"id":"f15","catId":"fc4","label":"Canederli / Knödel"},{"id":"f16","catId":"fc4","label":"Speck tirolese con pane di segale"},{"id":"f17","catId":"fc4","label":"Strudel in una pasticceria storica"}],"expCats":[{"id":"ec1","name":"🏨 Alloggi prenotati"},{"id":"ec2","name":"🚗 Auto, pedaggi, parcheggi e trasporti"},{"id":"ec3","name":"🍽️ Pasti e bevande"},{"id":"ec4","name":"🎟️ Visite e attività (facoltative escluse)"},{"id":"ec5","name":"🧾 Extra e imprevisti"}],"packCats":[{"id":"pc1","name":"🧥 Abbigliamento invernale"},{"id":"pc2","name":"🚙 Auto e inverno"},{"id":"pc3","name":"🪪 Documenti e prenotazioni"},{"id":"pc4","name":"🔌 Tecnologia e utilità"},{"id":"pc5","name":"🧴 Cura personale e viaggio"}],"foodCats":[{"id":"fc1","name":"🍺 Monaco e Baviera"},{"id":"fc2","name":"🎂 Salisburgo"},{"id":"fc3","name":"☕ Bad Ischl e laghi"},{"id":"fc4","name":"🏔️ Tirolo e Innsbruck"}]};
+const SEED = {"days":[{"id":"d1","title":"Cavalese → Neuschwanstein → Monaco (Gio 31 dic)","links":[{"label":"Cavalese","url":"https://maps.apple.com/?q=Cavalese"},{"label":"Neuschwanstein","url":"https://maps.apple.com/?q=Schloss%20Neuschwanstein%2C%20Schwangau"},{"label":"Marienbrücke","url":"https://maps.apple.com/?q=Marienbr%C3%BCcke%2C%20Schwangau"},{"label":"Alpsee","url":"https://maps.apple.com/?q=Alpsee%2C%20Schwangau"},{"label":"Marienplatz","url":"https://maps.apple.com/?q=Marienplatz%2C%20M%C3%BCnchen"},{"label":"Odeonsplatz","url":"https://maps.apple.com/?q=Odeonsplatz%2C%20M%C3%BCnchen"},{"label":"Viktualienmarkt","url":"https://maps.apple.com/?q=Viktualienmarkt%2C%20M%C3%BCnchen"},{"label":"Conlon House Lower East Side","url":"https://maps.apple.com/?q=Deisenhofener%20Stra%C3%9Fe%202B%2C%2081539%20M%C3%BCnchen"},{"label":"Augustiner Stammhaus","url":"https://maps.apple.com/?q=Neuhauser%20Str.%2027%2C%20M%C3%BCnchen"}],"M":"07:00 — Partenza in auto da Cavalese.\n10:00–13:30 — Neuschwanstein: castello (esterno o visita, se prenotata), ponte Marienbrücke se accessibile, passeggiata al lago Alpsee e pranzo.\nGli orari di guida sono indicativi: considerare traffico e condizioni invernali.","P":"16:30 — Arrivo indicativo a Monaco, sistemazione e check-in al Conlon House Lower East Side.\n17:00–19:00 — Marienplatz, Odeonsplatz e Viktualienmarkt.","S":"20:00 — Cena di Capodanno in centro: ristorante da prenotare (Augustiner Stammhaus fra le opzioni).\n23:30 — Passeggiata per Monaco e brindisi di mezzanotte."},{"id":"d2","title":"Monaco di Baviera (Ven 1 gen)","links":[{"label":"Giardino Inglese","url":"https://maps.apple.com/?q=Englischer%20Garten%20M%C3%BCnchen"},{"label":"Eisbach","url":"https://maps.apple.com/?q=Eisbachwelle%20M%C3%BCnchen"},{"label":"Schwabing","url":"https://maps.apple.com/?q=Schwabing%20M%C3%BCnchen"},{"label":"BMW Welt","url":"https://maps.apple.com/?q=BMW%20Welt%20M%C3%BCnchen"},{"label":"Olympiapark","url":"https://maps.apple.com/?q=Olympiapark%20M%C3%BCnchen"},{"label":"Therme Erding","url":"https://maps.apple.com/?q=Therme%20Erding"}],"M":"Mattinata tranquilla e senza sveglia presto.\n11:00–13:30 — Passeggiata nel Giardino Inglese, Eisbach e quartiere Schwabing.","P":"Due alternative per il pomeriggio:\nA) BMW Welt (verificare apertura il 1° gennaio) e Olympiapark.\nB) Relax alle Therme Erding (orari e biglietti da verificare).","S":"Cena tradizionale bavarese e passeggiata serale."},{"id":"d3","title":"Monaco → Chiemsee → Salisburgo (Sab 2 gen)","links":[{"label":"Monaco","url":"https://maps.apple.com/?q=Monaco"},{"label":"Chiemsee","url":"https://maps.apple.com/?q=Prien%20am%20Chiemsee"},{"label":"Herreninsel","url":"https://maps.apple.com/?q=Herreninsel%2C%20Chiemsee"},{"label":"Salisburgo","url":"https://maps.apple.com/?q=Altstadt%20Salzburg"},{"label":"Fortezza Hohensalzburg","url":"https://maps.apple.com/?q=Festung%20Hohensalzburg%2C%20Salzburg"},{"label":"Getreidegasse","url":"https://maps.apple.com/?q=Getreidegasse%2C%20Salzburg"},{"label":"Duomo","url":"https://maps.apple.com/?q=Salzburger%20Dom"},{"label":"Mönchsberg","url":"https://maps.apple.com/?q=M%C3%B6nchsberg%2C%20Salzburg"},{"label":"Salzach","url":"https://maps.apple.com/?q=Salzach%2C%20Salzburg"},{"label":"VELUNA One Hotel Salzburg","url":"https://maps.apple.com/?q=Neutorstra%C3%9Fe%2045%2C%205020%20Salzburg"}],"M":"09:00 — Partenza da Monaco.\n10:00–13:00 — Chiemsee: passeggiata sul lago, eventuale battello per Herreninsel (solo se operativo e compatibile con gli orari), pranzo.","P":"15:00 — Arrivo indicativo a Salisburgo e check-in al VELUNA One Hotel Salzburg.\nPasseggiata nel centro storico: Fortezza Hohensalzburg, Getreidegasse e Duomo.\nMönchsberg per il tramonto solo se il tempo lo permette: in inverno fa buio presto.","S":"Passeggiata sul Salzach e cena nel centro storico.\nVerificare in anticipo istruzioni del self-check-in e parcheggio."},{"id":"d4","title":"Laghi, Hallstatt → Pfarrwerfen (Dom 3 gen)","links":[{"label":"Salisburgo","url":"https://maps.apple.com/?q=Salisburgo"},{"label":"St. Gilgen","url":"https://maps.apple.com/?q=St.%20Gilgen%2C%20Wolfgangsee"},{"label":"Wolfgangsee","url":"https://maps.apple.com/?q=Wolfgangsee%2C%20Austria"},{"label":"St. Wolfgang","url":"https://maps.apple.com/?q=St.%20Wolfgang%20im%20Salzkammergut"},{"label":"Bad Ischl","url":"https://maps.apple.com/?q=Bad%20Ischl%2C%20Austria"},{"label":"Pasticceria Zauner","url":"https://maps.apple.com/?q=Konditorei%20Zauner%2C%20Bad%20Ischl"},{"label":"Traun","url":"https://maps.apple.com/?q=Traun%20river%2C%20Bad%20Ischl"},{"label":"Hallstatt","url":"https://maps.apple.com/?q=Hallstatt%2C%20Austria"},{"label":"Skywalk","url":"https://maps.apple.com/?q=Hallstatt%20Skywalk%20Austria"},{"label":"Pension Sonneck","url":"https://maps.apple.com/?q=Laubichl%2014%2C%205452%20Pfarrwerfen"}],"M":"09:00 — Partenza da Salisburgo.\n09:30–10:15 — St. Gilgen: passeggiata sul Wolfgangsee.\n10:30–11:45 — St. Wolfgang: centro storico e lungolago.","P":"12:00–14:00 — Bad Ischl: centro, Pasticceria Zauner, passeggiata sul Traun e pranzo.\n14:30–17:30 — Hallstatt: borgo, piazza centrale e lungolago; Skywalk solo se aperto e raggiungibile.\nNota: visita nel tardo pomeriggio con luce limitata, prima del buio privilegiare i punti panoramici.","S":"Dopo Hallstatt — Trasferimento verso Pfarrwerfen (circa 1 ora, condizioni permettendo).\nCena e pernottamento alla Pension Sonneck."},{"id":"d5","title":"Pfarrwerfen → Kitzbühel → Innsbruck → Cavalese (Lun 4 gen)","links":[{"label":"Kitzbühel","url":"https://maps.apple.com/?q=Kitzb%C3%BChel%2C%20Austria"},{"label":"Rathausplatz","url":"https://maps.apple.com/?q=Rathausplatz%2C%20Kitzb%C3%BChel"},{"label":"Innsbruck","url":"https://maps.apple.com/?q=Innsbruck%2C%20Austria"},{"label":"Tettuccio d’Oro","url":"https://maps.apple.com/?q=Goldenes%20Dachl%2C%20Innsbruck"},{"label":"Herzog-Friedrich-Straße","url":"https://maps.apple.com/?q=Herzog-Friedrich-Stra%C3%9Fe%20Innsbruck"},{"label":"Duomo","url":"https://maps.apple.com/?q=Dom%20zu%20St.%20Jakob%2C%20Innsbruck"},{"label":"fiume Inn","url":"https://maps.apple.com/?q=Inn%20river%2C%20Innsbruck"},{"label":"Bergisel","url":"https://maps.apple.com/?q=Bergisel%20Innsbruck"},{"label":"Cavalese","url":"https://maps.apple.com/?q=Cavalese%2C%20Trentino"}],"M":"08:30–09:00 — Partenza dopo il check-out.\n10:30–13:30 circa — Kitzbühel: centro storico, Rathausplatz, vie del paese e pranzo.\nTrasferimento Pfarrwerfen → Kitzbühel: prevedere circa 1 h 30–2 h.","P":"14:30 — Partenza verso Innsbruck.\n16:00–20:00 — Innsbruck: Tettuccio d’Oro, Herzog-Friedrich-Straße, Duomo e passeggiata lungo il fiume Inn.\nBergisel soltanto se rimane tempo e con luce sufficiente.","S":"Cena presto in centro oppure sosta veloce prima della partenza.\n20:00 circa — Partenza da Innsbruck.\n22:00–23:00 — Arrivo indicativo a Cavalese, in base a traffico e condizioni stradali.\n Fine del viaggio."}],"expenses":[{"id":"e1","catId":"ec1","label":"Conlon House · Monaco · 2 notti","estMin":254.34,"estMax":254.34},{"id":"e2","catId":"ec1","label":"VELUNA One Hotel · Salisburgo · 1 notte","estMin":115.83,"estMax":115.83},{"id":"e3","catId":"ec1","label":"Pension Sonneck · Pfarrwerfen · 1 notte","estMin":104.76,"estMax":104.76},{"id":"e4","catId":"ec2","label":"Carburante","estMin":170.0,"estMax":170.0},{"id":"e5","catId":"ec2","label":"Pedaggi stradali","estMin":45.0,"estMax":45.0},{"id":"e6","catId":"ec2","label":"Vignetta autostradale austriaca","estMin":15.0,"estMax":15.0},{"id":"e7","catId":"ec2","label":"Parcheggi","estMin":50.0,"estMax":50.0},{"id":"e8","catId":"ec2","label":"Metro e mezzi pubblici a Monaco","estMin":20.0,"estMax":20.0},{"id":"e9","catId":"ec3","label":"Cena di Capodanno (2 persone)","estMin":100.0,"estMax":100.0},{"id":"e10","catId":"ec3","label":"Altre 4 cene (2 persone)","estMin":160.0,"estMax":160.0},{"id":"e11","catId":"ec3","label":"Snack, dolci, bevande e aperitivi","estMin":35.0,"estMax":35.0},{"id":"e13","catId":"ec4","label":"Battello Chiemsee (eventuale)","estMin":15.0,"estMax":15.0},{"id":"e14","catId":"ec4","label":"Visite e ingressi a Salisburgo","estMin":35.0,"estMax":35.0},{"id":"e17","catId":"ec5","label":"Tasse di soggiorno e supplementi","estMin":25.0,"estMax":25.0},{"id":"e18","catId":"ec5","label":"Imprevisti e piccoli acquisti","estMin":25.0,"estMax":25.0},{"id":"e19","catId":"ec2","label":"Bollino ambientale tedesco","estMin":20,"estMax":20},{"id":"e20","catId":"ec3","label":"Colazioni per 5 giorni (2 persone)","estMin":45,"estMax":45},{"id":"e21","catId":"ec3","label":"Pranzi semplici per 5 giorni (2 persone)","estMin":90,"estMax":90}],"packing":[{"id":"p1","catId":"pc1","label":"Piumino/cappotto caldo e giacca antivento"},{"id":"p2","catId":"pc1","label":"Maglie termiche e pile/felpe"},{"id":"p3","catId":"pc1","label":"Maglioni e pantaloni lunghi"},{"id":"p4","catId":"pc1","label":"Pantaloni comodi per le passeggiate"},{"id":"p5","catId":"pc1","label":"Calze calde e ricambi"},{"id":"p6","catId":"pc1","label":"Scarpe invernali impermeabili con suola antiscivolo"},{"id":"p7","catId":"pc1","label":"Guanti, cappello e sciarpa/scaldacollo"},{"id":"p8","catId":"pc1","label":"Cambio per la cena di Capodanno"},{"id":"p9","catId":"pc1","label":"Biancheria intima e pigiama"},{"id":"p10","catId":"pc2","label":"Pneumatici idonei all’inverno; catene/calze se richieste o utili"},{"id":"p11","catId":"pc2","label":"Liquido lavavetri antigelo e raschietto per il ghiaccio"},{"id":"p12","catId":"pc2","label":"Controllo pressione gomme, liquidi e carburante"},{"id":"p13","catId":"pc2","label":"Cavo di ricarica/USB per l’auto"},{"id":"p14","catId":"pc2","label":"Navigatore e mappe offline Germania/Austria"},{"id":"p15","catId":"pc2","label":"Vignetta autostradale Austria: verificare itinerario e validità"},{"id":"p16","catId":"pc2","label":"Bollino ambientale tedesco (Umweltplakette) per Monaco · budget 20 €"},{"id":"p17","catId":"pc2","label":"Parcheggi e accessi agli alloggi: controllare prima di arrivare"},{"id":"p18","catId":"pc3","label":"Carta d’identità/passaporto validi per entrambi"},{"id":"p19","catId":"pc3","label":"Patente, libretto e assicurazione auto"},{"id":"p20","catId":"pc3","label":"Tessera sanitaria europea"},{"id":"p21","catId":"pc3","label":"Conferma Conlon House (31/12–02/01) e istruzioni self-check-in"},{"id":"p22","catId":"pc3","label":"Conferma VELUNA One Hotel (02/01–03/01) e codice accesso"},{"id":"p23","catId":"pc3","label":"Conferma Pension Sonneck (03/01–04/01)"},{"id":"p24","catId":"pc3","label":"Biglietti visite/terme, se acquistati"},{"id":"p25","catId":"pc3","label":"Carte di pagamento e un po’ di contanti"},{"id":"p26","catId":"pc4","label":"Smartphone e caricabatterie"},{"id":"p27","catId":"pc4","label":"Power bank"},{"id":"p28","catId":"pc4","label":"Fotocamera e batterie/schede, se usata"},{"id":"p29","catId":"pc4","label":"Auricolari"},{"id":"p30","catId":"pc4","label":"Adattatore o multipresa compatibile"},{"id":"p31","catId":"pc4","label":"Occhiali da sole per la neve"},{"id":"p32","catId":"pc4","label":"Zainetto leggero e borraccia"},{"id":"p33","catId":"pc5","label":"Spazzolino, dentifricio e prodotti per la doccia"},{"id":"p34","catId":"pc5","label":"Farmaci personali e piccolo kit di primo soccorso"},{"id":"p35","catId":"pc5","label":"Burrocacao e crema per il freddo"},{"id":"p36","catId":"pc5","label":"Fazzoletti e salviette"},{"id":"p37","catId":"pc5","label":"Costume e ciabatte, se scegliete Therme Erding"},{"id":"p38","catId":"pc5","label":"Snack e acqua per i trasferimenti"}],"food":[{"id":"f1","catId":"fc1","label":"Brezn (pretzel bavarese)"},{"id":"f2","catId":"fc1","label":"Schweinshaxe (stinco di maiale)"},{"id":"f3","catId":"fc1","label":"Weißwurst con senape dolce"},{"id":"f4","catId":"fc1","label":"Obatzda (crema di formaggio bavarese)"},{"id":"f5","catId":"fc1","label":"Käsespätzle (gnocchetti al formaggio)"},{"id":"f6","catId":"fc2","label":"Salzburger Nockerl (dolce tipico soffice)"},{"id":"f7","catId":"fc2","label":"Mozartkugeln (cioccolatini)"},{"id":"f8","catId":"fc2","label":"Schnitzel viennese o austriaca"},{"id":"f9","catId":"fc2","label":"Apfelstrudel con crema alla vaniglia"},{"id":"f10","catId":"fc3","label":"Dolce o torta alla Pasticceria Zauner di Bad Ischl"},{"id":"f11","catId":"fc3","label":"Zaunerstollen, specialità di Bad Ischl"},{"id":"f12","catId":"fc3","label":"Kaiserschmarrn (frittata dolce spezzettata)"},{"id":"f13","catId":"fc3","label":"Gulasch caldo durante le tappe"},{"id":"f14","catId":"fc4","label":"Tiroler Gröstl (patate, carne e cipolla)"},{"id":"f15","catId":"fc4","label":"Canederli / Knödel"},{"id":"f16","catId":"fc4","label":"Speck tirolese con pane di segale"},{"id":"f17","catId":"fc4","label":"Strudel in una pasticceria storica"}],"expCats":[{"id":"ec1","name":" Alloggi prenotati"},{"id":"ec2","name":" Auto, pedaggi, parcheggi e trasporti"},{"id":"ec3","name":" Pasti e bevande"},{"id":"ec4","name":" Visite e attività (facoltative escluse)"},{"id":"ec5","name":" Extra e imprevisti"}],"packCats":[{"id":"pc1","name":" Abbigliamento invernale"},{"id":"pc2","name":" Auto e inverno"},{"id":"pc3","name":" Documenti e prenotazioni"},{"id":"pc4","name":" Tecnologia e utilità"},{"id":"pc5","name":" Cura personale e viaggio"}],"foodCats":[{"id":"fc1","name":" Monaco e Baviera"},{"id":"fc2","name":" Salisburgo"},{"id":"fc3","name":" Bad Ischl e laghi"},{"id":"fc4","name":" Tirolo e Innsbruck"}]};
 // Il preventivo è indipendente dalle spese reali. I vecchi dati /expenses
 // restano nel database come archivio e non vengono modificati.
 const BUDGET_SEED = SEED.expenses.map(e => ({
@@ -520,6 +657,47 @@ let expenseState = {};
 let packState = {};
 let foodState = {};
 
+// Migrazione mirata: l'alloggio viene citato solo nel segmento di arrivo,
+// senza prezzi o dettagli di prenotazione ripetuti negli altri giorni.
+function cleanLodgingDiaryText(dayId, field, rawText) {
+  const allLodgings = /Conlon House Lower East Side|VELUNA One Hotel Salzburg|Pension Sonneck/i;
+  let allowedName = null;
+  if (dayId === 'd1' && field === 'P') allowedName = /Conlon House Lower East Side/i;
+  if (dayId === 'd3' && field === 'P') allowedName = /VELUNA One Hotel Salzburg/i;
+  if (dayId === 'd4' && field === 'S') allowedName = /Pension Sonneck/i;
+  let arrivalMentionKept = false;
+  const lines = String(rawText || '').split(/\r?\n/);
+  const cleaned = [];
+  for (let line of lines) {
+    if (!line.trim()) continue;
+    // Il giorno della partenza resta indicato, ma senza ripetere il nome dell'hotel.
+    if (dayId === 'd5' && field === 'M' && /Pension Sonneck/i.test(line)) {
+      if (!/Partenza/i.test(line)) continue;
+      line = line.replace(/dalla\s+Pension Sonneck(?:\s+a\s+Pfarrwerfen)?/i, '')
+        .replace(/Partenza\s*,\s*dopo il check-out/i, 'Partenza dopo il check-out')
+        .replace(/\s{2,}/g, ' ').trim();
+      if (line) cleaned.push(line);
+      continue;
+    }
+    const hasLodging = allLodgings.test(line);
+    const isArrivalLodging = !!(allowedName && allowedName.test(line));
+    if (hasLodging && !isArrivalLodging) continue;
+    if (/seconda notte al Conlon House|prenotazione confermata|già prenotata/i.test(line) && !isArrivalLodging) continue;
+    if (isArrivalLodging) {
+      if (arrivalMentionKept) continue;
+      arrivalMentionKept = true;
+      line = line
+        .replace(/\s*\([^)]*(?:prenotat|31\/12|02\/01|Deisenhofener|Neutorstraße|Laubichl|€|notte)[^)]*\)/gi, '')
+        .replace(/,?\s*(?:Deisenhofener\s+Str\.?\s*2B|Neutorstraße\s*45|Laubichl\s*14)\.?/gi, '')
+        .replace(/\s*[—–-]\s*\d+\s*notti?[^\n]*(?:€[^\n]*)?/gi, '')
+        .replace(/\s*\(?\d+(?:[.,]\d{2})?\s*€\)?/g, '')
+        .replace(/\s{2,}/g, ' ').trim();
+    }
+    if (/\b(?:254,34|115,83|104,76)\s*€/i.test(line)) continue;
+    if (line) cleaned.push(line);
+  }
+  return cleaned.join('\n');
+}
 function initLocalDefaults() {
   SEED.days.forEach(d => {
     diaryState[d.id] = { M: d.M, P: d.P, S: d.S, by: '', ts: 0 };
@@ -543,7 +721,19 @@ function attachSync() {
   }
   tripDb.ref('diary').on('value', snap => {
     const val = snap.val() || {};
-    SEED.days.forEach(d => { if (val[d.id]) diaryState[d.id] = val[d.id]; });
+    SEED.days.forEach(d => {
+      if (!val[d.id]) return;
+      const record = { ...val[d.id] };
+      const updates = {};
+      ['M', 'P', 'S'].forEach(field => {
+        const original = stripEmoji(record[field] || '');
+        const cleaned = cleanLodgingDiaryText(d.id, field, original);
+        record[field] = cleaned;
+        if (cleaned !== (val[d.id][field] || '')) updates[field] = cleaned;
+      });
+      diaryState[d.id] = record;
+      if (Object.keys(updates).length) tripDb.ref('diary/' + d.id).update(updates);
+    });
     renderDiary();
   }, err => syncStatusMsg('Errore di sincronizzazione: ' + err.message, true));
 
@@ -553,7 +743,7 @@ function attachSync() {
     const val = snap.val();
     if (val && Array.isArray(val.items)) {
       budgetItems = val.items.filter(x => x && x.id && x.catId && typeof x.label === 'string' && Number.isFinite(Number(x.amount)))
-        .map(x => ({ id: x.id, catId: x.catId, label: x.label, amount: Number(x.amount) }));
+        .map(x => ({ id: x.id, catId: x.catId, label: stripEmoji(x.label), amount: Number(x.amount) }));
     } else if (val && val.version === 3 && !val.items) {
       // In Firebase una lista vuota può essere serializzata come campo assente.
       budgetItems = [];
@@ -570,7 +760,7 @@ function attachSync() {
 
   tripDb.ref('actualExpenses').on('value', snap => {
     const val = snap.val() || {};
-    SEED.expenses = Object.keys(val).map(id => ({ ...val[id], id }))
+    SEED.expenses = Object.keys(val).map(id => ({ ...val[id], id, label: stripEmoji(val[id].label || '') }))
       .filter(e => e.label && e.catId)
       .sort((a,b) => (a.createdAt || 0) - (b.createdAt || 0));
     expenseState = Object.fromEntries(SEED.expenses.map(e => [e.id, e]));
@@ -579,9 +769,9 @@ function attachSync() {
 
   tripDb.ref('expCats').on('value', snap => {
     const val = snap.val() || {};
-    SEED.expCats.forEach(c => { if (val[c.id]) c.name = val[c.id]; });
+    SEED.expCats.forEach(c => { if (val[c.id]) c.name = stripEmoji(val[c.id]); });
     Object.keys(val).forEach(id => {
-      if (!SEED.expCats.find(c => c.id === id)) SEED.expCats.push({ id, name: val[id] });
+      if (!SEED.expCats.find(c => c.id === id)) SEED.expCats.push({ id, name: stripEmoji(val[id]) });
     });
     SEED.expCats = SEED.expCats.filter(c => val[c.id] !== undefined || !c.id.includes('_'));
     renderExpenses();
@@ -592,13 +782,13 @@ function attachSync() {
     SEED.packing.forEach(p => {
       if (val[p.id]) {
         if (val[p.id].A !== undefined || val[p.id].B !== undefined) packState[p.id] = { A: !!val[p.id].A, B: !!val[p.id].B };
-        if (val[p.id].label) p.label = val[p.id].label;
+        if (val[p.id].label) p.label = stripEmoji(val[p.id].label);
       }
     });
     // remote-added custom items
     Object.keys(val).forEach(id => {
       if (!SEED.packing.find(p => p.id === id) && val[id].label) {
-        SEED.packing.push({ id, catId: val[id].catId, label: val[id].label });
+        SEED.packing.push({ id, catId: val[id].catId, label: stripEmoji(val[id].label) });
         packState[id] = { A: !!val[id].A, B: !!val[id].B };
       }
     });
@@ -609,9 +799,9 @@ function attachSync() {
 
   tripDb.ref('packCats').on('value', snap => {
     const val = snap.val() || {};
-    SEED.packCats.forEach(c => { if (val[c.id]) c.name = val[c.id]; });
+    SEED.packCats.forEach(c => { if (val[c.id]) c.name = stripEmoji(val[c.id]); });
     Object.keys(val).forEach(id => {
-      if (!SEED.packCats.find(c => c.id === id)) SEED.packCats.push({ id, name: val[id] });
+      if (!SEED.packCats.find(c => c.id === id)) SEED.packCats.push({ id, name: stripEmoji(val[id]) });
     });
     SEED.packCats = SEED.packCats.filter(c => val[c.id] !== undefined || !c.id.includes('_'));
     renderPacking();
@@ -621,15 +811,15 @@ function attachSync() {
     const val = snap.val() || {};
     SEED.food.forEach(f => {
       if (val[f.id] && val[f.id].label) {
-        foodState[f.id] = val[f.id];
-        f.label = val[f.id].label;
+        foodState[f.id] = { ...val[f.id], label: stripEmoji(val[f.id].label) };
+        f.label = stripEmoji(val[f.id].label);
       }
     });
     // remote-added custom items
     Object.keys(val).forEach(id => {
       if (!SEED.food.find(f => f.id === id) && val[id].label) {
-        SEED.food.push({ id, catId: val[id].catId, label: val[id].label });
-        foodState[id] = val[id];
+        SEED.food.push({ id, catId: val[id].catId, label: stripEmoji(val[id].label) });
+        foodState[id] = { ...val[id], label: stripEmoji(val[id].label) };
       }
     });
     // remote-deleted custom items (only custom ones, never touch the baseline list)
@@ -639,9 +829,9 @@ function attachSync() {
 
   tripDb.ref('foodCats').on('value', snap => {
     const val = snap.val() || {};
-    SEED.foodCats.forEach(c => { if (val[c.id]) c.name = val[c.id]; });
+    SEED.foodCats.forEach(c => { if (val[c.id]) c.name = stripEmoji(val[c.id]); });
     Object.keys(val).forEach(id => {
-      if (!SEED.foodCats.find(c => c.id === id)) SEED.foodCats.push({ id, name: val[id] });
+      if (!SEED.foodCats.find(c => c.id === id)) SEED.foodCats.push({ id, name: stripEmoji(val[id]) });
     });
     SEED.foodCats = SEED.foodCats.filter(c => val[c.id] !== undefined || !c.id.includes('_'));
     renderFood();
@@ -656,6 +846,7 @@ function debounce(fn, wait) {
 }
 
 const saveDiaryField = debounce((dayId, field, value) => {
+  value = stripEmoji(value);
   diaryState[dayId][field] = value;
   diaryState[dayId].by = me || '?';
   diaryState[dayId].ts = Date.now();
@@ -694,12 +885,22 @@ function deleteExpense(id) {
 
 function togglePackMe(id) {
   if (!me) { whoModal.classList.add('show'); return; }
+  if (!packState[id]) packState[id] = { A: false, B: false };
+
+  // Aggiorna subito l'interfaccia: il feedback non aspetta Firebase.
   packState[id][me] = !packState[id][me];
+  updatePackItemUI(id);
+
   const p = SEED.packing.find(x => x.id === id);
   const payload = { A: !!packState[id].A, B: !!packState[id].B };
-  if (p && id.startsWith('pcustom_')) { payload.label = p.label; payload.catId = p.catId; }
-  if (firebaseReady) tripDb.ref('packing/' + id).set(payload);
-  renderPackingItem(id);
+  if (p && id.startsWith('pcustom_')) {
+    payload.label = p.label;
+    payload.catId = p.catId;
+  }
+  if (firebaseReady) {
+    tripDb.ref('packing/' + id).set(payload)
+      .catch(err => syncStatusMsg('Errore nel salvataggio della checklist: ' + err.message, true));
+  }
 }
 
 /* ---------------------- Diario ---------------------- */
@@ -803,9 +1004,9 @@ function getDayUsedSetUpTo(dayId, stopField) {
 }
 
 const ROW_META = {
-  M: { icon: '🌅', word: 'Mattina' },
-  P: { icon: '☀️', word: 'Pomeriggio' },
-  S: { icon: '🌙', word: 'Sera' }
+  M: { word: 'Mattina' },
+  P: { word: 'Pomeriggio' },
+  S: { word: 'Sera' }
 };
 
 function diaryRowHtml(d, field) {
@@ -828,11 +1029,7 @@ function startEditFromSwipe(combinedId) {
 }
 
 function rowContentHtml(d, field) {
-  const key = d.id + '-' + field;
   const text = diaryState[d.id][field] || '';
-  if (editingRows.has(key)) {
-    return `<textarea autofocus onblur="finishEdit('${d.id}','${field}',this.value)">${escapeHtml(text)}</textarea>`;
-  }
   if (!text) {
     return `<div class="rdisplay"><span class="rempty">scorri a sinistra per scrivere…</span></div>`;
   }
@@ -845,28 +1042,117 @@ function rowContentHtml(d, field) {
   return `<div class="rdisplay">${linesHtml}</div>`;
 }
 
-function startEdit(dayId, field) {
-  editingRows.add(dayId + '-' + field);
-  const el = document.getElementById('rowcontent-' + dayId + '-' + field);
-  const d = SEED.days.find(x => x.id === dayId);
-  el.innerHTML = rowContentHtml(d, field);
-  const ta = el.querySelector('textarea');
-  if (ta) {
-    ta.focus();
-    ta.setSelectionRange(ta.value.length, ta.value.length);
-    setTimeout(() => { ta.scrollIntoView({ behavior: 'smooth', block: 'center' }); }, 350);
+let activeDiaryEdit = null;
+let diaryEditorScrollY = 0;
+let diaryEditorPreviousStyles = null;
+
+function syncDiaryEditorViewport() {
+  const modal = document.getElementById('diaryEditorModal');
+  if (!modal || !modal.classList.contains('show')) return;
+  const vv = window.visualViewport;
+  if (vv) {
+    modal.style.top = Math.max(0, vv.offsetTop) + 'px';
+    modal.style.height = Math.max(0, vv.height) + 'px';
+  } else {
+    modal.style.top = '0px';
+    modal.style.height = window.innerHeight + 'px';
   }
 }
 
-function finishEdit(dayId, field, value) {
-  editingRows.delete(dayId + '-' + field);
+function startEdit(dayId, field) {
+  const d = SEED.days.find(x => x.id === dayId);
+  if (!d || !ROW_META[field]) return;
+
+  activeDiaryEdit = { dayId, field };
+  const modal = document.getElementById('diaryEditorModal');
+  const title = document.getElementById('diaryEditorTitle');
+  const mainTextarea = document.getElementById('diaryEditorMain');
+  const notesTextarea = document.getElementById('diaryEditorNotes');
+  title.textContent = 'Modifica · ' + ROW_META[field].word;
+  const currentLines = stripEmoji(diaryState[dayId][field] || '').split(/\r?\n/).filter(line => line.length > 0);
+  mainTextarea.value = currentLines.shift() || '';
+  notesTextarea.value = currentLines.join('\n');
+
+  diaryEditorScrollY = window.scrollY || document.documentElement.scrollTop || 0;
+  diaryEditorPreviousStyles = {
+    bodyPosition: document.body.style.position,
+    bodyTop: document.body.style.top,
+    bodyLeft: document.body.style.left,
+    bodyRight: document.body.style.right,
+    bodyWidth: document.body.style.width,
+    bodyOverflow: document.body.style.overflow,
+    htmlOverflow: document.documentElement.style.overflow
+  };
+  document.body.classList.add('diary-editor-locked');
+  document.documentElement.classList.add('diary-editor-locked');
+  document.body.style.position = 'fixed';
+  document.body.style.top = '-' + diaryEditorScrollY + 'px';
+  document.body.style.left = '0';
+  document.body.style.right = '0';
+  document.body.style.width = '100%';
+  document.body.style.overflow = 'hidden';
+  document.documentElement.style.overflow = 'hidden';
+
+  modal.classList.add('show');
+  modal.setAttribute('aria-hidden', 'false');
+  syncDiaryEditorViewport();
+  // Keep focus inside the original tap gesture so iOS opens the keyboard reliably.
+  mainTextarea.focus({ preventScroll: true });
+  try { mainTextarea.setSelectionRange(mainTextarea.value.length, mainTextarea.value.length); } catch (_) {}
+  requestAnimationFrame(syncDiaryEditorViewport);
+}
+
+function closeDiaryEditor() {
+  const modal = document.getElementById('diaryEditorModal');
+  const mainTextarea = document.getElementById('diaryEditorMain');
+  const notesTextarea = document.getElementById('diaryEditorNotes');
+  if (mainTextarea) mainTextarea.blur();
+  if (notesTextarea) notesTextarea.blur();
+  modal.classList.remove('show');
+  modal.setAttribute('aria-hidden', 'true');
+  modal.style.top = '';
+  modal.style.height = '';
+
+  if (diaryEditorPreviousStyles) {
+    document.body.style.position = diaryEditorPreviousStyles.bodyPosition;
+    document.body.style.top = diaryEditorPreviousStyles.bodyTop;
+    document.body.style.left = diaryEditorPreviousStyles.bodyLeft;
+    document.body.style.right = diaryEditorPreviousStyles.bodyRight;
+    document.body.style.width = diaryEditorPreviousStyles.bodyWidth;
+    document.body.style.overflow = diaryEditorPreviousStyles.bodyOverflow;
+    document.documentElement.style.overflow = diaryEditorPreviousStyles.htmlOverflow;
+  }
+  document.body.classList.remove('diary-editor-locked');
+  document.documentElement.classList.remove('diary-editor-locked');
+  activeDiaryEdit = null;
+  diaryEditorPreviousStyles = null;
+  window.scrollTo(0, diaryEditorScrollY);
+}
+
+function cancelDiaryEdit() {
+  closeDiaryEditor();
+}
+
+function saveDiaryEdit() {
+  if (!activeDiaryEdit) return;
+  const { dayId, field } = activeDiaryEdit;
+  const main = document.getElementById('diaryEditorMain').value.replace(/\r?\n/g, ' ').trim();
+  const notes = document.getElementById('diaryEditorNotes').value.replace(/\r/g, '').split('\n').map(line => line.trim()).filter(line => line.length > 0);
+  const value = [main, ...notes].filter(line => line.length > 0).join('\n');
   saveDiaryFieldNow(dayId, field, value);
   const el = document.getElementById('rowcontent-' + dayId + '-' + field);
   const d = SEED.days.find(x => x.id === dayId);
-  if (el) el.innerHTML = rowContentHtml(d, field);
+  if (el && d) el.innerHTML = rowContentHtml(d, field);
+  closeDiaryEditor();
+}
+
+if (window.visualViewport) {
+  window.visualViewport.addEventListener('resize', syncDiaryEditorViewport);
+  window.visualViewport.addEventListener('scroll', syncDiaryEditorViewport);
 }
 
 function saveDiaryFieldNow(dayId, field, value) {
+  value = stripEmoji(value);
   diaryState[dayId][field] = value;
   diaryState[dayId].by = me || '?';
   diaryState[dayId].ts = Date.now();
@@ -894,8 +1180,8 @@ function renderDiary() {
       <div class="day-head-static">
         <button class="day-nav-btn" onclick="stepDay(-1)" ${i === 0 ? 'disabled' : ''}>‹</button>
         <div class="day-head-mid" onclick="toggleCalendar()">
-          <div class="dnum">GIORNO ${i + 1} DI ${SEED.days.length} · 📅</div>
-          <div class="dtitle">${d.title}</div>
+          <div class="dnum">GIORNO ${i + 1} DI ${SEED.days.length}</div>
+          <div class="dtitle">${escapeHtml(d.title)}</div>
         </div>
         <button class="day-nav-btn" onclick="stepDay(1)" ${i === SEED.days.length - 1 ? 'disabled' : ''}>›</button>
       </div>
@@ -919,7 +1205,7 @@ function renderDiaryMeta(dayId) {
 }
 
 function escapeHtml(s) {
-  return (s || '')
+  return stripEmoji(s || '')
     .replace(/&/g, '&amp;')
     .replace(/</g, '&lt;')
     .replace(/>/g, '&gt;');
@@ -931,54 +1217,97 @@ function attachSwipeToDelete(container) {
   if (container.dataset.swipeAttached === '1') return;
   container.dataset.swipeAttached = '1';
   const OPEN_THRESHOLD = -40;
-  let activeContent = null, activeMax = -84, startX = 0, baseX = 0, dx = 0, dragging = false, moved = false;
+  let activeContent = null;
+  let activeMax = -84;
+  let startX = 0, startY = 0, baseX = 0, dx = 0;
+  let dragging = false, gesture = 'idle', moved = false, lastGestureWasSwipe = false;
 
   container.addEventListener('pointerdown', e => {
     const wrap = e.target.closest('.swipe-wrap');
-    if (!wrap) return;
-    if (e.target.closest('.swipe-actions-bg')) return;
+    if (!wrap || e.target.closest('.swipe-actions-bg')) return;
+
     container.querySelectorAll('.swipe-content.swiped').forEach(el => {
       const w = el.closest('.swipe-wrap');
-      if (!w || w !== wrap) { el.style.transform = ''; el.classList.remove('swiped'); }
+      if (w !== wrap) {
+        el.style.transform = '';
+        el.classList.remove('swiped');
+      }
     });
+
     activeContent = wrap.querySelector('.swipe-content');
+    if (!activeContent) return;
     const bg = wrap.querySelector('.swipe-actions-bg');
     activeMax = bg ? -bg.offsetWidth : -84;
     startX = e.clientX;
+    startY = e.clientY;
     baseX = activeContent.classList.contains('swiped') ? activeMax : 0;
     dx = baseX;
     dragging = true;
+    gesture = 'pending';
     moved = false;
-    activeContent.style.transition = 'none';
+    lastGestureWasSwipe = false;
   });
 
   container.addEventListener('pointermove', e => {
     if (!dragging || !activeContent) return;
-    const delta = e.clientX - startX;
-    if (Math.abs(delta) > 6) moved = true;
-    dx = baseX + delta;
+    const deltaX = e.clientX - startX;
+    const deltaY = e.clientY - startY;
+
+    if (gesture === 'pending') {
+      if (Math.abs(deltaX) < 8 && Math.abs(deltaY) < 8) return;
+      // Lascia al browser lo scroll verticale: solo un gesto chiaramente orizzontale apre le azioni.
+      if (Math.abs(deltaY) > Math.abs(deltaX) * 1.15) {
+        gesture = 'vertical';
+        dragging = false;
+        activeContent = null;
+        return;
+      }
+      if (Math.abs(deltaX) <= Math.abs(deltaY)) return;
+      gesture = 'horizontal';
+      activeContent.style.transition = 'none';
+    }
+
+    if (gesture !== 'horizontal') return;
+    moved = true;
+    dx = baseX + deltaX;
     if (dx > 0) dx = 0;
     if (dx < activeMax) dx = activeMax;
     activeContent.style.transform = `translateX(${dx}px)`;
-  });
+    if (e.cancelable) e.preventDefault();
+  }, { passive: false });
 
   function endDrag() {
-    if (!dragging || !activeContent) { dragging = false; return; }
+    if (!dragging || !activeContent) {
+      dragging = false;
+      activeContent = null;
+      return;
+    }
     dragging = false;
-    activeContent.style.transition = 'transform 0.2s ease';
-    if (dx < OPEN_THRESHOLD) {
-      activeContent.style.transform = `translateX(${activeMax}px)`;
-      activeContent.classList.add('swiped');
-    } else {
-      activeContent.style.transform = '';
-      activeContent.classList.remove('swiped');
+    if (gesture === 'horizontal') {
+      activeContent.style.transition = 'transform 0.2s ease';
+      if (dx < OPEN_THRESHOLD) {
+        activeContent.style.transform = `translateX(${activeMax}px)`;
+        activeContent.classList.add('swiped');
+      } else {
+        activeContent.style.transform = '';
+        activeContent.classList.remove('swiped');
+      }
+      lastGestureWasSwipe = moved;
     }
     activeContent = null;
+    gesture = 'idle';
   }
   container.addEventListener('pointerup', endDrag);
   container.addEventListener('pointercancel', endDrag);
 
   container.addEventListener('click', e => {
+    if (lastGestureWasSwipe) {
+      // Il click sintetico che può seguire uno swipe non deve attivare la voce sottostante.
+      e.preventDefault();
+      e.stopPropagation();
+      lastGestureWasSwipe = false;
+      return;
+    }
     const actBtn = e.target.closest('.swipe-act');
     if (actBtn) {
       const wrap = actBtn.closest('.swipe-wrap');
@@ -988,8 +1317,8 @@ function attachSwipeToDelete(container) {
       return;
     }
     const openContent = e.target.closest('.swipe-content.swiped');
-    if (openContent && moved === false) {
-      // tap while open just closes it, don't trigger underlying controls
+    if (openContent) {
+      // Un tocco su una riga aperta la richiude senza attivare il controllo sottostante.
       e.preventDefault();
       e.stopPropagation();
       openContent.style.transition = 'transform 0.2s ease';
@@ -1015,7 +1344,7 @@ function catHeaderHtml(cat, listKey) {
     ? `<input type="text" class="cat-edit-input" autofocus value="${escapeAttrValue(cat.name)}"
         onblur="finishEditCat('${listKey}','${cat.id}', this.value)"
         onkeydown="if(event.key==='Enter'){this.blur();}">`
-    : `<h3>${cat.name}</h3>`;
+    : `<h3>${escapeHtml(cat.name)}</h3>`;
   return `
     <div class="swipe-wrap cat-header-wrap" id="cathead-${listKey}-${cat.id}">
       <div class="swipe-actions-bg">
@@ -1035,7 +1364,7 @@ function startEditCat(combined) {
 
 function finishEditCat(listKey, catId, value) {
   editingRows.delete('cat-' + listKey + '-' + catId);
-  const name = value.trim();
+  const name = stripEmoji(value);
   if (name) {
     const cat = SEED[listKey].find(c => c.id === catId);
     if (cat) cat.name = name;
@@ -1096,7 +1425,7 @@ function openAddCat(listKey) {
 
 function addCat(listKey) {
   const input = document.getElementById('newcatinput-' + listKey);
-  const name = input.value.trim();
+  const name = stripEmoji(input.value);
   if (!name) return;
   const prefix = listKey === 'expCats' ? 'ec' : listKey === 'packCats' ? 'pc' : 'fc';
   const id = prefix + '_' + Date.now();
@@ -1180,7 +1509,7 @@ function startEditExpLabel(id) {
 
 function finishEditExpLabel(id, value) {
   editingRows.delete('exp-label-' + id);
-  const label = value.trim();
+  const label = stripEmoji(value);
   if (label) {
     const e = SEED.expenses.find(x => x.id === id);
     if (e) e.label = label;
@@ -1198,7 +1527,7 @@ function refreshExpItem(id) {
 }
 
 function escapeAttrValue(s) {
-  return (s || '').replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+  return stripEmoji(s || '').replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
 }
 
 function fmtEuroPlain(n) { return n == null ? '—' : (Number.isInteger(n) ? n : n.toFixed(2)); }
@@ -1208,7 +1537,7 @@ function addExpense(catId) {
   const labelEl = document.getElementById('newlabel-' + catId);
   const amtEl = document.getElementById('newamt-' + catId);
   if (!labelEl || !amtEl) return;
-  const label = labelEl.value.trim();
+  const label = stripEmoji(labelEl.value);
   const value = amtEl.value.trim();
   const amount = Number(value);
   if (!label || value === '' || !Number.isFinite(amount) || amount < 0) {
@@ -1238,15 +1567,76 @@ function renderExpTotals() {
   warningEl.textContent = remaining < 0 ? 'Budget superato di ' + fmtEuro(Math.abs(remaining)) : '';
 }
 
+let budgetModalScrollY = 0;
+let budgetModalPreviousStyles = null;
+
+function syncBudgetModalViewport() {
+  const modal = document.getElementById('budgetModal');
+  if (!modal || !modal.classList.contains('show')) return;
+  const vv = window.visualViewport;
+  if (vv) {
+    modal.style.top = Math.max(0, vv.offsetTop) + 'px';
+    modal.style.height = Math.max(0, vv.height) + 'px';
+  } else {
+    modal.style.top = '0px';
+    modal.style.height = window.innerHeight + 'px';
+  }
+}
+
 function openBudgetModal() {
   budgetDraft = budgetItems.map(x => ({ ...x }));
   renderBudgetEditor();
-  document.getElementById('budgetModal').classList.add('show');
+  budgetModalScrollY = window.scrollY || document.documentElement.scrollTop || 0;
+  budgetModalPreviousStyles = {
+    bodyPosition: document.body.style.position,
+    bodyTop: document.body.style.top,
+    bodyLeft: document.body.style.left,
+    bodyRight: document.body.style.right,
+    bodyWidth: document.body.style.width,
+    bodyOverflow: document.body.style.overflow,
+    htmlOverflow: document.documentElement.style.overflow
+  };
+  document.body.classList.add('budget-modal-locked');
+  document.documentElement.classList.add('budget-modal-locked');
+  document.body.style.position = 'fixed';
+  document.body.style.top = '-' + budgetModalScrollY + 'px';
+  document.body.style.left = '0';
+  document.body.style.right = '0';
+  document.body.style.width = '100%';
+  document.body.style.overflow = 'hidden';
+  document.documentElement.style.overflow = 'hidden';
+  const modal = document.getElementById('budgetModal');
+  modal.classList.add('show');
+  modal.setAttribute('aria-hidden', 'false');
+  syncBudgetModalViewport();
+  requestAnimationFrame(syncBudgetModalViewport);
 }
 
 function closeBudgetModal() {
-  document.getElementById('budgetModal').classList.remove('show');
+  const modal = document.getElementById('budgetModal');
+  modal.classList.remove('show');
+  modal.setAttribute('aria-hidden', 'true');
+  modal.style.top = '';
+  modal.style.height = '';
+  if (budgetModalPreviousStyles) {
+    document.body.style.position = budgetModalPreviousStyles.bodyPosition;
+    document.body.style.top = budgetModalPreviousStyles.bodyTop;
+    document.body.style.left = budgetModalPreviousStyles.bodyLeft;
+    document.body.style.right = budgetModalPreviousStyles.bodyRight;
+    document.body.style.width = budgetModalPreviousStyles.bodyWidth;
+    document.body.style.overflow = budgetModalPreviousStyles.bodyOverflow;
+    document.documentElement.style.overflow = budgetModalPreviousStyles.htmlOverflow;
+  }
+  document.body.classList.remove('budget-modal-locked');
+  document.documentElement.classList.remove('budget-modal-locked');
+  budgetModalPreviousStyles = null;
   budgetDraft = null; // Annulla le modifiche non salvate.
+  window.scrollTo(0, budgetModalScrollY);
+}
+
+if (window.visualViewport) {
+  window.visualViewport.addEventListener('resize', syncBudgetModalViewport);
+  window.visualViewport.addEventListener('scroll', syncBudgetModalViewport);
 }
 
 function renderBudgetEditor() {
@@ -1270,7 +1660,7 @@ function renderBudgetEditor() {
 function updateBudgetLabel(id, value) {
   if (!budgetDraft) return;
   const item = budgetDraft.find(x => x.id === id);
-  if (item) item.label = value;
+  if (item) item.label = stripEmoji(value);
 }
 
 function updateBudgetAmount(id, value) {
@@ -1316,7 +1706,7 @@ function saveBudget() {
     }
   }
   budgetItems = budgetDraft.map(item => ({ id: item.id, catId: item.catId,
-    label: item.label.trim(), amount: Math.round(Number(item.amount) * 100) / 100 }));
+    label: stripEmoji(item.label), amount: Math.round(Number(item.amount) * 100) / 100 }));
   if (firebaseReady) {
     tripDb.ref('budgetV3').set({ version: 3, items: budgetItems, updatedAt: Date.now() })
       .catch(err => alert('Il preventivo non è stato sincronizzato: ' + err.message));
@@ -1366,15 +1756,15 @@ function openPackAdd(catId) {
 function packItemHtml(p) {
   const key = 'pack-label-' + p.id;
   const st = packState[p.id] || { A: false, B: false };
-  let doneClass = '';
-  if (st.A && st.B) doneClass = 'is-done done-both';
-  else if (st.A) doneClass = 'is-done done-a';
-  else if (st.B) doneClass = 'is-done done-b';
+  // La cancellatura rappresenta lo stato della persona selezionata; i due indicatori
+  // laterali continuano a mostrare separatamente Mattia e Adriana.
+  const isDoneForMe = me ? !!st[me] : false;
+  const doneClass = isDoneForMe ? `is-done ${me === 'A' ? 'done-a' : 'done-b'}` : '';
   const labelHtml = editingRows.has(key)
     ? `<input type="text" class="inline-edit-input" autofocus value="${escapeAttrValue(p.label)}"
         onblur="finishEditPackLabel('${p.id}', this.value)"
         onkeydown="if(event.key==='Enter'){this.blur();}">`
-    : `<span class="p-label ${doneClass}" onclick="togglePackMe('${p.id}')">${p.label}</span>`;
+    : `<button type="button" class="p-label ${doneClass}" aria-pressed="${isDoneForMe}" onclick="togglePackMe('${p.id}')">${escapeHtml(p.label)}</button>`;
   return `
     <div class="swipe-wrap" id="packrow-${p.id}">
       <div class="swipe-actions-bg">
@@ -1399,7 +1789,7 @@ function startEditPackLabel(id) {
 
 function finishEditPackLabel(id, value) {
   editingRows.delete('pack-label-' + id);
-  const label = value.trim();
+  const label = stripEmoji(value);
   if (label) {
     const p = SEED.packing.find(x => x.id === id);
     if (p) p.label = label;
@@ -1412,7 +1802,7 @@ function finishEditPackLabel(id, value) {
 
 function addPackItem(catId) {
   const input = document.getElementById('newpack-' + catId);
-  const label = input.value.trim();
+  const label = stripEmoji(input.value);
   if (!label) return;
   const id = 'pcustom_' + Date.now();
   const item = { id, catId, label };
@@ -1429,6 +1819,24 @@ function deletePackItem(id) {
   delete packState[id];
   if (firebaseReady) tripDb.ref('packing/' + id).remove();
   renderPacking();
+}
+
+function updatePackItemUI(id) {
+  const row = document.getElementById('packrow-' + id);
+  if (!row) return;
+  const state = packState[id] || { A: false, B: false };
+  const label = row.querySelector('.p-label');
+  if (label) {
+    const isDoneForMe = me ? !!state[me] : false;
+    label.classList.toggle('is-done', isDoneForMe);
+    label.classList.toggle('done-a', isDoneForMe && me === 'A');
+    label.classList.toggle('done-b', isDoneForMe && me === 'B');
+    label.setAttribute('aria-pressed', String(isDoneForMe));
+  }
+  const dotA = row.querySelector('.p-who-dot.who-a');
+  const dotB = row.querySelector('.p-who-dot.who-b');
+  if (dotA) dotA.classList.toggle('on', !!state.A);
+  if (dotB) dotB.classList.toggle('on', !!state.B);
 }
 
 function renderPackingItem(id) {
@@ -1501,7 +1909,7 @@ function startEditFood(id) {
 
 function finishEditFood(id, value) {
   editingRows.delete('food-' + id);
-  const label = value.trim();
+  const label = stripEmoji(value);
   if (label) {
     foodState[id] = { label };
     const f = SEED.food.find(x => x.id === id);
@@ -1519,7 +1927,7 @@ function refreshFoodItem(id) {
 
 function addFoodItem(catId) {
   const input = document.getElementById('newfood-' + catId);
-  const label = input.value.trim();
+  const label = stripEmoji(input.value);
   if (!label) return;
   const id = 'fcustom_' + Date.now();
   const item = { id, catId, label };
@@ -1563,10 +1971,15 @@ function setWho(p) {
   whoLabelEl.textContent = p === 'A' ? PERSON_A : PERSON_B;
   whoDotEl.style.background = PERSON_COLORS[p];
   whoModal.classList.remove('show');
+  if (document.getElementById('packCategories')) SEED.packing.forEach(item => updatePackItemUI(item.id));
 }
 
 document.querySelectorAll('.who-pick').forEach(b => b.addEventListener('click', () => setWho(b.dataset.person)));
 whoBtn.addEventListener('click', () => whoModal.classList.add('show'));
+
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape' && activeDiaryEdit) cancelDiaryEdit();
+});
 
 if (me) { setWho(me); }
 else { whoModal.classList.add('show'); }
@@ -1578,14 +1991,6 @@ renderPacking();
 renderFood();
 attachSync();
 
-if (window.visualViewport) {
-  window.visualViewport.addEventListener('resize', () => {
-    const active = document.activeElement;
-    if (active && active.tagName === 'TEXTAREA') {
-      setTimeout(() => { active.scrollIntoView({ behavior: 'smooth', block: 'center' }); }, 100);
-    }
-  });
-}
 
 </script>
 </body>
